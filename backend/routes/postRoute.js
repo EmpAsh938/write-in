@@ -7,7 +7,7 @@ const postRouter = express.Router();
 
 postRouter.get('/all' , listBlogsPublic);             // public all blogs
 postRouter.post('/save', verifyUser, createNewBlog);            // private new blog
-postRouter.get('/me/:id', verifyUser, listBlogsPrivate);             // private all blogs
+postRouter.get('/me', verifyUser, listBlogsPrivate);             // private all blogs
 postRouter.delete('/me/:id', verifyUser, deleteBlog);          // private delete
 postRouter.put('/edit/:id', verifyUser, editBlog);         // private edit
 postRouter.get('/get/:id', getBlogSingle);         // public single blog

@@ -110,8 +110,10 @@ const deleteBlog = asyncHandler(async (req, res) => {
 })
 
 const listBlogsPrivate = asyncHandler(async (req, res) => {
-    const { id } = req.params;
     const { pages, rows } = req.query;
+    const token = req.headers.authorization.split('Bearer')[1].trim();
+    const decoded = jwt.decode(token);
+    const id = decoded._id;
     if (!id) {
         res.status(401);
         throw new Error('Not Authorized');

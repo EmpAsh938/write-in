@@ -15,25 +15,42 @@ import {
 } from 'react-icons/gr';
 import React, { useState, useEffect } from 'react';
 import {
+    useParams,
     useNavigate
 } from 'react-router-dom';
 
-import { useAppSelector } from '../hooks/useReactRedux';
+import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
+import { listSingleBlogs, saveBlog, resetSinglePost } from '../app/features/post/postSlice';
 
 
 const Blog = () => {
+    const { id } = useParams();
     const { token } = useAppSelector(state => state.auth);
+    const { singlePost } = useAppSelector(state => state.post);
     const [isPreviewOn, setIsPreviewOn] = useState<boolean>(false);
+    const [title, setTitle] = useState<string>('');
+    const [markdown, setMarkdown] = useState<string>('');
 
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
     
     const handleTextArea = (e:React.ChangeEvent<HTMLTextAreaElement>) => {
         e.target.style.height = `${e.target.scrollHeight}px`;
+        setMarkdown(e.target.value);
     }
     
     const handleCancel = () => {
+        dispatch(resetSinglePost());
+        setTitle('');
+        setMarkdown('');
         setIsPreviewOn(false);
         navigate('/');
+    }
+
+    const handleFinish = (type:'published'|'draft') => {
+        if(type) {
+            dispatch(saveBlog({title,markdown,status:type,token}));
+        }
     }
 
 
@@ -41,6 +58,19 @@ const Blog = () => {
     if(!token) navigate('/login');
     // eslint-disable-next-line
   }, [token])
+
+  useEffect(() => {
+    if(id && typeof id === 'string') {
+        dispatch(listSingleBlogs(id));
+    }
+  }, [id])
+
+  useEffect(() => {
+    if(Object.keys(singlePost).length > 0) {
+        setTitle(singlePost.title);
+        setMarkdown(singlePost.markdown);
+    }
+  }, [singlePost])
   return (
     <div className='bg-slate-100 min-h-screen'>
     <main className='overflow-y-visible max-w-xl mx-auto p-5 pb-40 flex flex-col gap-8'>
@@ -52,9 +82,9 @@ const Blog = () => {
         </div>
     </section>
    {!isPreviewOn ? (
-     <section className='overflow-x-hidden flex flex-col gap-5 border border-solid border-green-200 rounded-sm p-3 bg-slate-100'>
+     <section className='flex flex-col gap-5 border border-solid border-green-200 rounded-sm p-3 bg-slate-100'>
      <div>
-         <input type='text' placeholder='Untitled' className='outline-none text-3xl font-bold placeholder:text-slate-300' />
+         <input type='text' value={title} onChange={e=>setTitle(e.target.value)} placeholder='Untitled' className='outline-none w-full text-4xl font-bold placeholder:text-slate-300' />
      </div>
      <div className='flex gap-2'>
          <button>
@@ -87,7 +117,7 @@ const Blog = () => {
      </div>
      {/* <div className='min-h-screen'> */}
      {/* </div> */}
-         <textarea onChange={handleTextArea} className='w-full resize-none' placeholder='Write your post here...'>
+         <textarea onChange={handleTextArea} value={markdown} className='w-full resize-none' placeholder='Write your post here...'>
 
          </textarea>
 
@@ -99,8 +129,8 @@ const Blog = () => {
     </section>
    )}
     <section className='fixed bottom-0 left-0 w-full bg-white p-5 flex justify-center gap-2 border border-solid border-green-200'>
-        <button className='bg-green-600 text-white px-2 rounded-sm py-1'>Publish</button>
-        <button className='bg-green-800 text-white px-2 rounded-sm py-1'>Save to Draft</button>
+        <button onClick={() => handleFinish('published')} className='bg-green-600 text-white px-2 rounded-sm py-1'>Publish</button>
+        <button onClick={() => handleFinish('draft')} className='bg-green-800 text-white px-2 rounded-sm py-1'>Save to Draft</button>
         <button onClick={handleCancel} className='bg-red-600 text-white px-2 rounded-sm py-1'>Cancel</button>
     </section>
     </main>

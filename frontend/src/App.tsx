@@ -52,7 +52,7 @@ function App() {
             <Dashboard/>} />
           <Route path="new" element={
            <Blog />} />
-          <Route path="edit" element={
+          <Route path="edit/:id" element={
             <Blog/>} />
           <Route path="*" element={<PageNotFound />} />
         </Route>

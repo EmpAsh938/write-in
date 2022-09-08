@@ -5,6 +5,7 @@ export type PostsType = {
     _id:string;
     title:string;
     markdown:string;
+    status: 'draft' | 'published';
     author: UserState;
     createdAt: string;
     updatedAt: string;

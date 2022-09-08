@@ -1,16 +1,16 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { RootState } from '../../store';
-import { deleteBlog, editBlog, listPrivateAll, listPublicAll, listSingle } from './postService';
+import { deleteBlog, editBlog, listPrivateAll, listPublicAll, listSingle, savePost } from './postService';
 import { PostsType } from '../../../types/postTypes';
-
-
 
 interface PostState {
     pages: number;
     rows: number;
     postError: string;
     isLoading: boolean;
+    privatePosts: PostsType[];
+    singlePost: PostsType;
     posts: PostsType[];
 }
 
@@ -19,6 +19,8 @@ const initialState: PostState = {
     rows: 10,
     postError: '',
     isLoading:false,
+    singlePost: {} as PostsType,
+    privatePosts: [],
     posts:[]
 }
 
@@ -72,9 +74,21 @@ export const updateBlog = createAsyncThunk(
 
 export const removeBlog = createAsyncThunk(
     'post/remove',
-   async ({id,token}:{id:string,token:string}, thunkAPI) => {
+   async ({id,token}:{id:string,token:string | null}, thunkAPI) => {
     try {
         return (await deleteBlog(id,token));        
+    } catch (error:any) {
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString() || '';
+        return thunkAPI.rejectWithValue(message);
+    }
+   }
+)
+
+export const saveBlog = createAsyncThunk(
+    'post/save',
+   async ({title,markdown,status,token}:{title:string,markdown:string,status:'published'|'draft',token:string | null}, thunkAPI) => {
+    try {
+        return (await savePost(title,markdown,status,token));
     } catch (error:any) {
         const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString() || '';
         return thunkAPI.rejectWithValue(message);
@@ -92,6 +106,9 @@ const postSlice = createSlice({
         },
         loadMore: (state, action) => {
             state.pages = action.payload.pages
+        },
+        resetSinglePost: (state) => {
+            state.singlePost = {} as PostsType;
         }
     },
     extraReducers: (builder) => {
@@ -103,7 +120,11 @@ const postSlice = createSlice({
             state.isLoading = false;
             if(typeof action.payload === 'object') {
                 if(Array.isArray(action.payload.result) && action.payload.result.length > 0) {
-                   state.posts = [...state.posts, ...action.payload.result]
+                    if(initialState.pages !== state.pages || initialState.rows !== state.rows) {
+                        state.posts = [...state.posts, ...action.payload.result]
+                    } else {
+                        state.posts = [...action.payload.result];
+                    }
                 }
             }
         })
@@ -118,6 +139,9 @@ const postSlice = createSlice({
         })
         .addCase(listSingleBlogs.fulfilled, (state, action) => {
             state.isLoading = false;
+            if(typeof action.payload.result === 'object') {
+                state.singlePost = action.payload.result;
+            }
         })
 
         .addCase(listSingleBlogs.rejected, (state, action) => {
@@ -132,6 +156,15 @@ const postSlice = createSlice({
         })
         .addCase(listPrivate.fulfilled, (state, action) => {
             state.isLoading = false;
+            if(typeof action.payload === 'object') {
+                if(Array.isArray(action.payload.result) && action.payload.result.length > 0) {
+                    if(initialState.pages !== state.pages || initialState.rows !== state.rows) {
+                        state.privatePosts = [...state.privatePosts, ...action.payload.result]
+                    } else {
+                        state.privatePosts = [...action.payload.result];
+                    }
+                }
+            }
         })
         .addCase(listPrivate.rejected, (state, action) => {
             state.isLoading = false;
@@ -157,10 +190,18 @@ const postSlice = createSlice({
                 state.postError = action.payload
             }
         })
+        .addCase(saveBlog.fulfilled, (state, action) => {
+
+        })
+        .addCase(saveBlog.rejected, (state, action) => {
+            if(typeof action.payload === 'string') {
+                state.postError = action.payload;
+            }
+        })
     }
 })
 
-export const { loadMore, resetPages } = postSlice.actions;
+export const { loadMore, resetPages, resetSinglePost } = postSlice.actions;
 
 export const selectPost = (state: RootState) => state.post
 

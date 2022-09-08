@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import { register, login, logout, verify } from './authService'
-import type { RootState } from '../../store'
 import { RegisterAuthState, LoginAuthState, NotificationsType } from '../../../types/authTypes'
 
 type NotificationsObj = {
@@ -132,13 +131,14 @@ const authSlice = createSlice({
           state.notifications.message = action.payload;
       }
     })
-    .addCase(logoutUser.fulfilled, (() => {
+    .addCase(logoutUser.fulfilled, ((state) => {
       return {
+        ...state,
         ...initialState
       }
     }))
     .addCase(verifyUser.fulfilled, ((state, action) => {
-      if(action.payload.result === 'object') {
+      if(typeof action.payload.result === 'object') {
         const { token, _doc } = action.payload.result;
         state.token = token 
         state.user = _doc

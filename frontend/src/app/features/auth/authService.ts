@@ -24,7 +24,7 @@ const logout = async () => {
 
 // verify
 const verify = async (token:string) => {
-    const response = await axios.get('auth/verify', { 
+    const response = await axios.get('/auth/verify', { 
         headers: {
         Authorization: `Bearer ${token}`
     } });
