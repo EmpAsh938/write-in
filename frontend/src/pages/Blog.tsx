@@ -20,7 +20,7 @@ import {
 } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
-import { listSingleBlogs, saveBlog, resetSinglePost } from '../app/features/post/postSlice';
+import { listSingleBlogs, saveBlog, resetSinglePost, updateBlog } from '../app/features/post/postSlice';
 
 
 const Blog = () => {
@@ -48,7 +48,9 @@ const Blog = () => {
     }
 
     const handleFinish = (type:'published'|'draft') => {
-        if(type) {
+        if(id) {
+            dispatch(updateBlog({id,token,title,status:type,markdown}));
+        } else {
             dispatch(saveBlog({title,markdown,status:type,token}));
         }
     }

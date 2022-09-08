@@ -68,7 +68,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
     try {
         const doc = await user.save()
-        const token = await jwt.sign(doc.toJSON(),process.env.JWT_SECRET, { expiresIn: "1000" });
+        const token = await jwt.sign(doc.toJSON(),process.env.JWT_SECRET, { expiresIn: "1D" });
         res.status(200).json({
             message: 'register user',
             result: {

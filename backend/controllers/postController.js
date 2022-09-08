@@ -128,13 +128,14 @@ const listBlogsPrivate = asyncHandler(async (req, res) => {
             match: {
                 _id: { $eq: id }
             }
-        }).sort({ createdAt: -1 }).skip(rows * (pages-1)).limit(pages).exec();
+        }).sort({ createdAt: -1 }).skip(rows * (pages-1)).limit(rows).exec();
         if (docs.length === 0) {
             res.json({
                 message: 'not enough items to show',
                 result: []
             })
         } else {
+            console.log(docs);
             res.json({
                 message: 'successfully retrieved',
                 result: docs
