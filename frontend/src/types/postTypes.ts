@@ -10,3 +10,9 @@ export type PostsType = {
     createdAt: string;
     updatedAt: string;
 }
+
+export type PostsObjType = {
+    title: string;
+    markdown:string;
+    status:'draft' | 'published';
+}

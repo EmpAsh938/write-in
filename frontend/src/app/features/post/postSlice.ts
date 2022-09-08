@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { RootState } from '../../store';
 import { deleteBlog, editBlog, listPrivateAll, listPublicAll, listSingle, savePost } from './postService';
-import { PostsType } from '../../../types/postTypes';
+import { PostsObjType, PostsType } from '../../../types/postTypes';
 
 interface PostState {
     pages: number;
@@ -62,9 +62,9 @@ export const listPrivate = createAsyncThunk(
 
 export const updateBlog = createAsyncThunk(
     'post/edit',
-    async({id,token}:{id:string,token:string}, thunkAPI) => {
+    async({id,token,title,status,markdown}:PostsObjType & {id:string,token:string}, thunkAPI) => {
         try {
-            return (await editBlog(id,token));
+            return (await editBlog(id,token,title, status, markdown));
         } catch (error:any) {
             const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString() || '';
             return thunkAPI.rejectWithValue(message);
@@ -86,7 +86,7 @@ export const removeBlog = createAsyncThunk(
 
 export const saveBlog = createAsyncThunk(
     'post/save',
-   async ({title,markdown,status,token}:{title:string,markdown:string,status:'published'|'draft',token:string | null}, thunkAPI) => {
+   async ({title,markdown,status,token}:PostsObjType & {token: string | null}, thunkAPI) => {
     try {
         return (await savePost(title,markdown,status,token));
     } catch (error:any) {
