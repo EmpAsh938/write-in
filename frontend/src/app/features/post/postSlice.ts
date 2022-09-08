@@ -9,6 +9,7 @@ import { PostsType } from '../../../types/postTypes';
 interface PostState {
     pages: number;
     rows: number;
+    postError: string;
     isLoading: boolean;
     posts: PostsType[];
 }
@@ -16,6 +17,7 @@ interface PostState {
 const initialState: PostState = {
     pages:1,
     rows: 10,
+    postError: '',
     isLoading:false,
     posts:[]
 }
@@ -84,14 +86,21 @@ const postSlice = createSlice({
     name: 'post',
     initialState,
     reducers: {
-
+        resetPages: (state) => {
+            state.pages = initialState.pages;
+            state.rows = initialState.rows;
+        },
+        loadMore: (state, action) => {
+            state.pages = action.payload.pages
+        }
     },
     extraReducers: (builder) => {
         builder
         .addCase(listPublicBlogs.pending, (state, action) => {
-
+            state.isLoading = true;
         })
         .addCase(listPublicBlogs.fulfilled, (state, action) => {
+            state.isLoading = false;
             if(typeof action.payload === 'object') {
                 if(Array.isArray(action.payload.result) && action.payload.result.length > 0) {
                    state.posts = [...state.posts, ...action.payload.result]
@@ -99,42 +108,59 @@ const postSlice = createSlice({
             }
         })
         .addCase(listPublicBlogs.rejected, (state, action) => {
-
+            state.isLoading = false;
+            if(typeof action.payload === 'string') {
+                state.postError = action.payload
+            }
         })
         .addCase(listSingleBlogs.pending, (state, action) => {
-
+            state.isLoading = true;
         })
         .addCase(listSingleBlogs.fulfilled, (state, action) => {
-
+            state.isLoading = false;
         })
 
         .addCase(listSingleBlogs.rejected, (state, action) => {
-
+            state.isLoading = false;
+            if(typeof action.payload === 'string') {
+                state.postError = action.payload
+            }
 
         })
         .addCase(listPrivate.pending, (state, action) => {
-
+            state.isLoading = true;
         })
         .addCase(listPrivate.fulfilled, (state, action) => {
-
+            state.isLoading = false;
         })
         .addCase(listPrivate.rejected, (state, action) => {
-
+            state.isLoading = false;
+            if(typeof action.payload === 'string') {
+                state.postError = action.payload
+            }
         })
         .addCase(updateBlog.fulfilled, (state, action) => {
-
+            state.isLoading = false;
         })
         .addCase(updateBlog.rejected, (state, action) => {
-
+            state.isLoading = false;
+            if(typeof action.payload === 'string') {
+                state.postError = action.payload
+            }
         })
         .addCase(removeBlog.fulfilled, (state, action) => {
-
+            state.isLoading = false;
         })
         .addCase(removeBlog.rejected, (state, action) => {
-            
+            state.isLoading = false;
+            if(typeof action.payload === 'string') {
+                state.postError = action.payload
+            }
         })
     }
 })
+
+export const { loadMore, resetPages } = postSlice.actions;
 
 export const selectPost = (state: RootState) => state.post
 
