@@ -23,7 +23,7 @@ function App() {
   useEffect(() => {
 
     let timer = setTimeout(() => {
-      if(notifications.message || notificationPost.type) {
+      if(notifications.type || notificationPost.type) {
         dispatch(notify({type:'',message:''}));
         dispatch(postNotification({type: '', message:''}));
       }
@@ -31,7 +31,7 @@ function App() {
 
     return () => clearTimeout(timer);
     // eslint-disable-next-line
-  }, [notifications, notificationPost])
+  }, [notifications.type, notificationPost.type])
 
   useEffect(() => {
     if(token) {
