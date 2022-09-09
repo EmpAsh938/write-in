@@ -1,3 +1,58 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    .markdown-css *{
+        @apply text-base text-gray-700;
+    }
+    .markdown-css h1,h2,h3,h4,h5,h6 {
+        @apply font-semibold my-1;
+    }
+    .markdown-css h1 {
+        @apply text-3xl;
+    }
+    .markdown-css h2 {
+        @apply text-xl;
+    }
+    .markdown-css h3 {
+        @apply text-lg;
+    }
+    .markdown-css h4 {
+        @apply text-base;
+    }
+    .markdown-css h5 {
+        @apply text-sm;
+    }
+    .markdown-css h6 {
+        @apply text-xs;
+    }
+    .markdown-css strong {
+        @apply font-bold;
+    }
+    .mardown-css em {
+        @apply italic;
+    }
+    .markdown-css u {
+        @apply underline;
+    }
+    .markdown-css code {
+        @apply block p-2 bg-[rgba(0,0,0,.6)] text-white;
+    }
+    .markdown-css img {
+        @apply w-full object-contain;
+    }
+    .markdown-css a {
+        @apply underline;
+    }
+    .markdown-css ul {
+        @apply list-disc pl-6 italic;
+    }
+    .markdown-css ol {
+        @apply list-decimal pl-6 italic;
+    }
+    
+    .markdown-css p {
+        @apply text-base;
+    }
+}

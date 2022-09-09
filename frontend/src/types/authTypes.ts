@@ -8,4 +8,4 @@ export type RegisterAuthState = LoginAuthState & {
     fullname: string;
 }
 
-export type NotificationsType = 'error' | 'success';
+export type NotificationsType = 'error' | 'success' | '';

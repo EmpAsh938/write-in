@@ -93,8 +93,8 @@ const deleteBlog = asyncHandler(async (req, res) => {
         throw new Error('Id missing');
     }
     try {
-        const result = await Post.findByIdAndDelete(id);
-        if(!result) {
+        const doc = await Post.findByIdAndDelete(id);
+        if(!doc) {
             res.status(401);
             throw new Error('Deletion failed');
         } else {
@@ -135,7 +135,6 @@ const listBlogsPrivate = asyncHandler(async (req, res) => {
                 result: []
             })
         } else {
-            console.log(docs);
             res.json({
                 message: 'successfully retrieved',
                 result: docs

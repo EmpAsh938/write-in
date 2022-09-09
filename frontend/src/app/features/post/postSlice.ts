@@ -3,11 +3,15 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../../store';
 import { deleteBlog, editBlog, listPrivateAll, listPublicAll, listSingle, savePost } from './postService';
 import { PostsObjType, PostsType } from '../../../types/postTypes';
+import { NotificationsType } from '../../../types/authTypes';
 
 interface PostState {
     pages: number;
     rows: number;
-    postError: string;
+    notifications: {
+        type: NotificationsType,
+        message: string
+    };
     isLoading: boolean;
     privatePosts: PostsType[];
     singlePost: PostsType;
@@ -17,7 +21,10 @@ interface PostState {
 const initialState: PostState = {
     pages:1,
     rows: 10,
-    postError: '',
+    notifications: {
+        type: '',
+        message: '',
+    },
     isLoading:false,
     singlePost: {} as PostsType,
     privatePosts: [],
@@ -50,7 +57,7 @@ export const listSingleBlogs = createAsyncThunk(
 
 export const listPrivate = createAsyncThunk(
     'post/private/all',
-   async ({pages,rows,token}:{pages:number,rows:number,token:string},thunkAPI) => {
+   async ({pages,rows,token}:{pages:number,rows:number,token:string | null},thunkAPI) => {
     try {
         return (await listPrivateAll(pages,rows,token));
     } catch (error:any) {
@@ -109,6 +116,18 @@ const postSlice = createSlice({
         },
         resetSinglePost: (state) => {
             state.singlePost = {} as PostsType;
+        },
+        removePrivatePost: (state,action) => {
+            const { id } = action.payload;
+            const filteredPost = state.privatePosts.filter(item => item._id !== id);
+            state.privatePosts = filteredPost;
+            state.notifications.type = 'success';
+            state.notifications.message = 'post removed';
+        },
+        postNotification: (state, action) => {
+            const { type, message } = action.payload;
+            state.notifications.type = type;
+            state.notifications.message = message;
         }
     },
     extraReducers: (builder) => {
@@ -127,11 +146,14 @@ const postSlice = createSlice({
                     }
                 }
             }
+            state.notifications.type = 'success';
+            state.notifications.message = 'post fetched';
         })
         .addCase(listPublicBlogs.rejected, (state, action) => {
             state.isLoading = false;
             if(typeof action.payload === 'string') {
-                state.postError = action.payload
+                state.notifications.type = 'error';
+                state.notifications.message = action.payload
             }
         })
         .addCase(listSingleBlogs.pending, (state, action) => {
@@ -142,12 +164,15 @@ const postSlice = createSlice({
             if(typeof action.payload.result === 'object') {
                 state.singlePost = action.payload.result;
             }
+            state.notifications.type = 'success';
+            state.notifications.message = 'post fetched';
         })
 
         .addCase(listSingleBlogs.rejected, (state, action) => {
             state.isLoading = false;
             if(typeof action.payload === 'string') {
-                state.postError = action.payload
+                state.notifications.type = 'error';
+                state.notifications.message = action.payload;
             }
 
         })
@@ -156,6 +181,8 @@ const postSlice = createSlice({
         })
         .addCase(listPrivate.fulfilled, (state, action) => {
             state.isLoading = false;
+            state.notifications.type = 'success';
+            state.notifications.message = 'post fetched';
             if(typeof action.payload === 'object') {
                 if(Array.isArray(action.payload.result) && action.payload.result.length > 0) {
                     if(initialState.pages !== state.pages || initialState.rows !== state.rows) {
@@ -169,39 +196,48 @@ const postSlice = createSlice({
         .addCase(listPrivate.rejected, (state, action) => {
             state.isLoading = false;
             if(typeof action.payload === 'string') {
-                state.postError = action.payload
+                state.notifications.type = 'error';
+                state.notifications.message = action.payload;
             }
         })
         .addCase(updateBlog.fulfilled, (state, action) => {
             state.isLoading = false;
+            state.notifications.type = 'success';
+            state.notifications.message = 'post edited';
         })
         .addCase(updateBlog.rejected, (state, action) => {
             state.isLoading = false;
             if(typeof action.payload === 'string') {
-                state.postError = action.payload
+                state.notifications.type = 'error';
+                state.notifications.message = action.payload;
             }
         })
         .addCase(removeBlog.fulfilled, (state, action) => {
             state.isLoading = false;
+            state.notifications.type = 'success';
+            state.notifications.message = 'post removed';
         })
         .addCase(removeBlog.rejected, (state, action) => {
             state.isLoading = false;
             if(typeof action.payload === 'string') {
-                state.postError = action.payload
+                state.notifications.type = 'error';
+                state.notifications.message = action.payload;
             }
         })
         .addCase(saveBlog.fulfilled, (state, action) => {
-
+            state.notifications.type = 'success';
+            state.notifications.message = 'post saved';
         })
         .addCase(saveBlog.rejected, (state, action) => {
             if(typeof action.payload === 'string') {
-                state.postError = action.payload;
+                state.notifications.type = 'error';
+                state.notifications.message = action.payload;
             }
         })
     }
 })
 
-export const { loadMore, resetPages, resetSinglePost } = postSlice.actions;
+export const { loadMore, resetPages, resetSinglePost, removePrivatePost, postNotification } = postSlice.actions;
 
 export const selectPost = (state: RootState) => state.post
 

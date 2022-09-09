@@ -8,7 +8,7 @@ import { emailValidator } from '../utils/emailValidator';
 
 
 const Profile = () => {
-    const { token, notifications: {message: error}, user } = useAppSelector(state => state.auth);
+    const { token, notifications, user } = useAppSelector(state => state.auth);
     const [name, setName] = useState<string | null>(user.fullname);
     const [uname, setUname] = useState<string | null>(user.username);
     const [mail, setMail] = useState<string | null>(user.email);
@@ -32,7 +32,7 @@ const Profile = () => {
     return (
         <div className='bg-slate-100'>
             <Navbar />
-            {error && <ErrorMessage />}
+            {notifications.type && <ErrorMessage {...notifications}/>}
             <main className='max-w-lg mx-auto p-5 flex flex-col gap-8 bg-white'>
                 <section className='flex flex-col gap-2'>
 

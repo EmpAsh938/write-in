@@ -15,7 +15,7 @@ export const listSingle = async (id:string) => {
 }
 
 // list private all blogs
-export const listPrivateAll = async (pages:number,rows:number,token:string) => {
+export const listPrivateAll = async (pages:number,rows:number,token:string | null) => {
     const response = await axios.get(`/post/me?pages=${pages}&rows=${rows}`,
         {
         headers: {
@@ -38,7 +38,7 @@ export const editBlog = async ({id,token,title,status,markdown}:PostsObjType & {
 }
 // delete blog
 export const deleteBlog = async (id:string,token:string|null) => {
-    const response = await axios.delete(`/post/delete/${id}`, {
+    const response = await axios.delete(`/post/me/${id}`, {
         headers: {
             Authorization: `Bearer ${token}`
         }

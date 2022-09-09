@@ -6,7 +6,7 @@ import { useAppSelector, useAppDispatch } from '../hooks/useReactRedux';
 import { loginUser } from '../app/features/auth/authSlice';
 
 const Login = () => {
-  const { token, notifications: {message: error} } = useAppSelector(state => state.auth);
+  const { token, notifications } = useAppSelector(state => state.auth);
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
@@ -69,7 +69,7 @@ const Login = () => {
           </div>
           </div>
       </section>
-      {error && <ErrorMessage />}
+      {notifications.type && <ErrorMessage {...notifications} />}
     </main>
   )
 }

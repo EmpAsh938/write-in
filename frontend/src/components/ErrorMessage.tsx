@@ -1,11 +1,10 @@
 import { MdDone } from "react-icons/md";
 import { VscError } from "react-icons/vsc";
 
-import { useAppSelector } from "../hooks/useReactRedux"
+import { NotificationsType } from "../types/authTypes";
 
-const ErrorMessage = () => {
-  const { notifications } = useAppSelector(state => state.auth);
-  const { type, message } = notifications;
+const ErrorMessage = (notifications: {type: NotificationsType, message:string}) => {
+  const {type, message} = notifications;
   return (
     <div className="fixed top-3 right-1 p-6 max-w-sm mx-auto bg-white rounded-xl shadow-lg flex items-center space-x-4">
       <div className={`${type === 'error' ? 'shrink-0 text-3xl text-red-700' : 'shrink-0 text-3xl text-green-600'}`}>

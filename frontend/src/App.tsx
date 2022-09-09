@@ -10,24 +10,28 @@ import Dashboard from './pages/Dashboard';
 import PageNotFound from './pages/PageNotFound';
 import { notify, verifyUser } from './app/features/auth/authSlice';
 import { useAppDispatch, useAppSelector } from './hooks/useReactRedux';
+import SingleBlog from './pages/SingleBlog';
+import { postNotification } from './app/features/post/postSlice';
 
 
 function App() {
   const { notifications, token } = useAppSelector(state => state.auth);
+  const { notifications: notificationPost } = useAppSelector(state => state.post);
 
   const dispatch = useAppDispatch();
 
   useEffect(() => {
 
     let timer = setTimeout(() => {
-      if(notifications.message) {
-        dispatch(notify({type:'error',message:''}));
+      if(notifications.message || notificationPost.type) {
+        dispatch(notify({type:'',message:''}));
+        dispatch(postNotification({type: '', message:''}));
       }
     }, 2000);
 
     return () => clearTimeout(timer);
     // eslint-disable-next-line
-  }, [notifications])
+  }, [notifications, notificationPost])
 
   useEffect(() => {
     if(token) {
@@ -54,6 +58,9 @@ function App() {
            <Blog />} />
           <Route path="edit/:id" element={
             <Blog/>} />
+            <Route path=':id'element={
+              <SingleBlog />
+            } />
           <Route path="*" element={<PageNotFound />} />
         </Route>
       </Routes>

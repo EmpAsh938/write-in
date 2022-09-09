@@ -21,12 +21,13 @@ import {
 
 import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
 import { listSingleBlogs, saveBlog, resetSinglePost, updateBlog } from '../app/features/post/postSlice';
+import ErrorMessage from '../components/ErrorMessage';
 
 
 const Blog = () => {
     const { id } = useParams();
     const { token } = useAppSelector(state => state.auth);
-    const { singlePost } = useAppSelector(state => state.post);
+    const { singlePost, notifications } = useAppSelector(state => state.post);
     const [isPreviewOn, setIsPreviewOn] = useState<boolean>(false);
     const [title, setTitle] = useState<string>('');
     const [markdown, setMarkdown] = useState<string>('');
@@ -35,6 +36,7 @@ const Blog = () => {
     const dispatch = useAppDispatch();
     
     const handleTextArea = (e:React.ChangeEvent<HTMLTextAreaElement>) => {
+        e.target.style.height = 'inherit';
         e.target.style.height = `${e.target.scrollHeight}px`;
         setMarkdown(e.target.value);
     }
@@ -136,6 +138,7 @@ const Blog = () => {
         <button onClick={handleCancel} className='bg-red-600 text-white px-2 rounded-sm py-1'>Cancel</button>
     </section>
     </main>
+    {notifications.type && <ErrorMessage {...notifications} />}
     </div>
   )
 }

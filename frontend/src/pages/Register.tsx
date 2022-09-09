@@ -13,7 +13,7 @@ const Register = () => {
     fullname: '',
     password: ''
   })
-  const { token, notifications: {message: error} } = useAppSelector(state => state.auth);
+  const { token, notifications } = useAppSelector(state => state.auth);
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -111,7 +111,7 @@ const Register = () => {
           </div>
           </div>
       </section>
-      {error && <ErrorMessage />}
+      {notifications.type && <ErrorMessage {...notifications} />}
     </main>
   )
 }
