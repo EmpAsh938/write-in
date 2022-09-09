@@ -112,7 +112,7 @@ const postSlice = createSlice({
             state.rows = initialState.rows;
         },
         loadMore: (state, action) => {
-            state.pages = action.payload.pages
+            state.pages = action.payload.pages;
         },
         resetSinglePost: (state) => {
             state.singlePost = {} as PostsType;

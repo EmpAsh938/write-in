@@ -1,11 +1,13 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { listPrivate } from '../app/features/post/postSlice';
-import Blogcard from '../components/Blogcard';
+
 import Card from '../components/Card';
-import ErrorMessage from '../components/ErrorMessage';
 import Navbar from '../components/Navbar';
+import Blogcard from '../components/Blogcard';
+import ErrorMessage from '../components/ErrorMessage';
 import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
+import { listPrivate, resetPages } from '../app/features/post/postSlice';
+import Pagination from '../components/Pagination';
 
 const Dashboard = () => {
   const { token } = useAppSelector(state => state.auth);
@@ -21,6 +23,7 @@ const Dashboard = () => {
   }, [token])
   
   useEffect(() => {
+    dispatch(resetPages());
     if(token) {
       dispatch(listPrivate({pages,rows,token}));
     }
@@ -51,7 +54,7 @@ const Dashboard = () => {
             )}
           </div>
         </section>
-
+        <Pagination />
       </main>
       {notifications.type && <ErrorMessage {...notifications} />}
     </div>

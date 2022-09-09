@@ -2,8 +2,9 @@ import { useEffect } from 'react';
 
 import Navbar from '../components/Navbar';
 import HomeBlogs from '../components/HomeBlogs';
+import Pagination from '../components/Pagination';
 import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
-import { listPublicBlogs } from '../app/features/post/postSlice';
+import { listPublicBlogs, resetPages } from '../app/features/post/postSlice';
 
 
 const Home = () => {
@@ -12,6 +13,7 @@ const Home = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    dispatch(resetPages());
     dispatch(listPublicBlogs({pages:1,rows:10}));
   }, [])  
   return (
@@ -25,6 +27,7 @@ const Home = () => {
           )
         })
        )}
+       <Pagination />
       </main>
     </div>
   )
