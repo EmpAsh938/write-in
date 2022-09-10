@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { RootState } from '../../store';
-import { deleteBlog, editBlog, listPrivateAll, listPublicAll, listSingle, savePost } from './postService';
+import { deleteBlog, editBlog, listPrivateAll, listPublicAll, listSingle, savePost, searchBlog } from './postService';
 import { PostsObjType, PostsType } from '../../../types/postTypes';
 import { NotificationsType } from '../../../types/authTypes';
 
@@ -12,10 +12,12 @@ interface PostState {
         type: NotificationsType,
         message: string
     };
+    query:string,
     isLoading: boolean;
-    privatePosts: PostsType[];
-    singlePost: PostsType;
     posts: PostsType[];
+    singlePost: PostsType;
+    searchPosts: PostsType[];
+    privatePosts: PostsType[];
 }
 
 const initialState: PostState = {
@@ -25,10 +27,12 @@ const initialState: PostState = {
         type: '',
         message: '',
     },
+    query:'',
+    posts:[],
     isLoading:false,
     singlePost: {} as PostsType,
     privatePosts: [],
-    posts:[]
+    searchPosts: [],
 }
 
 export const listPublicBlogs = createAsyncThunk(
@@ -103,10 +107,25 @@ export const saveBlog = createAsyncThunk(
    }
 )
 
+export const searchBlogs = createAsyncThunk(
+    'posts/search',
+   async (query:string,thunkAPI) => {
+    try {
+        return (await searchBlog({query}));
+    } catch (error:any) {
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString() || '';
+        return thunkAPI.rejectWithValue(message);
+    }
+   }
+)
+
 const postSlice = createSlice({
     name: 'post',
     initialState,
     reducers: {
+        searchString: (state, action) => {
+            state.query = action.payload.search;
+        },
         resetPages: (state) => {
             state.pages = initialState.pages;
             state.rows = initialState.rows;
@@ -132,7 +151,7 @@ const postSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-        .addCase(listPublicBlogs.pending, (state, action) => {
+        .addCase(listPublicBlogs.pending, (state) => {
             state.isLoading = true;
         })
         .addCase(listPublicBlogs.fulfilled, (state, action) => {
@@ -159,7 +178,7 @@ const postSlice = createSlice({
                 state.notifications.message = action.payload
             }
         })
-        .addCase(listSingleBlogs.pending, (state, action) => {
+        .addCase(listSingleBlogs.pending, (state) => {
             state.isLoading = true;
         })
         .addCase(listSingleBlogs.fulfilled, (state, action) => {
@@ -177,7 +196,7 @@ const postSlice = createSlice({
             }
 
         })
-        .addCase(listPrivate.pending, (state, action) => {
+        .addCase(listPrivate.pending, (state) => {
             state.isLoading = true;
         })
         .addCase(listPrivate.fulfilled, (state, action) => {
@@ -216,7 +235,7 @@ const postSlice = createSlice({
                 state.notifications.message = action.payload;
             }
         })
-        .addCase(removeBlog.fulfilled, (state, action) => {
+        .addCase(removeBlog.fulfilled, (state) => {
             state.isLoading = false;
             state.notifications.type = 'success';
             state.notifications.message = 'post removed';
@@ -228,7 +247,7 @@ const postSlice = createSlice({
                 state.notifications.message = action.payload;
             }
         })
-        .addCase(saveBlog.fulfilled, (state, action) => {
+        .addCase(saveBlog.fulfilled, (state) => {
             state.notifications.type = 'success';
             state.notifications.message = 'post saved';
         })
@@ -238,10 +257,35 @@ const postSlice = createSlice({
                 state.notifications.message = action.payload;
             }
         })
+        .addCase(searchBlogs.pending, (state) => {
+            state.isLoading = true;
+        })
+        .addCase(searchBlogs.fulfilled, (state, action) => {
+            state.isLoading = false;
+            if(typeof action.payload === 'object') {
+                if(Array.isArray(action.payload.result)) {
+                    if(action.payload.result.length > 0) {
+
+                        if(initialState.pages !== state.pages || initialState.rows !== state.rows) {
+                            state.searchPosts = [...state.searchPosts, ...action.payload.result]
+                        } else {
+                            state.searchPosts = [...action.payload.result];
+                        }
+                    } else {
+                        state.pages = state.pages - 1;
+                    }
+                }
+            }
+        })
+        .addCase(searchBlogs.rejected, (state, action) => {
+            state.isLoading = false;
+            state.notifications.type = 'error';
+            state.notifications.message = typeof action.payload === 'string' ? action.payload : '';
+        })
     }
 })
 
-export const { loadMore, resetPages, resetSinglePost, removePrivatePost, postNotification } = postSlice.actions;
+export const { searchString, loadMore, resetPages, resetSinglePost, removePrivatePost, postNotification } = postSlice.actions;
 
 export const selectPost = (state: RootState) => state.post
 

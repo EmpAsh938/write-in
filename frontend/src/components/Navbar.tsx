@@ -1,17 +1,29 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { FormEvent, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaSearch } from 'react-icons/fa';
 
 import UserImage from './UserImage';
 import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
 import { logoutUser } from '../app/features/auth/authSlice';
+import { searchBlogs, searchString } from '../app/features/post/postSlice';
 
 const Navbar = () => {
   const { token, user } = useAppSelector(state => state.auth);
+  const { query } = useAppSelector(state => state.post);
   const [toggleModal, setToggleModal] = useState<boolean>(false);
+  const [searchquery, setSearchQuery] = useState<string>(query);
 
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
+  const handleSearch = (e:FormEvent | MouseEvent) => {
+    e.preventDefault();
+    if(searchquery) {
+      dispatch(searchString({search:searchquery}));
+      dispatch(searchBlogs(searchquery));
+      navigate('/search');
+    }
+  }
   const handleLogout = () => {
     dispatch(logoutUser());
   }
@@ -23,9 +35,9 @@ const Navbar = () => {
             <h2 className='w-fit py-4 px-2 rounded text-center bg-slate-900 text-green-500 font-bold uppercase'>Write In</h2>
           </Link>
         </div>
-        <form className='max-w-sm flex-1 flex border border-solid border-green-200 p-1 rounded-sm'>
-          <input type='text' placeholder='Search blogs here' className='flex-1 outline-none'/>
-          <button className='text-green-700 opacity-50'>
+        <form onSubmit={handleSearch} className='max-w-sm flex-1 flex border border-solid border-green-200 p-1 rounded-sm'>
+          <input value={searchquery} onChange={e=>setSearchQuery(e.target.value)} type='text' placeholder='Search blogs here' className='flex-1 outline-none'/>
+          <button className='text-green-700 opacity-50' onClick={handleSearch}>
             <FaSearch />
           </button>
         </form>

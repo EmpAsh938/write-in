@@ -58,3 +58,9 @@ export const savePost =async ({title,status,markdown,token}:PostsObjType & {toke
     })
     return response.data;
 }
+
+// search blog
+export const searchBlog =async ({query}:{query:string}) => {
+    const response = await axios.get(`/post/search?term=${query}`);
+    return response.data;
+}

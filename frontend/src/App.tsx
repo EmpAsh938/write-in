@@ -12,6 +12,7 @@ import { notify, verifyUser } from './app/features/auth/authSlice';
 import { useAppDispatch, useAppSelector } from './hooks/useReactRedux';
 import SingleBlog from './pages/SingleBlog';
 import { postNotification } from './app/features/post/postSlice';
+import Search from './pages/Search';
 
 
 function App() {
@@ -54,6 +55,8 @@ function App() {
             <Profile />} />
           <Route path="dashboard" element={
             <Dashboard/>} />
+          <Route path="search" element={
+            <Search />} />
           <Route path="new" element={
            <Blog />} />
           <Route path="edit/:id" element={
