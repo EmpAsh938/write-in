@@ -29,6 +29,7 @@ const Dashboard = () => {
     }
     // eslint-disable-next-line
   }, [])
+ 
   return (
     <div className='bg-slate-100'>
       <Navbar />

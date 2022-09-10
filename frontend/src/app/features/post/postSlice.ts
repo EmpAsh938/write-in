@@ -112,7 +112,7 @@ const postSlice = createSlice({
             state.rows = initialState.rows;
         },
         loadMore: (state, action) => {
-            state.pages = action.payload.pages;
+            state.pages = action.payload.rows;
         },
         resetSinglePost: (state) => {
             state.singlePost = {} as PostsType;
@@ -138,11 +138,16 @@ const postSlice = createSlice({
         .addCase(listPublicBlogs.fulfilled, (state, action) => {
             state.isLoading = false;
             if(typeof action.payload === 'object') {
-                if(Array.isArray(action.payload.result) && action.payload.result.length > 0) {
-                    if(initialState.pages !== state.pages || initialState.rows !== state.rows) {
-                        state.posts = [...state.posts, ...action.payload.result]
+                if(Array.isArray(action.payload.result)) {
+                    if(action.payload.result.length > 0) {
+
+                        if(initialState.pages !== state.pages || initialState.rows !== state.rows) {
+                            state.posts = [...state.posts, ...action.payload.result]
+                        } else {
+                            state.posts = [...action.payload.result];
+                        }
                     } else {
-                        state.posts = [...action.payload.result];
+                        state.pages = state.pages - 1;
                     }
                 }
             }
@@ -184,11 +189,16 @@ const postSlice = createSlice({
             state.notifications.type = 'success';
             state.notifications.message = 'post fetched';
             if(typeof action.payload === 'object') {
-                if(Array.isArray(action.payload.result) && action.payload.result.length > 0) {
-                    if(initialState.pages !== state.pages || initialState.rows !== state.rows) {
-                        state.privatePosts = [...state.privatePosts, ...action.payload.result]
+                if(Array.isArray(action.payload.result)) {
+                    if(action.payload.result.length > 0) {
+
+                        if(initialState.pages !== state.pages || initialState.rows !== state.rows) {
+                            state.privatePosts = [...state.privatePosts, ...action.payload.result]
+                        } else {
+                            state.privatePosts = [...action.payload.result];
+                        }
                     } else {
-                        state.privatePosts = [...action.payload.result];
+                        state.pages = state.pages - 1;
                     }
                 }
             }
