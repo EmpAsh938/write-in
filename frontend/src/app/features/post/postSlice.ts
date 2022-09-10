@@ -111,8 +111,8 @@ const postSlice = createSlice({
             state.pages = initialState.pages;
             state.rows = initialState.rows;
         },
-        loadMore: (state, action) => {
-            state.pages = action.payload.rows;
+        loadMore: (state) => {
+            state.pages += 1;
         },
         resetSinglePost: (state) => {
             state.singlePost = {} as PostsType;
@@ -151,8 +151,6 @@ const postSlice = createSlice({
                     }
                 }
             }
-            state.notifications.type = 'success';
-            state.notifications.message = 'post fetched';
         })
         .addCase(listPublicBlogs.rejected, (state, action) => {
             state.isLoading = false;
@@ -169,8 +167,6 @@ const postSlice = createSlice({
             if(typeof action.payload.result === 'object') {
                 state.singlePost = action.payload.result;
             }
-            state.notifications.type = 'success';
-            state.notifications.message = 'post fetched';
         })
 
         .addCase(listSingleBlogs.rejected, (state, action) => {
@@ -186,8 +182,6 @@ const postSlice = createSlice({
         })
         .addCase(listPrivate.fulfilled, (state, action) => {
             state.isLoading = false;
-            state.notifications.type = 'success';
-            state.notifications.message = 'post fetched';
             if(typeof action.payload === 'object') {
                 if(Array.isArray(action.payload.result)) {
                     if(action.payload.result.length > 0) {
