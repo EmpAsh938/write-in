@@ -10,7 +10,7 @@ const listBlogsPublic = asyncHandler(async (req, res) => {
         throw new Error('No valid query parameter found');
     }
     try {
-        const doc = await Post.find({}).populate('author').sort({ createdAt: -1 }).skip(rows * (pages - 1)).limit(rows).exec();
+        const doc = await Post.find({ status:{$eq:'published'} }).populate('author').sort({ createdAt: -1 }).skip(rows * (pages - 1)).limit(rows).exec();
         if (doc.length === 0) {
             res.json({
                 message: "items not found: either load more documents or lower the page limit",
