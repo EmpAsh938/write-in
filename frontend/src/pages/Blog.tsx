@@ -55,6 +55,7 @@ const Blog = () => {
         } else {
             dispatch(saveBlog({title,markdown,status:type,token}));
         }
+        navigate('/dashboard');
     }
 
 
