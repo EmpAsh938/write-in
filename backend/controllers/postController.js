@@ -3,6 +3,32 @@ const asyncHandler = require('express-async-handler');
 
 const Post = require('../models/postModel');
 
+const searchBlogs = asyncHandler(async (req, res) => {
+    const { term, pages, rows, sort } = req.query;
+    if(!term || !pages || !rows) {
+        res.status(400);
+        throw new Error('term/pages/rows are missing.');
+    }
+    let sortParam = !sort ? -1 : sort === 'asc' ? 1 : -1;
+    let re = new RegExp(term);
+    try {
+        const doc = await Post.find({ title: {$regex: re, $options: 'i'} }).populate('author').sort({createdAt: sortParam}).skip(rows * (pages-1)).limit(rows).exec();
+        if(doc.length === 0) {
+            res.json({
+                message: 'items not found',
+                result: []
+            })
+        } else {
+            res.json({
+                message: 'successfully retrieved',
+                result: doc
+            })
+        }
+    } catch (error) {
+        throw new Error(error);
+    } 
+})
+
 const listBlogsPublic = asyncHandler(async (req, res) => {
     const { pages, rows } = req.query;
     if (!pages || !rows) {
@@ -180,6 +206,7 @@ const getBlogSingle = asyncHandler(async (req, res) => {
 module.exports = {
     editBlog,
     deleteBlog,
+    searchBlogs,
     createNewBlog,
     getBlogSingle,
     listBlogsPublic,
