@@ -9,10 +9,15 @@ const searchBlogs = asyncHandler(async (req, res) => {
         res.status(400);
         throw new Error('term/pages/rows are missing.');
     }
-    let sortParam = !sort ? -1 : sort === 'asc' ? 1 : -1;
     let re = new RegExp(term);
     try {
-        const doc = await Post.find({ title: {$regex: re, $options: 'i'} }).populate('author').sort({createdAt: sortParam}).skip(rows * (pages-1)).limit(rows).exec();
+        let doc;
+        if(!sort || sort !== 'asc' || sort !== 'desc') {
+            doc = await Post.find({title: {regex: re, $options: 'i'}}).populate('author').skip(rows * (pages-1)).limit(rows).exec();
+        } else {
+            let sortParam = sort === 'asc' ? 1 : -1;
+            doc = await Post.find({ title: {$regex: re, $options: 'i'} }).populate('author').sort({createdAt: sortParam}).skip(rows * (pages-1)).limit(rows).exec();
+        }
         if(doc.length === 0) {
             res.json({
                 message: 'items not found',
