@@ -55,4 +55,8 @@
     .markdown-css p {
         @apply text-base;
     }
+
+    .active {
+        @apply font-semibold;
+    }
 }

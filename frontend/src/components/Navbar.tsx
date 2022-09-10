@@ -9,7 +9,7 @@ import { searchBlogs, searchString } from '../app/features/post/postSlice';
 
 const Navbar = () => {
   const { token, user } = useAppSelector(state => state.auth);
-  const { query } = useAppSelector(state => state.post);
+  const { query, pages, rows } = useAppSelector(state => state.post);
   const [toggleModal, setToggleModal] = useState<boolean>(false);
   const [searchquery, setSearchQuery] = useState<string>(query);
 
@@ -18,9 +18,9 @@ const Navbar = () => {
 
   const handleSearch = (e:FormEvent | MouseEvent) => {
     e.preventDefault();
-    if(searchquery) {
+    if(searchquery.length > 2) {
       dispatch(searchString({search:searchquery}));
-      dispatch(searchBlogs(searchquery));
+      dispatch(searchBlogs({query:searchquery,pages,rows,sort:0}));
       navigate('/search');
     }
   }
@@ -36,7 +36,7 @@ const Navbar = () => {
           </Link>
         </div>
         <form onSubmit={handleSearch} className='max-w-sm flex-1 flex border border-solid border-green-200 p-1 rounded-sm'>
-          <input value={searchquery} onChange={e=>setSearchQuery(e.target.value)} type='text' placeholder='Search blogs here' className='flex-1 outline-none'/>
+          <input value={searchquery} onChange={e=>setSearchQuery(e.target.value)} type='text' placeholder='Search blogs here(>2 letters)' className='flex-1 outline-none'/>
           <button className='text-green-700 opacity-50' onClick={handleSearch}>
             <FaSearch />
           </button>

@@ -12,10 +12,10 @@ const searchBlogs = asyncHandler(async (req, res) => {
     let re = new RegExp(term);
     try {
         let doc;
-        if(!sort || sort !== 'asc' || sort !== 'desc') {
-            doc = await Post.find({title: {regex: re, $options: 'i'}}).populate('author').skip(rows * (pages-1)).limit(rows).exec();
+        if(!sort || sort !== 1 || sort !== -1) {
+            doc = await Post.find({title: {$regex: re, $options: 'i'}}).populate('author').skip(rows * (pages-1)).limit(rows).exec();
         } else {
-            let sortParam = sort === 'asc' ? 1 : -1;
+            let sortParam = sort;
             doc = await Post.find({ title: {$regex: re, $options: 'i'} }).populate('author').sort({createdAt: sortParam}).skip(rows * (pages-1)).limit(rows).exec();
         }
         if(doc.length === 0) {

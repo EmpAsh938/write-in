@@ -109,9 +109,9 @@ export const saveBlog = createAsyncThunk(
 
 export const searchBlogs = createAsyncThunk(
     'posts/search',
-   async (query:string,thunkAPI) => {
+   async ({query,rows,pages,sort}:{query:string,rows:number,pages:number,sort:number},thunkAPI) => {
     try {
-        return (await searchBlog({query}));
+        return (await searchBlog({query,rows,pages,sort}));
     } catch (error:any) {
         const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString() || '';
         return thunkAPI.rejectWithValue(message);

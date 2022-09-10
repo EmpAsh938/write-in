@@ -60,7 +60,11 @@ export const savePost =async ({title,status,markdown,token}:PostsObjType & {toke
 }
 
 // search blog
-export const searchBlog =async ({query}:{query:string}) => {
-    const response = await axios.get(`/post/search?term=${query}`);
+export const searchBlog =async ({query,pages,rows,sort}:{query:string,pages:number,rows:number,sort:number}) => {
+    let prepareQuery = `/post/search?term=${query}&pages=${pages}&rows=${rows}`;
+    if(sort === 1 || sort === -1) {
+        prepareQuery = `${prepareQuery}&sort=${sort}`;
+    }
+    const response = await axios.get(prepareQuery);
     return response.data;
 }
