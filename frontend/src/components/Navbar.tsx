@@ -57,7 +57,10 @@ const Navbar = () => {
             </>
           )}
         </div>
-      </nav>
+        
+ 
+</nav>
+
     </header>
   )
 }
