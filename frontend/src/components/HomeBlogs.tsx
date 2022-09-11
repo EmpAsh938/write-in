@@ -4,8 +4,18 @@ import UserImage from './UserImage';
 import { PostsType } from '../types/postTypes';
 import { getMonth } from '../utils/getMonth';
 import { Link } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
+import { likeBlog } from '../app/features/post/postSlice';
 
 const HomeBlogs = ({_id, author, title, createdAt}:PostsType) => {
+
+  const { token } = useAppSelector(state => state.auth);
+
+  const dispatch = useAppDispatch();
+
+  const handleLike = () => {
+    dispatch(likeBlog({id:_id,token}));
+  }
   
   return (
     <Link to={_id} className='border border-solid border-green-200 shadow-md rounded p-3 bg-white'>
@@ -22,7 +32,7 @@ const HomeBlogs = ({_id, author, title, createdAt}:PostsType) => {
         </div>
       </div>
       <div className='flex justify-between items-center'>
-        <button className=''>
+        <button className='' onClick={handleLike}>
           <FaRegHeart className='hover:fill-red-500'/>
         </button>
         <div>

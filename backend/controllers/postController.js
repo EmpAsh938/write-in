@@ -206,9 +206,51 @@ const getBlogSingle = asyncHandler(async (req, res) => {
     }
 })
 
+const likeBlog = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    if(!id) {
+        res.status(400);
+        throw new Error('id missing');
+    }
+    const decoded = jwt.decode(req.headers.authorization.split('Bearer')[1].trim());
+    const user_ref_id = decoded._id;
+    try {
+        let doc = await Post.findById(id).exec();
+        if(!doc) {
+            res.status(404);
+            return res.json({
+                message: 'not found',
+                result: []
+            })
+        }
+        doc = await Post.findOne({likes: {$elemMatch: {$eq: user_ref_id}}});
+        if(doc) {
+            return res.status(403).json({
+                message: 'Already liked',
+                result: []
+            })
+        }
+        let results = await Post.findByIdAndUpdate(id,{$push: {likes: user_ref_id}}).exec();
+        if(!results) {
+            res.status(404);
+            return res.json({
+                message: 'not found',
+                result: []
+            })
+        }
+        res.json({
+            message: 'liked',
+            result: results
+        })
+    } catch (error) {
+        throw new Error(error);
+    }
+})
+
 
 
 module.exports = {
+    likeBlog,
     editBlog,
     deleteBlog,
     searchBlogs,

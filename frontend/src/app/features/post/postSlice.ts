@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { RootState } from '../../store';
-import { deleteBlog, editBlog, listPrivateAll, listPublicAll, listSingle, savePost, searchBlog } from './postService';
+import { deleteBlog, editBlog, likePost, listPrivateAll, listPublicAll, listSingle, savePost, searchBlog } from './postService';
 import { PostsObjType, PostsType } from '../../../types/postTypes';
 import { NotificationsType } from '../../../types/authTypes';
 
@@ -112,6 +112,18 @@ export const searchBlogs = createAsyncThunk(
    async ({query,rows,pages,sort}:{query:string,rows:number,pages:number,sort:number},thunkAPI) => {
     try {
         return (await searchBlog({query,rows,pages,sort}));
+    } catch (error:any) {
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString() || '';
+        return thunkAPI.rejectWithValue(message);
+    }
+   }
+)
+
+export const likeBlog = createAsyncThunk(
+    'post/like',
+   async ({id,token}:{id:string,token:string | null},thunkAPI) => {
+    try {
+        return (await likePost({id,token}));
     } catch (error:any) {
         const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString() || '';
         return thunkAPI.rejectWithValue(message);
@@ -281,6 +293,16 @@ const postSlice = createSlice({
             state.isLoading = false;
             state.notifications.type = 'error';
             state.notifications.message = typeof action.payload === 'string' ? action.payload : '';
+        })
+        .addCase(likeBlog.fulfilled, (state, action) => {
+            console.log(action.payload);
+        })
+        .addCase(likeBlog.rejected, (state, action) => {
+            if(typeof action.payload === 'string') {
+                state.notifications.type = 'error';
+                state.notifications.message = action.payload;
+            }
+
         })
     }
 })

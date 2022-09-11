@@ -68,3 +68,13 @@ export const searchBlog =async ({query,pages,rows,sort}:{query:string,pages:numb
     const response = await axios.get(prepareQuery);
     return response.data;
 }
+
+// like blog 
+export const likePost =async ({id,token}:{id:string,token:string | null}) => {
+    const response = await axios.get(`/post/like/${id}`, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+    return response.data;
+}

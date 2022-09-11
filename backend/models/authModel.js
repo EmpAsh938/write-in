@@ -34,7 +34,11 @@ const authSchema = new Schema(
         },
         profileImage: {
             type:String
-        }
+        },
+        bookmarks: {
+            type: [Schema.Types.ObjectId],
+            ref: 'Post'
+        },
     },
     {
         timestamps: true

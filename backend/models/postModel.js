@@ -23,7 +23,9 @@ const postSchema = new Schema(
             required: [true, 'please add author ref']
         },
         likes: {
-            type: String,
+            type: [Schema.Types.ObjectId],
+            ref: 'Auth',
+            required: [true, 'please add ref']
         },
         markdown: {
             type: String
