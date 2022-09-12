@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
 const asyncHandler = require('express-async-handler');
 
 const Post = require('../models/postModel');
@@ -223,21 +224,24 @@ const likeBlog = asyncHandler(async (req, res) => {
                 result: []
             })
         }
-        doc = await Post.findOne({likes: {$elemMatch: {$eq: user_ref_id}}});
+        doc = await Post.findOne({_id:id, likes: {$eq: user_ref_id}}).exec();
+       
         if(doc) {
-            return res.status(403).json({
-                message: 'Already liked',
-                result: []
+            doc = await Post.findOneAndUpdate({_id:id}, {$pull: {likes: {$eq: user_ref_id}}}).exec();
+            doc = await Post.findOne({_id:id}).exec();
+            return res.json({
+                message: 'like removed',
+                result: doc
             })
         }
-        let results = await Post.findByIdAndUpdate(id,{$push: {likes: user_ref_id}}).exec();
+        let results = await Post.findByIdAndUpdate(id,{$push: {"likes": user_ref_id}}).exec();
         if(!results) {
-            res.status(404);
-            return res.json({
+            return res.status(404).json({
                 message: 'not found',
                 result: []
             })
         }
+        results = await Post.findOne({_id:id}).exec();
         res.json({
             message: 'liked',
             result: results

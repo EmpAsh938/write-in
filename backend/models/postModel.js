@@ -22,11 +22,12 @@ const postSchema = new Schema(
             ref: 'Auth',
             required: [true, 'please add author ref']
         },
-        likes: {
-            type: [Schema.Types.ObjectId],
-            ref: 'Auth',
-            required: [true, 'please add ref']
-        },
+        likes: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'Auth'
+            }
+        ],
         markdown: {
             type: String
         }
