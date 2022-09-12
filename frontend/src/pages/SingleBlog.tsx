@@ -2,19 +2,28 @@ import { marked } from 'marked';
 import { useEffect } from 'react';
 import * as DOMPurify from 'dompurify';
 import { useNavigate, useParams } from 'react-router-dom';
+import { FaRegHeart, FaRegBookmark } from 'react-icons/fa';
 
 import { getMonth } from '../utils/getMonth';
 import UserImage from '../components/UserImage';
-import { listSingleBlogs } from '../app/features/post/postSlice';
+import { likeBlog, listSingleBlogs } from '../app/features/post/postSlice';
 import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
 
 
 const SingleBlog = () => {
     const { id } = useParams();
+    const { token } = useAppSelector(state => state.auth);
     const { singlePost } = useAppSelector(state => state.post);
 
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
+
+
+  const handleLike = () => {
+    if(token && id) {
+        dispatch(likeBlog({id: id,token}));
+    }
+  }
 
     useEffect(() => {
         if(!id) {
@@ -39,6 +48,18 @@ const SingleBlog = () => {
     const { title, markdown, createdAt, author } = singlePost;
     return (
         <main className='p-10'>
+            <aside className='fixed h-full w-fit p-3 bottom-0 left-0 bg-white'>
+                <section>
+                    <button className='' onClick={handleLike}>
+                        <FaRegHeart />
+                        <span>Like</span>
+                    </button>
+                    <button>
+                        <FaRegBookmark />
+                        <span>Bookmark</span>
+                    </button>
+                </section>
+            </aside>
             <section className='max-w-5xl min-h-screen mx-auto p-4 border border-solid border-green-300 rounded flex flex-col gap-3'>
                 <div className='flex items-center justify-start gap-2'>
                     <div>

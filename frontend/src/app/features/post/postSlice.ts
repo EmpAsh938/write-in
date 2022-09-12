@@ -21,7 +21,7 @@ interface PostState {
 }
 
 const initialState: PostState = {
-    pages:1,
+    pages: 1,
     rows: 10,
     notifications: {
         type: '',
