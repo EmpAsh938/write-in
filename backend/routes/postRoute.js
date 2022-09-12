@@ -13,6 +13,5 @@ postRouter.delete('/me/:id', verifyUser, deleteBlog);          // private delete
 postRouter.put('/edit/:id', verifyUser, editBlog);         // private edit
 postRouter.get('/get/:id', getBlogSingle);         // public single blog
 postRouter.get('/like/:id', verifyUser, likeBlog);             // like blog
-// postRouter.get('/bookmark/:id', verifyUser);             // bookmark blog
 
 module.exports = postRouter;

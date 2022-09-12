@@ -82,11 +82,37 @@ const registerUser = asyncHandler(async (req, res) => {
     }
 })
 
-const logoutUser = (req, res) => {
-    res.status(200).json({
-        message: 'logout user'
-    })
-}
+const bookmarkPost = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    if(!id) {
+        res.status(400);
+        throw new Error('id missing');
+    }
+    const decoded = jwt.decode(req.headers.authorization.split('Bearer')[1].trim());
+    try {
+        let doc = await Auth.findOne({_id:decoded._id, bookmarks: {$eq: id}}).exec();
+        if(doc) {
+            doc = await Auth.findOneAndUpdate({_id:decoded._id}, {$pull: {bookmarks: {$eq: id}}}).exec();
+            doc = await Auth.findOne({_id:decoded._id}).exec();
+            return res.json({
+                message: 'bookmark removed',
+                result: doc
+            })
+        }
+        doc = await Auth.findByIdAndUpdate(decoded._id, {$push: {'bookmarks': id}}).exec();
+        if(!doc) {
+            res.status(400);
+            throw new Error('not found');
+        }
+        doc = await Auth.findOne({_id:decoded._id}).exec();
+        res.json({
+            message: 'bookmarked',
+            result: doc
+        })
+    } catch (error) {
+        throw new Error(error);
+    }
+})
 
 const validateUser = asyncHandler(async (req, res) => {
     const userToken = req.headers.authorization.split('Bearer')[1].trim();
@@ -117,4 +143,4 @@ const validateUser = asyncHandler(async (req, res) => {
     }
 })
 
-module.exports = { loginUser, registerUser, logoutUser, validateUser };
+module.exports = { loginUser, registerUser, bookmarkPost, validateUser };

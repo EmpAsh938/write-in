@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-import { register, login, logout, verify } from './authService'
+import { register, login, logout, verify, bookmark } from './authService'
 import { RegisterAuthState, LoginAuthState, NotificationsType } from '../../../types/authTypes'
 
 type NotificationsObj = {
@@ -66,6 +66,18 @@ export const logoutUser = createAsyncThunk(
  }
 )
 
+export const bookmarkPost = createAsyncThunk(
+  'auth/bookmark',
+ async ({id,token}:{id:string,token:string}, thunkAPI) => {
+  try {
+    return (await bookmark(id,token));
+  } catch (error:any) {
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString() || '';
+    return thunkAPI.rejectWithValue(message);
+  }
+ }
+)
+
 export const verifyUser = createAsyncThunk(
   'auth/verify',
  async (token:string) => {
@@ -78,7 +90,6 @@ const authSlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
-    // Use the PayloadAction type to declare the contents of `action.payload`
     notify: (state, action) => {
       const { type, message } = action.payload;
       return {
@@ -131,9 +142,8 @@ const authSlice = createSlice({
           state.notifications.message = action.payload;
       }
     })
-    .addCase(logoutUser.fulfilled, ((state) => {
+    .addCase(logoutUser.fulfilled, (() => {
       return {
-        ...state,
         ...initialState
       }
     }))
@@ -150,6 +160,15 @@ const authSlice = createSlice({
         state.token = null;
         state.notifications.type = 'error';
           state.notifications.message = action.payload;
+      }
+    })
+    .addCase(bookmarkPost.fulfilled, (state,action) => {
+        console.log(action.payload);
+    })
+    .addCase(bookmarkPost.rejected, (state, action) => {
+      if(typeof action.payload === 'string') {
+        state.notifications.type = 'error';
+        state.notifications.message = action.payload;
       }
     })
   },

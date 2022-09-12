@@ -22,6 +22,16 @@ const logout = async () => {
     localStorage.clear();
 }
 
+// bookmark
+const bookmark = async (id:string,token:string) => {
+    const response = await axios.get(`/auth/bookmark/${id}`, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+    return response.data;
+}
+
 // verify
 const verify = async (token:string) => {
     const response = await axios.get('/auth/verify', { 
@@ -32,4 +42,4 @@ const verify = async (token:string) => {
     return response.data;
 }
 
-export { register, login, logout, verify };
+export { register, login, logout, bookmark,  verify };

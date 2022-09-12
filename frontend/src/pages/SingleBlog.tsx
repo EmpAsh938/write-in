@@ -8,6 +8,7 @@ import { getMonth } from '../utils/getMonth';
 import UserImage from '../components/UserImage';
 import { likeBlog, listSingleBlogs } from '../app/features/post/postSlice';
 import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
+import { bookmarkPost } from '../app/features/auth/authSlice';
 
 
 const SingleBlog = () => {
@@ -21,7 +22,13 @@ const SingleBlog = () => {
 
   const handleLike = () => {
     if(token && id) {
-        dispatch(likeBlog({id: id,token}));
+        dispatch(likeBlog({id,token}));
+    }
+  }
+
+  const handleBookmark = () => {
+    if(token && id) {
+        dispatch(bookmarkPost({id,token}));
     }
   }
 
@@ -54,7 +61,7 @@ const SingleBlog = () => {
                         <FaRegHeart />
                         <span>Like</span>
                     </button>
-                    <button>
+                    <button onClick={handleBookmark}>
                         <FaRegBookmark />
                         <span>Bookmark</span>
                     </button>
