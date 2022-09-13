@@ -9,6 +9,7 @@ import UserImage from '../components/UserImage';
 import { likeBlog, listSingleBlogs } from '../app/features/post/postSlice';
 import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
 import { bookmarkPost } from '../app/features/auth/authSlice';
+import Navbar from '../components/Navbar';
 
 
 const SingleBlog = () => {
@@ -52,29 +53,30 @@ const SingleBlog = () => {
         smartypants: false,
         xhtml: false
       });
-    const { title, markdown, createdAt, author } = singlePost;
+    const { title, markdown, createdAt, author, likes } = singlePost;
     return (
+        <>
+        <Navbar />
         <main className='p-10'>
-            <aside className='fixed h-full w-fit p-3 bottom-0 left-0 bg-white'>
-                <section>
-                    <button className='' onClick={handleLike}>
-                        <FaRegHeart />
-                        <span>Like</span>
-                    </button>
-                    <button onClick={handleBookmark}>
-                        <FaRegBookmark />
-                        <span>Bookmark</span>
-                    </button>
-                </section>
-            </aside>
             <section className='max-w-5xl min-h-screen mx-auto p-4 border border-solid border-green-300 rounded flex flex-col gap-3'>
-                <div className='flex items-center justify-start gap-2'>
+                <div className='flex items-center justify-between'>
                     <div>
-                        <UserImage profileImage={author.profileImage} fullname={author.fullname} />
+                        <div>
+                            <UserImage profileImage={author.profileImage} fullname={author.fullname} />
+                        </div>
+                        <div className='flex flex-col gap-1'>
+                            <h3 className='font-medium'>{author.fullname}</h3>
+                            <span className='text-slate-500 text-sm'>{`Created at ${getMonth(createdAt)} ${new Date(createdAt).getDate()} ${new Date(createdAt).getFullYear()}`}</span>
+                        </div>
                     </div>
-                    <div className='flex flex-col gap-1'>
-                        <h3 className='font-medium'>{author.fullname}</h3>
-                        <span className='text-slate-500 text-sm'>{`Created at ${getMonth(createdAt)} ${new Date(createdAt).getDate()} ${new Date(createdAt).getFullYear()}`}</span>
+                    <div className='flex items-center gap-2'>
+                        <button className='relative' onClick={handleLike}>
+                            <FaRegHeart className='' />
+                            {likes.length > 0 && <span className='absolute w-[25px] h-[25px] text-xs font-semibold text-center top-[-50%] left-[-130%] border border-solid border-gray-800 p-1 bg-white rounded-full'>{likes.length}</span>}
+                        </button>
+                        <button onClick={handleBookmark}>
+                            <FaRegBookmark />
+                        </button>
                     </div>
                 </div>
                 <div>
@@ -86,6 +88,8 @@ const SingleBlog = () => {
                 </article>
             </section>
         </main>
+        </>
+
   )
 }
 

@@ -29,7 +29,7 @@ const Navbar = () => {
   }
   return (
     <header className='border border-solid border-green-200 bg-white'>
-      <nav className='max-w-7xl mx-auto flex justify-between items-center py-2'>
+      <nav className='max-w-7xl mx-auto flex justify-between items-center p-2'>
         <div>
           <Link to='/' className=''>
             <h2 className='w-fit py-4 px-2 rounded text-center bg-slate-900 text-green-500 font-bold uppercase'>Write In</h2>
@@ -55,6 +55,7 @@ const Navbar = () => {
                 <div className='border border-x-0 py-2 border-solid border-green-300 flex flex-col gap-[2px]'>
                   <Link to='/profile' className='text-left'>Profile</Link>
                   <Link to='/dashboard' className='text-left'>Dashboard</Link>
+                  <Link to='/bookmark' className='text-left'>Bookmark</Link>
                 </div>
                 <div>
                   <button onClick={handleLogout} className='font-medium hover:text-red-800'>Log Out</button>

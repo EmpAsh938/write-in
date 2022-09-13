@@ -7,7 +7,7 @@ export type PostsType = {
     markdown:string;
     status: 'draft' | 'published';
     author: UserState;
-    like: [string];
+    likes: [string];
     createdAt: string;
     updatedAt: string;
 }

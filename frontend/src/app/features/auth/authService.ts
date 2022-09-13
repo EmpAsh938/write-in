@@ -42,4 +42,14 @@ const verify = async (token:string) => {
     return response.data;
 }
 
-export { register, login, logout, bookmark,  verify };
+// list bookmark
+const listBookmark =async (rows:number,pages:number,token:string,sort:number) => {
+    const response = await axios.get(`/auth/bookmark/list?pages=${pages}&rows=${rows}&sort=${sort}`, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+    return response.data;
+}
+
+export { register, login, logout, bookmark, listBookmark, verify };

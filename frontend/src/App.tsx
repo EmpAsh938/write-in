@@ -13,6 +13,7 @@ import { useAppDispatch, useAppSelector } from './hooks/useReactRedux';
 import SingleBlog from './pages/SingleBlog';
 import { postNotification } from './app/features/post/postSlice';
 import Search from './pages/Search';
+import Bookmarks from './pages/Bookmarks';
 
 
 function App() {
@@ -55,6 +56,8 @@ function App() {
             <Profile />} />
           <Route path="dashboard" element={
             <Dashboard/>} />
+          <Route path="bookmark" element={
+            <Bookmarks />} />
           <Route path="search" element={
             <Search />} />
           <Route path="new" element={
