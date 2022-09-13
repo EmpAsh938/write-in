@@ -143,4 +143,33 @@ const validateUser = asyncHandler(async (req, res) => {
     }
 })
 
-module.exports = { loginUser, registerUser, bookmarkPost, validateUser };
+const listBookmark = asyncHandler(async (req, res) => {
+    const { pages, rows } = req.params;
+    if(!pages || !rows) {
+        res.status(400);
+        throw new Error('pages or rows are missing');
+    }
+    if(pages < 1 || rows < 1) {
+        res.status(400);
+        throw new Error('pages or rows can\'t be negative');
+    }
+    const user_id = jwt.decode(req.headers.authorization.split('Bearer')[1].trim())._id;
+    try {
+        const doc = await Auth.findOne({_id:user_id}).populate('bookmarks').exec();
+        let filtered_doc = doc.bookmarks.splice((rows*(pages-1)),rows);
+        if(doc.bookmarks.length === 0 || filtered_doc.length === 0) {
+            return res.status(404).json({
+                message: 'no bookmarks to display',
+                result: []
+            })
+        }
+        return res.json({
+            message: 'bookmarks list',
+            result: filtered_doc
+        })
+    } catch (error) {
+        throw new Error(error);
+    }
+})
+
+module.exports = { loginUser, registerUser, bookmarkPost, listBookmark, validateUser };
