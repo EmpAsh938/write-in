@@ -1,19 +1,28 @@
+import { useEffect } from 'react'
 import { FaRegBookmark } from 'react-icons/fa'
+import { useNavigate } from 'react-router-dom'
+import { bookmarkLists, loadMore } from '../app/features/post/postSlice'
 import HomeBlogs from '../components/HomeBlogs'
 import Navbar from '../components/Navbar'
+import Pagination from '../components/Pagination'
+import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux'
 
 const Bookmarks = () => {
 
-    const handleClick = (type:number) => {
-        if(type === 0) {
-            
-        } else if (type === 1) {
+    const { token } = useAppSelector(state => state.auth);
+    const { bookmarkPosts, pages, rows } = useAppSelector(state => state.post);
 
-        } else if (type === -1) {
-            
+    const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        if(token) {
+            dispatch(bookmarkLists({pages,rows,token}));
+        } else {
+            navigate('/');
         }
-
-    }
+        // eslint-disable-next-line
+    }, [pages])
   return (
    <>
     <Navbar />
@@ -24,17 +33,27 @@ const Bookmarks = () => {
                     <FaRegBookmark className='text-3xl' />
                     <h1 className='text-2xl text-gray-800 font-semibold'>Bookmarks</h1>
                 </div>
-                <div className='flex items-center justify-between pb-1 border-b border-solid border-green-300'>
+                <div className='flex items-center justify-start pb-1 border-b border-solid border-green-300'>
                     <p className='text-lg'>Your reading list</p>
-                    <div className='flex gap-1 text-sm'>
-                        <button onClick={()=>handleClick(0)} className='active'>Relevant</button>
-                        <button onClick={()=>handleClick(1)}>Oldest</button>
-                        <button onClick={()=>handleClick(-1)}>Latest</button>
-                    </div>
                 </div>
             </div>
             <div>
-                {/* <HomeBlogs /> */}
+                <div>
+
+                {
+                    bookmarkPosts.length > 0 ? (bookmarkPosts.map(item => {
+                        return (
+                            <HomeBlogs key={item._id} {...item}/>
+                        )
+                    })) : (
+                        <p>no items to display</p>
+                        )
+                    }
+                
+                </div>
+                    <div>
+                        {bookmarkPosts.length > 0 && <Pagination />}
+                    </div>
             </div>
         </section>
     </main>

@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { RootState } from '../../store';
-import { deleteBlog, editBlog, likePost, listPrivateAll, listPublicAll, listSingle, savePost, searchBlog } from './postService';
+import { deleteBlog, editBlog, likePost, listBookmark, listPrivateAll, listPublicAll, listSingle, savePost, searchBlog } from './postService';
 import { PostsObjType, PostsType } from '../../../types/postTypes';
 import { NotificationsType } from '../../../types/authTypes';
 
@@ -18,6 +18,7 @@ interface PostState {
     singlePost: PostsType;
     searchPosts: PostsType[];
     privatePosts: PostsType[];
+    bookmarkPosts: PostsType[];
 }
 
 const initialState: PostState = {
@@ -33,6 +34,7 @@ const initialState: PostState = {
     singlePost: {} as PostsType,
     privatePosts: [],
     searchPosts: [],
+    bookmarkPosts:[]
 }
 
 export const listPublicBlogs = createAsyncThunk(
@@ -124,6 +126,18 @@ export const likeBlog = createAsyncThunk(
    async ({id,token}:{id:string,token:string | null},thunkAPI) => {
     try {
         return (await likePost({id,token}));
+    } catch (error:any) {
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString() || '';
+        return thunkAPI.rejectWithValue(message);
+    }
+   }
+)
+
+export const bookmarkLists = createAsyncThunk(
+    'post/bookmarks/list',
+   async ({ pages, rows, token }:{pages:number,rows: number, token:string},thunkAPI) => {
+    try {
+        return (await listBookmark(pages,rows,token));
     } catch (error:any) {
         const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString() || '';
         return thunkAPI.rejectWithValue(message);
@@ -303,6 +317,35 @@ const postSlice = createSlice({
                 state.notifications.message = action.payload;
             }
 
+        })
+        .addCase(bookmarkLists.pending, (state) => {
+            state.isLoading = true;
+        })
+
+        .addCase(bookmarkLists.fulfilled, (state, action) => {
+            state.isLoading = false;
+
+            if(typeof action.payload === 'object') {
+                if(Array.isArray(action.payload.result)) {
+                    if(action.payload.result.length > 0) {
+
+                        if(initialState.pages !== state.pages || initialState.rows !== state.rows) {
+                            state.bookmarkPosts = [...state.bookmarkPosts, ...action.payload.result]
+                        } else {
+                            state.bookmarkPosts = [...action.payload.result];
+                        }
+                    } else {
+                        state.pages = state.pages - 1;
+                    }
+                }
+            }
+        })
+        .addCase(bookmarkLists.rejected, (state, action) => {
+            state.isLoading = false;
+            if(typeof action.payload === 'string') {
+                state.notifications.type = 'error';
+                state.notifications.message = action.payload;
+            }
         })
     }
 })
