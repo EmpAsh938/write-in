@@ -80,7 +80,7 @@ export const likePost =async ({id,token}:{id:string,token:string | null}) => {
 }
 
 // list bookmark
-export const listBookmark =async (rows:number,pages:number,token:string) => {
+export const listBookmark =async (pages:number,rows:number,token:string) => {
     const response = await axios.get(`/auth/bookmark/list?pages=${pages}&rows=${rows}`, {
         headers: {
             Authorization: `Bearer ${token}`

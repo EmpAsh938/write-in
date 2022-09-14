@@ -38,7 +38,7 @@ const Bookmarks = () => {
                 </div>
             </div>
             <div>
-                <div>
+                <div className='flex flex-col gap-4 p-2'>
 
                 {
                     bookmarkPosts.length > 0 ? (bookmarkPosts.map(item => {

@@ -144,7 +144,7 @@ const validateUser = asyncHandler(async (req, res) => {
 })
 
 const listBookmark = asyncHandler(async (req, res) => {
-    const { pages, rows } = req.params;
+    const { pages, rows } = req.query;
     if(!pages || !rows) {
         res.status(400);
         throw new Error('pages or rows are missing');
@@ -157,7 +157,7 @@ const listBookmark = asyncHandler(async (req, res) => {
     try {
         const doc = await Auth.findOne({_id:user_id}).populate('bookmarks').exec();
         let filtered_doc = doc.bookmarks.splice((rows*(pages-1)),rows);
-        if(doc.bookmarks.length === 0 || filtered_doc.length === 0) {
+        if(filtered_doc.length === 0) {
             return res.status(404).json({
                 message: 'no bookmarks to display',
                 result: []
