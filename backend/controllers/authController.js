@@ -214,6 +214,34 @@ const passwordChange = asyncHandler(async (req, res) => {
 })
 
 const emailChange = asyncHandler(async (req, res) => {
+    const { email, password } = req.body;
+    const decoded = jwt.decode(req.headers.authorization.split('Bearer')[1].trim());
+    try {
+        let doc = await Auth.findOne({_id:decoded._id});
+        const isValid = await bcrypt.compare(password,doc.password);
+        if(!isValid) {
+            res.status(401);
+            throw new Error('user not authorized');
+        }
+        if(email === decoded.email) {
+            res.status(400);
+            throw new Error('same email as old one');
+        }
+        doc = await Auth.findOneAndUpdate({_id:decoded._id},{$set: {email}});
+        if(!doc) {
+            throw new Error('email change failed');
+        }
+        let newtoken = await jwt.sign(doc.toJSON(),process.env.JWT_SECRET,{expiresIn:'1D'});
+        res.status(200).json({
+            message: 'email changed',
+            result: {
+                ...doc,
+                token: newtoken
+            }
+        })
+    } catch (error) {
+        throw new Error(error);
+    }
 
 })
 
