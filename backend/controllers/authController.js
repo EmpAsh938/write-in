@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const asyncHandler = require('express-async-handler');
 
 const Auth = require('../models/authModel');
+const { validPassword } = require('../utils/validPassword');
 
 const loginUser = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
@@ -40,8 +41,8 @@ const registerUser = asyncHandler(async (req, res) => {
         throw new Error('Some fields are empty');
     }
 
-    const isValidPassword = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/.test(password);
-    if(!isValidPassword) {
+    
+    if(!validPassword(password)) {
         res.status(400);
         throw new Error('Password too weak');
     } 
@@ -172,4 +173,53 @@ const listBookmark = asyncHandler(async (req, res) => {
     }
 })
 
-module.exports = { loginUser, registerUser, bookmarkPost, listBookmark, validateUser };
+const passwordChange = asyncHandler(async (req, res) => {
+    const { oldPassword, newPassword } = req.body;
+    if(!oldPassword || !newPassword) {
+        res.status(400);
+        throw new Error('old or new password can\'t be empty');
+    }
+    const user = jwt.decode(req.headers.authorization.split('Bearer')[1].trim());
+    try {
+        const isUser = await Auth.findOne({_id:user._id}).exec();
+        if(!isUser || !(await bcrypt.compare(oldPassword,isUser.password))) {
+            res.status(401);
+            throw new Error('user not authorized');
+        }
+        if(oldPassword === newPassword) {
+            res.status(400);
+            throw new Error('new and old passwords are same');
+        }
+        if(!validPassword(newPassword)) {
+            res.status(400);
+            throw new Error('Too weak password');
+        }
+        let hashedPassword = await bcrypt.hash(newPassword,10);
+        let updatePass = await Auth.findOneAndUpdate({_id:user._id}, {$set: {password: hashedPassword}}).exec();
+        if(!updatePass) {
+            throw new Error('update failed');
+        }
+        let newtoken = await jwt.sign(updatePass.toJSON(),process.env.JWT_SECRET,{expiresIn:'1D'});
+        res.status(200).json({
+            message: 'password changed',
+            token: newtoken
+        })
+
+    } catch (error) {
+        throw new Error(error);
+    }
+})
+
+const emailChange = asyncHandler(async (req, res) => {
+
+})
+
+const accountInfoChange = asyncHandler(async (req, res) => {
+    
+})
+
+const deleteAccount = asyncHandler(async (req, res) => {
+
+})
+
+module.exports = { loginUser, registerUser, bookmarkPost, listBookmark, passwordChange, validateUser };
