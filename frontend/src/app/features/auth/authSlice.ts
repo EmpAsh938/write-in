@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-import { register, login, logout, verify, bookmark } from './authService'
+import { register, login, logout, verify, bookmark, passwordChange } from './authService'
 import { RegisterAuthState, LoginAuthState, NotificationsType } from '../../../types/authTypes'
 
 type NotificationsObj = {
@@ -85,6 +85,18 @@ export const verifyUser = createAsyncThunk(
  }
 )
 
+export const changePassword = createAsyncThunk(
+  'auth/change/password',
+ async ({oldpassword,newpassword,token}:{oldpassword:string,newpassword:string,token:string},thunkAPI) => {
+  try {
+    return (await passwordChange(oldpassword,newpassword,token));
+  } catch (error:any) {
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString() || '';
+    return thunkAPI.rejectWithValue(message);
+  }
+ }
+)
+
 const authSlice = createSlice({
   name: 'auth',
   // `createSlice` will infer the state type from the `initialState` argument
@@ -166,6 +178,21 @@ const authSlice = createSlice({
         console.log(action.payload);
     })
     .addCase(bookmarkPost.rejected, (state, action) => {
+      if(typeof action.payload === 'string') {
+        state.notifications.type = 'error';
+        state.notifications.message = action.payload;
+      }
+    })
+    .addCase(changePassword.fulfilled, (state, action) => {
+      if(typeof action.payload.result === 'object') {
+        const { token, _doc} = action.payload.result;
+        state.token = token;
+        state.user = _doc;
+        state.notifications.type = 'success';
+        state.notifications.message = 'password changed successfully';
+      }
+    })
+    .addCase(changePassword.rejected, (state, action) => {
       if(typeof action.payload === 'string') {
         state.notifications.type = 'error';
         state.notifications.message = action.payload;

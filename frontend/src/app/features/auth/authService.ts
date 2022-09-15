@@ -42,6 +42,18 @@ const verify = async (token:string) => {
     return response.data;
 }
 
+const passwordChange = async (oldpassword:string,newpassword:string,token:string) => {
+    const response = await axios.post('/auth/change/password',
+    {oldpassword,newpassword},
+    {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+    localStorage.setItem('user_db',JSON.stringify(response.data.result));
+    return response.data;
+}
 
 
-export { register, login, logout, bookmark, verify };
+
+export { register, login, logout, bookmark, verify, passwordChange };

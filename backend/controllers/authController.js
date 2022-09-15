@@ -174,7 +174,7 @@ const listBookmark = asyncHandler(async (req, res) => {
 })
 
 const passwordChange = asyncHandler(async (req, res) => {
-    const { oldPassword, newPassword } = req.body;
+    const { oldpassword: oldPassword, newpassword: newPassword } = req.body;
     if(!oldPassword || !newPassword) {
         res.status(400);
         throw new Error('old or new password can\'t be empty');
@@ -202,7 +202,10 @@ const passwordChange = asyncHandler(async (req, res) => {
         let newtoken = await jwt.sign(updatePass.toJSON(),process.env.JWT_SECRET,{expiresIn:'1D'});
         res.status(200).json({
             message: 'password changed',
-            token: newtoken
+            result: {
+                ...updatePass,
+                token: newtoken
+            }
         })
 
     } catch (error) {
@@ -222,4 +225,4 @@ const deleteAccount = asyncHandler(async (req, res) => {
 
 })
 
-module.exports = { loginUser, registerUser, bookmarkPost, listBookmark, passwordChange, validateUser };
+module.exports = { loginUser, registerUser, bookmarkPost, listBookmark, emailChange, passwordChange, validateUser };

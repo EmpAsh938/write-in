@@ -3,8 +3,9 @@ import { useNavigate } from 'react-router-dom';
 
 import Navbar from '../components/Navbar';
 import ErrorMessage from '../components/ErrorMessage';
-import { useAppSelector } from '../hooks/useReactRedux';
+import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
 import { emailValidator } from '../utils/emailValidator';
+import { changePassword } from '../app/features/auth/authSlice';
 
 
 const Profile = () => {
@@ -16,6 +17,15 @@ const Profile = () => {
     const [oldPassword, setOldPassword] = useState<string>('');
 
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+
+    const handlePasswordChange = () => {
+        if(oldPassword && newPassword && token) {
+            dispatch(changePassword({oldpassword:oldPassword,newpassword:newPassword,token}));
+            setOldPassword('');
+        }
+        setNewPassword('');
+    }
 
     const handleEmailChange = () => {
 
@@ -74,7 +84,7 @@ const Profile = () => {
                             <label htmlFor="newpassword">Enter New Password</label>
                             <input value={newPassword} onChange={e => setNewPassword(e.target.value)} type="password" id="newpassword" className='outline-none border border-solid border-green-300 rounded px-2 py-1 text-sm' />
                         </div>
-                        <button className='bg-green-500 px-10 text-white py-2 rounded-sm'>Change</button>
+                        <button className='bg-green-500 px-10 text-white py-2 rounded-sm' onClick={handlePasswordChange}>Change</button>
                     </div>
                     <div className='flex flex-col gap-2'>
                         <h2 className='text-xl font-medium'>
