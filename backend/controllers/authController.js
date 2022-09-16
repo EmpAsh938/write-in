@@ -246,7 +246,24 @@ const emailChange = asyncHandler(async (req, res) => {
 })
 
 const accountInfoChange = asyncHandler(async (req, res) => {
-    
+    const { fullname, username, bio } = req.body;
+    if(!fullname && !username && !bio) {
+        res.status(400);
+        throw new Error('some fields are empty');
+    }
+    const decoded = jwt.decode(req.headers.authorization.split("Bearer")[1].trim());
+    try {
+        let doc = await Auth.findOneAndUpdate({_id:decoded._id},{$set: {fullname,username,bio}});
+        if(!doc) {
+            throw new Error('update failed');
+        }
+        res.json({
+            message:'update success',
+            result: doc
+        })
+    } catch (error) {
+        throw new Error(error);
+    }
 })
 
 const deleteAccount = asyncHandler(async (req, res) => {

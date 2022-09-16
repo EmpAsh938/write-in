@@ -32,6 +32,9 @@ const authSchema = new Schema(
             type:String,
             required: [true, 'Please add a fullname']
         },
+        bio: {
+            type: String
+        },
         profileImage: {
             type:String
         },
