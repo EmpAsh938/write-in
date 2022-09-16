@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const asyncHandler = require('express-async-handler');
 
 const Auth = require('../models/authModel');
+const Post = require('../models/postModel');
 const { validPassword } = require('../utils/validPassword');
 
 const loginUser = asyncHandler(async (req, res) => {
@@ -64,7 +65,8 @@ const registerUser = asyncHandler(async (req, res) => {
         fullname,
         username,
         password:hashedPassword,
-        profileImage:''
+        profileImage:'',
+        bio: ''
     });
 
     try {
@@ -252,8 +254,11 @@ const accountInfoChange = asyncHandler(async (req, res) => {
         throw new Error('some fields are empty');
     }
     const decoded = jwt.decode(req.headers.authorization.split("Bearer")[1].trim());
+    let insert_fullname = fullname || decoded.fullname;
+    let insert_username = username || decoded.username;
+    let insert_bio = bio || decoded.bio;
     try {
-        let doc = await Auth.findOneAndUpdate({_id:decoded._id},{$set: {fullname,username,bio}});
+        let doc = await Auth.findOneAndUpdate({_id:decoded._id},{$set: {fullname:insert_fullname,username:insert_username,bio:insert_bio}});
         if(!doc) {
             throw new Error('update failed');
         }
@@ -270,7 +275,15 @@ const deleteAccount = asyncHandler(async (req, res) => {
     const decoded = jwt.decode(req.headers.authorization.split('Bearer')[1].trim());
     try {
         let doc = await Auth.findOneAndDelete({_id:decoded._id}).exec();
-        console.log(doc);
+        if(!doc) {
+            res.status(401);
+            throw new Error('user not authorized');
+        }
+        doc = await Post.deleteMany({author: decoded._id}).exec();
+        res.json({
+            success: 'account deleted',
+            result: []
+        })
     } catch (error) {
         throw new Error(error);
     }

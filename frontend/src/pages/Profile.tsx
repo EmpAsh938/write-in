@@ -5,7 +5,7 @@ import Navbar from '../components/Navbar';
 import ErrorMessage from '../components/ErrorMessage';
 import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
 import { emailValidator } from '../utils/emailValidator';
-import { changePassword } from '../app/features/auth/authSlice';
+import { changePassword, deleteAccount } from '../app/features/auth/authSlice';
 
 
 const Profile = () => {
@@ -32,7 +32,11 @@ const Profile = () => {
     }
 
 
-    const handleDeleteUser = () => { };
+    const handleDeleteUser = () => {
+        if(token) {
+            dispatch(deleteAccount({token}));
+        }
+    };
 
     useEffect(() => {
         if(!token) navigate('/login');

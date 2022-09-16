@@ -27,7 +27,7 @@ const lsk = JSON.parse(localStorage.getItem('user_db') || 'null');
 // Define the initial state using that type
 const initialState: AuthState = {
   notifications: {
-    type:'error',
+    type:'',
     message: ''
   },
   token: lsk ? lsk.token : null,
@@ -235,10 +235,11 @@ const authSlice = createSlice({
         state.notifications.message = action.payload;
       }
     })
-    .addCase(deleteAccount.fulfilled, () => {
-	    return {
-	    	...initialState
-	    }
+    .addCase(deleteAccount.fulfilled, (state) => {
+      state.notifications.type = '';
+      state.notifications.message = '';
+	    state.user = {} as UserState;
+      state.token = null;
     })
     .addCase(deleteAccount.rejected, (state,action) => {
       if(typeof action.payload === 'string') {

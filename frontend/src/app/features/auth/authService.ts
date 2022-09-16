@@ -43,7 +43,7 @@ const verify = async (token:string) => {
 }
 
 const passwordChange = async (oldpassword:string,newpassword:string,token:string) => {
-    const response = await axios.post('/auth/change/password',
+    const response = await axios.put('/auth/change/password',
     {oldpassword,newpassword},
     {
         headers: {
