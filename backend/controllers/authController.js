@@ -276,4 +276,14 @@ const deleteAccount = asyncHandler(async (req, res) => {
     }
 })
 
-module.exports = { loginUser, registerUser, bookmarkPost, listBookmark, emailChange, passwordChange, validateUser };
+module.exports = { 
+    loginUser, 
+    emailChange, 
+    validateUser,
+    registerUser, 
+    bookmarkPost, 
+    listBookmark, 
+    deleteAccount, 
+    passwordChange, 
+    accountInfoChange,
+};
