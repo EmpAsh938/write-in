@@ -54,6 +54,34 @@ const passwordChange = async (oldpassword:string,newpassword:string,token:string
     return response.data;
 }
 
+const removeAccount =async (token:string) => {
+    const response = await axios.delete('/auth/change/account', {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+    localStorage.clear();
+    return response.data;
+}
+
+const emailChange = async (token:string,email:string) => {
+	const response = await axios.put('/auth/change/email', {email}, {
+		headers: {
+			Authorization: `Bearer ${token}`
+		}
+	})
+	return response.data;
+}
+
+const accountDetailsChange = async (fullname:string,username:string,bio:string,token:string) =>  {
+	const response = await axios.put('/auth/change/account', {fullname,username,bio}, {
+		headers: {
+			Authorization: `Bearer ${token}`
+		}
+	})
+	return response.data;
+}
 
 
-export { register, login, logout, bookmark, verify, passwordChange };
+
+export { register, login, logout, bookmark, verify, passwordChange,removeAccount, emailChange, accountDetailsChange };

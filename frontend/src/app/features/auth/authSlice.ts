@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-import { register, login, logout, verify, bookmark, passwordChange } from './authService'
+import { register, login, logout, verify, bookmark, passwordChange, removeAccount, accountDetailsChange, emailChange } from './authService'
 import { RegisterAuthState, LoginAuthState, NotificationsType } from '../../../types/authTypes'
 
 type NotificationsObj = {
@@ -95,6 +95,43 @@ export const changePassword = createAsyncThunk(
     return thunkAPI.rejectWithValue(message);
   }
  }
+)
+
+export const deleteAccount = createAsyncThunk(
+  'auth/account/delete',
+ async ({token}:{token:string},thunkAPI) => {
+  try {
+    return (await removeAccount(token));
+  } catch (error:any) {
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString() || '';
+    return thunkAPI.rejectWithValue(message);
+  }
+ }
+)
+
+export const changeEmail = createAsyncThunk(
+	'auth/account/change/email',
+	async ({email,token}:{email:string,token:string},thunkAPI) => {
+		try {
+			return (await emailChange(email,token));
+		} catch (error: any) {
+			const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString() || '';
+			return thunkAPI.rejectWithValue(message);
+		}
+	}
+)
+
+export const changeAccountInfo = createAsyncThunk(
+	'auth/account/change',
+	async ({bio,fullname,username,token}:{bio:string,fullname:string,username:string,token:string},thunkAPI) => {
+	try {
+		return (await accountDetailsChange(bio,fullname,username,token));
+	}
+	catch (error:any) {
+   	 const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString() || '';
+	return thunkAPI.rejectWithValue(message);
+	}
+	}
 )
 
 const authSlice = createSlice({
@@ -198,7 +235,37 @@ const authSlice = createSlice({
         state.notifications.message = action.payload;
       }
     })
-  },
+    .addCase(deleteAccount.fulfilled, () => {
+	    return {
+	    	...initialState
+	    }
+    })
+    .addCase(deleteAccount.rejected, (state,action) => {
+      if(typeof action.payload === 'string') {
+        state.notifications.type = 'error';
+        state.notifications.message = action.payload;
+      }
+    })
+    .addCase(changeEmail.fulfilled, (state,action) => {
+      console.log(action.payload);
+    })
+    .addCase(changeEmail.rejected, (state,action) => {
+      if(typeof action.payload === 'string') {
+        state.notifications.type = 'error';
+        state.notifications.message = action.payload;
+      }
+    })
+    .addCase(changeAccountInfo.fulfilled, (state,action) => {
+console.log(action.payload);
+    })
+    .addCase(changeAccountInfo.rejected, (state,action) => {
+      if(typeof action.payload === 'string') {
+        state.notifications.type = 'error';
+        state.notifications.message = action.payload;
+      }
+    })
+
+  }
 })
 
 export const { notify } = authSlice.actions
