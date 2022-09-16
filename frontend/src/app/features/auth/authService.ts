@@ -64,7 +64,7 @@ const removeAccount =async (token:string) => {
     return response.data;
 }
 
-const emailChange = async (token:string,email:string) => {
+const emailChange = async (email:string,token:string) => {
 	const response = await axios.put('/auth/change/email', {email}, {
 		headers: {
 			Authorization: `Bearer ${token}`

@@ -216,15 +216,15 @@ const passwordChange = asyncHandler(async (req, res) => {
 })
 
 const emailChange = asyncHandler(async (req, res) => {
-    const { email, password } = req.body;
+    const { email } = req.body;
+    if(!email) {
+        res.status(400);
+        throw new Error('some fields are empty');
+    }
     const decoded = jwt.decode(req.headers.authorization.split('Bearer')[1].trim());
     try {
         let doc = await Auth.findOne({_id:decoded._id});
-        const isValid = await bcrypt.compare(password,doc.password);
-        if(!isValid) {
-            res.status(401);
-            throw new Error('user not authorized');
-        }
+        
         if(email === decoded.email) {
             res.status(400);
             throw new Error('same email as old one');

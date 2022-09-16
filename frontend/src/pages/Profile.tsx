@@ -5,7 +5,7 @@ import Navbar from '../components/Navbar';
 import ErrorMessage from '../components/ErrorMessage';
 import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
 import { emailValidator } from '../utils/emailValidator';
-import { changePassword, deleteAccount } from '../app/features/auth/authSlice';
+import { changeAccountInfo, changeEmail, changePassword, deleteAccount, notify } from '../app/features/auth/authSlice';
 
 
 const Profile = () => {
@@ -28,13 +28,26 @@ const Profile = () => {
     }
 
     const handleEmailChange = () => {
-
+        if(token && emailValidator(mail || '')) {
+            dispatch(changeEmail({email:mail || '', token}));
+        } else {
+            dispatch(notify({type:'error',message:'email change failed'}));
+        }
     }
 
+    const handleProfileChange = () => {
+        if(token && (name || uname)) {
+            dispatch(changeAccountInfo({fullname:name || '',username:uname || '',bio:'',token}));
+        } else {
+            dispatch(notify({type:'error',message:'user profile update failed'}));
+        }
+    }
 
     const handleDeleteUser = () => {
         if(token) {
             dispatch(deleteAccount({token}));
+        } else {
+            dispatch(notify({type:'error',message:'delete user failed'}));
         }
     };
 
@@ -60,7 +73,7 @@ const Profile = () => {
                         <h2 className='text-xl font-medium'>Your Username</h2>
                         <input type="text" value={uname || ''} onChange={e => setUname(e.target.value)} className='outline-none border border-solid border-green-300 rounded px-2 py-1 text-sm' />
                     </div>
-                    <button className='bg-green-500 px-10 text-white py-2 rounded-sm'>Change</button>
+                    <button onClick={handleProfileChange} className='bg-green-500 px-10 text-white py-2 rounded-sm'>Change</button>
                     <div className='flex flex-col gap-2'>
                         <h2 className='text-xl font-medium'>Photo</h2>
                     </div>
@@ -75,6 +88,7 @@ const Profile = () => {
                             <label htmlFor="email">Enter Email</label>
                             <input value={mail || ''} onChange={e => setMail(e.target.value)} type="email" id="email" className='outline-none border border-solid border-green-300 rounded px-2 py-1 text-sm' />
                         </div>
+                        
                         <button onClick={handleEmailChange} className='bg-green-500 px-10 text-white py-2 rounded-sm'>Change</button>
                     </div>
                     <div className='flex flex-col gap-2'>
