@@ -250,7 +250,13 @@ const accountInfoChange = asyncHandler(async (req, res) => {
 })
 
 const deleteAccount = asyncHandler(async (req, res) => {
-
+    const decoded = jwt.decode(req.headers.authorization.split('Bearer')[1].trim());
+    try {
+        let doc = await Auth.findOneAndDelete({_id:decoded._id}).exec();
+        console.log(doc);
+    } catch (error) {
+        throw new Error(error);
+    }
 })
 
 module.exports = { loginUser, registerUser, bookmarkPost, listBookmark, emailChange, passwordChange, validateUser };
