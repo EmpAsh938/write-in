@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Navbar from '../components/Navbar';
@@ -6,6 +6,8 @@ import ErrorMessage from '../components/ErrorMessage';
 import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
 import { emailValidator } from '../utils/emailValidator';
 import { changeAccountInfo, changeEmail, changePassword, deleteAccount, notify } from '../app/features/auth/authSlice';
+import UserImage from '../components/UserImage';
+import { uploadFile } from '../app/features/upload/uploadSlice';
 
 
 const Profile = () => {
@@ -51,6 +53,15 @@ const Profile = () => {
         }
     };
 
+    const handleFileChange = (event:ChangeEvent<HTMLInputElement>) => {
+        let filelist = event.target.files;
+        if(token && filelist) {
+            console.log(filelist);
+            dispatch(uploadFile({file:filelist[0],token}));
+        }
+    }
+
+
     useEffect(() => {
         if(!token) navigate('/login');
 
@@ -76,6 +87,12 @@ const Profile = () => {
                     <button onClick={handleProfileChange} className='bg-green-500 px-10 text-white py-2 rounded-sm'>Change</button>
                     <div className='flex flex-col gap-2'>
                         <h2 className='text-xl font-medium'>Photo</h2>
+                        <div>
+                            <UserImage profileImage={user.profileImage} fullname={user.fullname} />
+                            <div className='relative'>
+                                <input onChange={handleFileChange} type='file' name='photos' accept='image/*' />
+                            </div>
+                        </div>
                     </div>
                 </section>
                 <section className='flex flex-col gap-2'>

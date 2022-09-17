@@ -1,13 +1,12 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
-const mongoose = require('mongoose');
-
 
 // imports
 const authRouter  = require('./routes/authRoute');
 const postRouter  = require('./routes/postRoute');
-const connectDB  = require('./config/connection');
+const uploadRouter = require('./routes/uploadRoute');
+const connectDB  = require('./config/db');
 const notFound = require('./middlewares/notFound');
 const errorHandler  = require('./middlewares/errorMiddleware');
 
@@ -15,7 +14,9 @@ const errorHandler  = require('./middlewares/errorMiddleware');
 dotenv.config();
 const app = express();
 const port = process.env.PORT || 8801;
+
 // const corsUrl = process.env.ALLOWED_URLS || '';
+
 
 // mongodb connection 
 connectDB();
@@ -41,6 +42,7 @@ app.use(express.urlencoded({extended:true}));
 // routes
 app.use('/auth', authRouter);
 app.use('/post', postRouter);
+app.use('/upload', uploadRouter);
 
 app.use(errorHandler);
 app.use(notFound);
