@@ -262,9 +262,13 @@ const accountInfoChange = asyncHandler(async (req, res) => {
         if(!doc) {
             throw new Error('update failed');
         }
+        let newtoken = await jwt.sign(doc.toJSON(),process.env.JWT_SECRET,{expiresIn:'1D'});
         res.json({
             message:'update success',
-            result: doc
+            result: {
+                ...doc,
+                token:newtoken
+            }
         })
     } catch (error) {
         throw new Error(error);
