@@ -212,7 +212,13 @@ const authSlice = createSlice({
       }
     })
     .addCase(bookmarkPost.fulfilled, (state,action) => {
-        console.log(action.payload);
+      if(typeof action.payload.result === 'object') {
+        const { token, _doc} = action.payload.result;
+        state.token = token;
+        state.user = _doc;
+        state.notifications.type = 'success';
+        state.notifications.message = 'post bookmarked successfully';
+      }
     })
     .addCase(bookmarkPost.rejected, (state, action) => {
       if(typeof action.payload === 'string') {
@@ -236,10 +242,9 @@ const authSlice = createSlice({
       }
     })
     .addCase(deleteAccount.fulfilled, (state) => {
-      state.notifications.type = '';
-      state.notifications.message = '';
-	    state.user = {} as UserState;
-      state.token = null;
+      return {
+        ...initialState
+      }
     })
     .addCase(deleteAccount.rejected, (state,action) => {
       if(typeof action.payload === 'string') {
@@ -248,7 +253,13 @@ const authSlice = createSlice({
       }
     })
     .addCase(changeEmail.fulfilled, (state,action) => {
-      console.log(action.payload);
+      if(typeof action.payload.result === 'object') {
+        const { token, _doc} = action.payload.result;
+        state.token = token;
+        state.user = _doc;
+        state.notifications.type = 'success';
+        state.notifications.message = 'user email changed successfully';
+      }
     })
     .addCase(changeEmail.rejected, (state,action) => {
       if(typeof action.payload === 'string') {
@@ -257,7 +268,13 @@ const authSlice = createSlice({
       }
     })
     .addCase(changeAccountInfo.fulfilled, (state,action) => {
-console.log(action.payload);
+      if(typeof action.payload.result === 'object') {
+        const { token, _doc} = action.payload.result;
+        state.token = token;
+        state.user = _doc;
+        state.notifications.type = 'success';
+        state.notifications.message = 'user info updated successfully';
+      }
     })
     .addCase(changeAccountInfo.rejected, (state,action) => {
       if(typeof action.payload === 'string') {

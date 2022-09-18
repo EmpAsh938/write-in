@@ -70,6 +70,7 @@ const emailChange = async (email:string,token:string) => {
 			Authorization: `Bearer ${token}`
 		}
 	})
+    localStorage.setItem('user_db',JSON.stringify(response.data.result));
 	return response.data;
 }
 
@@ -79,6 +80,7 @@ const accountDetailsChange = async (fullname:string,username:string,bio:string,t
 			Authorization: `Bearer ${token}`
 		}
 	})
+    localStorage.setItem('user_db',JSON.stringify(response.data.result));
 	return response.data;
 }
 
