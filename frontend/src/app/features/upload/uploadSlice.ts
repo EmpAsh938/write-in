@@ -7,11 +7,13 @@ interface UploadState {
         type: NotificationsType,
         message: string
     };
+    uploadStatus: 'idle' | 'running' | 'success' | 'error';
     file: File | null;
 }
 
 const initialState: UploadState = {
     file: null,
+    uploadStatus: 'idle',
     notifications: {
         type: '',
         message: ''
@@ -37,13 +39,15 @@ const uploadSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-        .addCase(uploadFile.pending, (state, action) => {
-
+        .addCase(uploadFile.pending, (state) => {
+            state.uploadStatus = 'running';
         })
         .addCase(uploadFile.fulfilled, (state, action) => {
+            state.uploadStatus = 'success';
             console.log(action.payload);
         })
         .addCase(uploadFile.rejected, (state, action) => {
+            state.uploadStatus = 'error';
             if(typeof action.payload === 'string') {
                 state.notifications.type = 'error';
                 state.notifications.message = action.payload;
