@@ -13,7 +13,7 @@ const uploadFile = asyncHandler(async (req, res) => {
    try {
       
       const result = await cloudinary.uploader.upload(req.file.path, {
-         folder: 'write-in',
+         folder: 'write-in/post',
          context: `alt=${req.file.originalname.split('.')[0]}`,
          public_id: req.file.filename
       })
