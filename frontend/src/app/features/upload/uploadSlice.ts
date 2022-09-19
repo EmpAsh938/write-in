@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { NotificationsType } from "../../../types/authTypes"
-import { upload } from "./uploadService";
+import { profileUpload, upload } from "./uploadService";
 
 interface UploadState {
     notifications: {
@@ -9,11 +9,13 @@ interface UploadState {
     };
     uploadStatus: 'idle' | 'running' | 'success' | 'error';
     file: File | null;
+    imageUrl: string;
 }
 
 const initialState: UploadState = {
     file: null,
     uploadStatus: 'idle',
+    imageUrl: '',
     notifications: {
         type: '',
         message: ''
@@ -44,7 +46,9 @@ const uploadSlice = createSlice({
         })
         .addCase(uploadFile.fulfilled, (state, action) => {
             state.uploadStatus = 'success';
-            console.log(action.payload);
+            if(action.payload.result === 'object') {
+                state.imageUrl = action.payload.result.secure_url;
+            }
         })
         .addCase(uploadFile.rejected, (state, action) => {
             state.uploadStatus = 'error';

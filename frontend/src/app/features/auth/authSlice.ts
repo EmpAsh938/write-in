@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import { register, login, logout, verify, bookmark, passwordChange, removeAccount, accountDetailsChange, emailChange } from './authService'
 import { RegisterAuthState, LoginAuthState, NotificationsType } from '../../../types/authTypes'
+import { profileUpload } from '../upload/uploadService';
 
 type NotificationsObj = {
   type: NotificationsType;
@@ -132,6 +133,17 @@ export const changeAccountInfo = createAsyncThunk(
 	return thunkAPI.rejectWithValue(message);
 	}
 	}
+)
+
+export const uploadProfile = createAsyncThunk(
+  'upload/profile/',
+ async ({file,token}:{file:File,token:string},thunkAPI) => {
+  try {
+      return (await profileUpload(file,token));
+  } catch (error:any) {
+      return thunkAPI.rejectWithValue('');
+  }
+ }
 )
 
 const authSlice = createSlice({
@@ -282,7 +294,25 @@ const authSlice = createSlice({
         state.notifications.message = action.payload;
       }
     })
-
+    .addCase(uploadProfile.pending, (state) => {
+      state.notifications.type = 'running';
+      state.notifications.message = 'image uploading';
+    })
+    .addCase(uploadProfile.fulfilled, (state, action) => {
+        state.notifications.type = 'success';
+        state.notifications.message = 'image uploaded successfully';
+        if(typeof action.payload.result === 'object') {
+            const { token, _doc } = action.payload.result;
+            state.token = token 
+            state.user = _doc
+          }
+    })
+    .addCase(uploadProfile.rejected, (state, action) => {
+        if(typeof action.payload === 'string') {
+            state.notifications.type = 'error';
+            state.notifications.message = action.payload;
+        }
+    })
   }
 })
 

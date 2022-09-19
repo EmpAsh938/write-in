@@ -11,3 +11,15 @@ export const upload = async (file:File,token:string) => {
     })
     return response.data;
 }
+export const profileUpload = async (file:File,token:string) => {
+    const formData = new FormData();
+    formData.append('photos',file);
+    const response = await axios.post('/upload/profile', formData, {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data'
+        }
+    })
+    localStorage.setItem('user_db',JSON.stringify(response.data.result));
+    return response.data;
+}

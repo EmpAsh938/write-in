@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
 import { emailValidator } from '../utils/emailValidator';
 import { changeAccountInfo, changeEmail, changePassword, deleteAccount, notify } from '../app/features/auth/authSlice';
 import UserImage from '../components/UserImage';
-import { uploadFile } from '../app/features/upload/uploadSlice';
+import { uploadProfile } from '../app/features/upload/uploadSlice';
 
 
 const Profile = () => {
@@ -56,8 +56,7 @@ const Profile = () => {
     const handleFileChange = (event:ChangeEvent<HTMLInputElement>) => {
         let filelist = event.target.files;
         if(token && filelist) {
-            console.log(filelist);
-            dispatch(uploadFile({file:filelist[0],token}));
+            dispatch(uploadProfile({file:filelist[0],token}));
         }
     }
 
