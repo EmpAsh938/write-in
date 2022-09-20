@@ -26,7 +26,7 @@ function App() {
   useEffect(() => {
 
     let timer = setTimeout(() => {
-      if(notificationAuth.type || notificationPost.type) {
+      if(notificationAuth.type !=='idle' || notificationPost.type !== 'idle') {
         dispatch(notify({type:'idle',message:''}));
         dispatch(postNotification({type: 'idle', message:''}));
       }
