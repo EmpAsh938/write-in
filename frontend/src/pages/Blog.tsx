@@ -13,7 +13,7 @@ import {
 import {
     GrBlockQuote
 } from 'react-icons/gr';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ChangeEvent } from 'react';
 import {
     useParams,
     useNavigate
@@ -21,13 +21,13 @@ import {
 
 import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
 import { listSingleBlogs, saveBlog, resetSinglePost, updateBlog } from '../app/features/post/postSlice';
-import ErrorMessage from '../components/ErrorMessage';
+import { uploadFile } from '../app/features/upload/uploadSlice';
 
 
 const Blog = () => {
     const { id } = useParams();
     const { token } = useAppSelector(state => state.auth);
-    const { singlePost, notifications } = useAppSelector(state => state.post);
+    const { singlePost } = useAppSelector(state => state.post);
     const [isPreviewOn, setIsPreviewOn] = useState<boolean>(false);
     const [title, setTitle] = useState<string>('');
     const [markdown, setMarkdown] = useState<string>('');
@@ -56,6 +56,13 @@ const Blog = () => {
             dispatch(saveBlog({title,markdown,status:type,token}));
         }
         navigate('/dashboard');
+    }
+
+    const handleUpload = (event:ChangeEvent<HTMLInputElement>) => {
+        const fileList = event.target.files;
+        if(token && fileList) {
+            dispatch(uploadFile({file:fileList[0],token}));
+        }
     }
 
 
@@ -92,7 +99,7 @@ const Blog = () => {
      <div>
          <input type='text' value={title} onChange={e=>setTitle(e.target.value)} placeholder='Untitled' className='outline-none w-full text-4xl font-bold placeholder:text-slate-300' />
      </div>
-     <div className='flex gap-2'>
+     <div className='flex gap-4'>
          <button>
              <FaHeading />
          </button>
@@ -114,8 +121,11 @@ const Blog = () => {
          <button>
              <FaLink />
          </button>
-         <button>
+         <button className='relative'>
+            <label htmlFor='upload'>
              <FaImage />
+            </label>
+            <input onChange={handleUpload} className='hidden absolute inset-0 w-full h-full' type='file' id='upload' accept='image/*' />
          </button>
          <button>
              <FaCode />
@@ -140,7 +150,7 @@ const Blog = () => {
         <button onClick={handleCancel} className='bg-red-600 text-white px-2 rounded-sm py-1'>Cancel</button>
     </section>
     </main>
-    {notifications.type && <ErrorMessage {...notifications} />}
+    
     </div>
   )
 }

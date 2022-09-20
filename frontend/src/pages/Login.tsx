@@ -1,12 +1,11 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-import ErrorMessage from '../components/ErrorMessage';
 import { useAppSelector, useAppDispatch } from '../hooks/useReactRedux';
 import { loginUser } from '../app/features/auth/authSlice';
 
 const Login = () => {
-  const { token, notifications } = useAppSelector(state => state.auth);
+  const { token } = useAppSelector(state => state.auth);
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
@@ -69,7 +68,6 @@ const Login = () => {
           </div>
           </div>
       </section>
-      {notifications.type && <ErrorMessage {...notifications} />}
     </main>
   )
 }

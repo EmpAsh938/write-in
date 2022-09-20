@@ -4,14 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import Card from '../components/Card';
 import Navbar from '../components/Navbar';
 import Blogcard from '../components/Blogcard';
-import ErrorMessage from '../components/ErrorMessage';
 import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
 import { listPrivate, resetPages } from '../app/features/post/postSlice';
 import Pagination from '../components/Pagination';
 
 const Dashboard = () => {
   const { token } = useAppSelector(state => state.auth);
-  const { privatePosts, pages, rows, notifications } = useAppSelector(state => state.post);
+  const { privatePosts, pages, rows } = useAppSelector(state => state.post);
 
 
   const navigate = useNavigate();
@@ -57,7 +56,6 @@ const Dashboard = () => {
         </section>
         <Pagination />
       </main>
-      {notifications.type && <ErrorMessage {...notifications} />}
     </div>
   )
 }

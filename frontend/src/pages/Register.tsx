@@ -1,7 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { ChangeEvent, FormEvent, useState, useEffect } from 'react';
 
-import ErrorMessage from '../components/ErrorMessage';
 import { RegisterAuthState } from '../types/authTypes';
 import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
 import { registerUser } from '../app/features/auth/authSlice';
@@ -13,7 +12,7 @@ const Register = () => {
     fullname: '',
     password: ''
   })
-  const { token, notifications } = useAppSelector(state => state.auth);
+  const { token } = useAppSelector(state => state.auth);
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -111,7 +110,6 @@ const Register = () => {
           </div>
           </div>
       </section>
-      {notifications.type && <ErrorMessage {...notifications} />}
     </main>
   )
 }

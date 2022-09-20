@@ -2,16 +2,15 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Navbar from '../components/Navbar';
-import ErrorMessage from '../components/ErrorMessage';
 import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
 import { emailValidator } from '../utils/emailValidator';
 import { changeAccountInfo, changeEmail, changePassword, deleteAccount, notify } from '../app/features/auth/authSlice';
 import UserImage from '../components/UserImage';
-import { uploadProfile } from '../app/features/upload/uploadSlice';
+import { uploadProfile } from '../app/features/auth/authSlice';
 
 
 const Profile = () => {
-    const { token, notifications, user } = useAppSelector(state => state.auth);
+    const { token, user } = useAppSelector(state => state.auth);
     const [name, setName] = useState<string | null>(user.fullname);
     const [uname, setUname] = useState<string | null>(user.username);
     const [mail, setMail] = useState<string | null>(user.email);
@@ -69,7 +68,6 @@ const Profile = () => {
     return (
         <div className='bg-slate-100'>
             <Navbar />
-            {notifications.type && <ErrorMessage {...notifications}/>}
             <main className='max-w-lg mx-auto p-5 flex flex-col gap-8 bg-white'>
                 <section className='flex flex-col gap-2'>
 

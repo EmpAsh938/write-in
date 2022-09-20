@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { NotificationsType } from "../../../types/authTypes"
-import { profileUpload, upload } from "./uploadService";
+import { upload } from "./uploadService";
 
 interface UploadState {
     notifications: {

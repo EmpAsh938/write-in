@@ -14,6 +14,7 @@ import SingleBlog from './pages/SingleBlog';
 import { postNotification } from './app/features/post/postSlice';
 import Search from './pages/Search';
 import Bookmarks from './pages/Bookmarks';
+import ErrorMessage from './components/ErrorMessage';
 
 
 function App() {
@@ -45,6 +46,7 @@ function App() {
   
   return (
     <BrowserRouter>
+      {notifications.type && <ErrorMessage {...notifications} />}
       <Routes>
         <Route path="/">
           <Route index element={<Home />} />
