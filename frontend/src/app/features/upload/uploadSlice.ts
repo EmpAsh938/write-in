@@ -3,10 +3,7 @@ import { NotificationsType } from "../../../types/authTypes"
 import { upload } from "./uploadService";
 
 interface UploadState {
-    notifications: {
-        type: NotificationsType,
-        message: string
-    };
+    notifications: NotificationsType;
     uploadStatus: 'idle' | 'running' | 'success' | 'error';
     file: File | null;
     imageUrl: string;
@@ -17,7 +14,7 @@ const initialState: UploadState = {
     uploadStatus: 'idle',
     imageUrl: '',
     notifications: {
-        type: '',
+        type: 'idle',
         message: ''
     }
 }

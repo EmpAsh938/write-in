@@ -4,11 +4,6 @@ import { register, login, logout, verify, bookmark, passwordChange, removeAccoun
 import { RegisterAuthState, LoginAuthState, NotificationsType } from '../../../types/authTypes'
 import { profileUpload } from '../upload/uploadService';
 
-type NotificationsObj = {
-  type: NotificationsType;
-  message: string;
-}
-
 export type UserState = {
   email: string;
   fullname: string;
@@ -19,7 +14,7 @@ export type UserState = {
 // Define a type for the slice state
 interface AuthState {
   token: string | null;
-  notifications: NotificationsObj;
+  notifications: NotificationsType;
   user: UserState;
 }
 
@@ -28,7 +23,7 @@ const lsk = JSON.parse(localStorage.getItem('user_db') || 'null');
 // Define the initial state using that type
 const initialState: AuthState = {
   notifications: {
-    type:'',
+    type:'idle',
     message: ''
   },
   token: lsk ? lsk.token : null,

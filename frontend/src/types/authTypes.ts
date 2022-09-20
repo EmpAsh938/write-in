@@ -8,4 +8,7 @@ export type RegisterAuthState = LoginAuthState & {
     fullname: string;
 }
 
-export type NotificationsType = 'idle' | 'loading' | 'error' | 'success' | '';
+export type NotificationsType = {
+    type: 'idle' | 'loading' | 'error' | 'success';
+    message: string;
+}

@@ -8,10 +8,7 @@ import { NotificationsType } from '../../../types/authTypes';
 interface PostState {
     pages: number;
     rows: number;
-    notifications: {
-        type: NotificationsType,
-        message: string
-    };
+    notifications: NotificationsType;
     query:string,
     isLoading: boolean;
     posts: PostsType[];
@@ -25,7 +22,7 @@ const initialState: PostState = {
     pages: 1,
     rows: 10,
     notifications: {
-        type: '',
+        type: 'idle',
         message: '',
     },
     query:'',

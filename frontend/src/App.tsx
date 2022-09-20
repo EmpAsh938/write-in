@@ -18,7 +18,7 @@ import ErrorMessage from './components/ErrorMessage';
 
 
 function App() {
-  const { notifications, token } = useAppSelector(state => state.auth);
+  const { notifications: notificationAuth, token } = useAppSelector(state => state.auth);
   const { notifications: notificationPost } = useAppSelector(state => state.post);
 
   const dispatch = useAppDispatch();
@@ -26,15 +26,15 @@ function App() {
   useEffect(() => {
 
     let timer = setTimeout(() => {
-      if(notifications.type || notificationPost.type) {
-        dispatch(notify({type:'',message:''}));
-        dispatch(postNotification({type: '', message:''}));
+      if(notificationAuth.type || notificationPost.type) {
+        dispatch(notify({type:'idle',message:''}));
+        dispatch(postNotification({type: 'idle', message:''}));
       }
     }, 2000);
 
     return () => clearTimeout(timer);
     // eslint-disable-next-line
-  }, [notifications.type, notificationPost.type])
+  }, [notificationAuth.type, notificationPost.type])
 
   useEffect(() => {
     if(token) {
@@ -46,7 +46,8 @@ function App() {
   
   return (
     <BrowserRouter>
-      {notifications.type && <ErrorMessage {...notifications} />}
+      {notificationAuth.type && <ErrorMessage {...notificationAuth} />}
+      {notificationPost.type && <ErrorMessage {...notificationPost} />}
       <Routes>
         <Route path="/">
           <Route index element={<Home />} />

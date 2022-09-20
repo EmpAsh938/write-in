@@ -3,7 +3,7 @@ import { VscError } from "react-icons/vsc";
 
 import { NotificationsType } from "../types/authTypes";
 
-const ErrorMessage = (notifications: {type: NotificationsType, message:string}) => {
+const ErrorMessage = (notifications: NotificationsType) => {
   const {type, message} = notifications;
   return (
     <div className="fixed top-3 right-1 p-6 max-w-sm mx-auto bg-white rounded-xl shadow-lg flex items-center space-x-4">
