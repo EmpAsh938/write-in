@@ -13,7 +13,7 @@ import {
 import {
     GrBlockQuote
 } from 'react-icons/gr';
-import React, { useState, useEffect, ChangeEvent } from 'react';
+import React, { useState, useEffect, ChangeEvent, SyntheticEvent } from 'react';
 import {
     useParams,
     useNavigate
@@ -22,6 +22,8 @@ import {
 import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
 import { listSingleBlogs, saveBlog, resetSinglePost, updateBlog } from '../app/features/post/postSlice';
 import { uploadFile } from '../app/features/upload/uploadSlice';
+import { tags } from '../utils/getMarkdown';
+import { TagsType } from '../types/postTypes';
 
 
 const Blog = () => {
@@ -65,9 +67,21 @@ const Blog = () => {
         }
     }
 
+    const handleTags = (e:SyntheticEvent<HTMLButtonElement>) => {
+        if(e.target && e.currentTarget.dataset.id) {
+            let tag = e.currentTarget.dataset.id;
+            // console.log(tags.tag);
+        }
+    }
+
+    const handleSelection = (e:SyntheticEvent<HTMLTextAreaElement>) => {
+        console.log(e.currentTarget.selectionStart);
+        console.log(e.currentTarget.selectionEnd);
+    }
+
 
   useEffect(() => {
-    if(!token) navigate('/login');
+    // if(!token) navigate('/login');
     // eslint-disable-next-line
   }, [token])
 
@@ -100,40 +114,40 @@ const Blog = () => {
          <input type='text' value={title} onChange={e=>setTitle(e.target.value)} placeholder='Untitled' className='outline-none w-full text-4xl font-bold placeholder:text-slate-300' />
      </div>
      <div className='flex gap-4'>
-         <button>
+         <button onClick={handleTags} data-id='header'>
              <FaHeading />
          </button>
-         <button>
+         <button onClick={handleTags} data-id='italic'>
              <FaItalic />
          </button>
-         <button>
+         <button onClick={handleTags} data-id='bold'>
              <FaBold />
          </button>
-         <button>
+         <button onClick={handleTags} data-id='ul'>
              <MdFormatListBulleted />
          </button>
-         <button>
+         <button onClick={handleTags} data-id='ol'>
              <MdFormatListNumbered />
          </button>
-         <button>
+         <button onClick={handleTags} data-id='blockquote'>
              <GrBlockQuote />
          </button>
-         <button>
+         <button onClick={handleTags} data-id='link'>
              <FaLink />
          </button>
-         <button className='relative'>
-            <label htmlFor='upload'>
+         <button onClick={handleTags} className='relative cursor-pointer' data-id='image'>
+            <label htmlFor='upload' className='cursor-pointer'>
              <FaImage />
             </label>
             <input onChange={handleUpload} className='hidden absolute inset-0 w-full h-full' type='file' id='upload' accept='image/*' />
          </button>
-         <button>
+         <button onClick={handleTags} data-id='code'>
              <FaCode />
          </button>
      </div>
      {/* <div className='min-h-screen'> */}
      {/* </div> */}
-         <textarea onChange={handleTextArea} value={markdown} className='w-full resize-none' placeholder='Write your post here...'>
+         <textarea onChange={handleTextArea} onSelect={handleSelection} value={markdown} className='w-full resize-none' placeholder='Write your post here...'>
 
          </textarea>
 
