@@ -22,6 +22,7 @@ import {
 import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
 import { listSingleBlogs, saveBlog, resetSinglePost, updateBlog } from '../app/features/post/postSlice';
 import { uploadFile } from '../app/features/upload/uploadSlice';
+import { getTags } from '../utils/getTags';
 
 
 const Blog = () => {
@@ -31,6 +32,8 @@ const Blog = () => {
     const [isPreviewOn, setIsPreviewOn] = useState<boolean>(false);
     const [title, setTitle] = useState<string>('');
     const [markdown, setMarkdown] = useState<string>('');
+    const [startSelect, setStartSelect] = useState<number>(0);
+    const [endSelect, setEndSelect] = useState<number>(0);
 
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
@@ -41,6 +44,7 @@ const Blog = () => {
         setMarkdown(e.target.value);
     }
     
+
     const handleCancel = () => {
         dispatch(resetSinglePost());
         setTitle('');
@@ -68,13 +72,17 @@ const Blog = () => {
     const handleTags = (e:SyntheticEvent<HTMLButtonElement>) => {
         if(e.target && e.currentTarget.dataset.id) {
             let tag = e.currentTarget.dataset.id;
-            // console.log(tags.tag);
+            let firstPart = markdown.substring(0,startSelect);
+            let midPart = markdown.substring(startSelect,endSelect);
+            let secondPart = markdown.substring(endSelect,markdown.length);
+            midPart = getTags(tag,midPart || 'text');
+            setMarkdown(firstPart+midPart+secondPart);
         }
     }
 
     const handleSelection = (e:SyntheticEvent<HTMLTextAreaElement>) => {
-        console.log(e.currentTarget.selectionStart);
-        console.log(e.currentTarget.selectionEnd);
+        setStartSelect(e.currentTarget.selectionStart);
+        setEndSelect(e.currentTarget.selectionEnd);
     }
 
 
