@@ -189,7 +189,7 @@ const postSlice = createSlice({
                             state.posts = [...action.payload.result];
                         }
                     } else {
-                        state.pages = state.pages - 1;
+                        state.pages = state.pages === 1 ? 1 : state.pages- 1;
                     }
                 }
             }
@@ -234,7 +234,7 @@ const postSlice = createSlice({
                             state.privatePosts = [...action.payload.result];
                         }
                     } else {
-                        state.pages = state.pages - 1;
+                        state.pages = state.pages === 1 ? 1 : state.pages- 1;
                     }
                 }
             }
@@ -295,7 +295,7 @@ const postSlice = createSlice({
                             state.searchPosts = [...action.payload.result];
                         }
                     } else {
-                        state.pages = state.pages - 1;
+                        state.pages = state.pages === 1 ? 1 : state.pages- 1;
                     }
                 }
             }
@@ -332,7 +332,7 @@ const postSlice = createSlice({
                             state.bookmarkPosts = [...action.payload.result];
                         }
                     } else {
-                        state.pages = state.pages - 1;
+                        state.pages = state.pages === 1 ? 1 : state.pages- 1;
                     }
                 }
             }
