@@ -22,8 +22,6 @@ import {
 import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
 import { listSingleBlogs, saveBlog, resetSinglePost, updateBlog } from '../app/features/post/postSlice';
 import { uploadFile } from '../app/features/upload/uploadSlice';
-import { tags } from '../utils/getMarkdown';
-import { TagsType } from '../types/postTypes';
 
 
 const Blog = () => {
