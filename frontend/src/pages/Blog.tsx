@@ -39,13 +39,6 @@ const Blog = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     
-    const handleTextArea = (e:React.ChangeEvent<HTMLTextAreaElement>) => {
-        e.target.style.height = 'inherit';
-        e.target.style.height = `${e.target.scrollHeight}px`;
-        setMarkdown(e.target.value);
-    }
-    
-
     const handleCancel = () => {
         dispatch(resetSinglePost());
         setTitle('');
@@ -154,7 +147,7 @@ const Blog = () => {
      </div>
      {/* <div className='min-h-screen'> */}
      {/* </div> */}
-         <textarea onChange={handleTextArea} onSelect={handleSelection} value={markdown} className='w-full resize-none' placeholder='Write your post here...'>
+         <textarea onChange={e=>setMarkdown(e.target.value)} onSelect={handleSelection} value={markdown} className='w-full min-h-[200px]  overflow-y-visible resize-none' placeholder='Write your post here...'>
 
          </textarea>
 

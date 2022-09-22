@@ -2,7 +2,7 @@
 export const getTags = (tag:string,text:string) => {
     switch (tag) {
         case 'header':
-            return (`##${text}`);
+            return (`## ${text}`);
         case 'italic':
             return (`*${text}*`);
         case 'bold':
@@ -14,9 +14,9 @@ export const getTags = (tag:string,text:string) => {
         case 'blockquote':
             return (`> ${text}`);
         case 'image':
-            return (`![${text}][url]`);
+            return (`![${text}](url)`);
         case 'link':
-            return (`[${text}][url]`);
+            return (`[${text}](url)`);
         case 'code':
             return (`\`\`\`${text}\`\`\``);
         case 'task':
