@@ -23,6 +23,7 @@ import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
 import { listSingleBlogs, saveBlog, resetSinglePost, updateBlog } from '../app/features/post/postSlice';
 import { uploadFile } from '../app/features/upload/uploadSlice';
 import { getTags } from '../utils/getTags';
+import Preview from '../components/Preview';
 
 
 const Blog = () => {
@@ -161,7 +162,7 @@ const Blog = () => {
    ) : (
     <section className='bg-white'>
         <h2 className='font-semibold text-lg'>Preview</h2>
-        {/* parse markdown */}
+        <Preview markdown={markdown} />
     </section>
    )}
     <section className='fixed bottom-0 left-0 w-full bg-white p-5 flex justify-center gap-2 border border-solid border-green-200'>
