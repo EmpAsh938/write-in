@@ -1,17 +1,19 @@
 import { FormEvent, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaSearch } from 'react-icons/fa';
+import { FaSearch, FaBars } from 'react-icons/fa';
 
 import UserImage from './UserImage';
 import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
 import { logoutUser } from '../app/features/auth/authSlice';
 import { searchBlogs, searchString } from '../app/features/post/postSlice';
+import NavModal from './NavModal';
 
 const Navbar = () => {
   const { token, user } = useAppSelector(state => state.auth);
   const { query, pages, rows } = useAppSelector(state => state.post);
   const [toggleModal, setToggleModal] = useState<boolean>(false);
   const [searchquery, setSearchQuery] = useState<string>(query);
+  const [isActive, setIsActive] = useState<boolean>(false);
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -32,7 +34,7 @@ const Navbar = () => {
       <nav className='max-w-7xl mx-auto flex justify-between items-center p-2'>
         <div>
           <Link to='/' className=''>
-            <h2 className='w-fit py-4 px-2 rounded text-center bg-slate-900 text-green-500 font-bold uppercase'>Write In</h2>
+            <h2 className='w-fit py-3 px-2 rounded text-center bg-slate-900 text-white font-bold uppercase text-[.9rem]'>Write In</h2>
           </Link>
         </div>
         <form onSubmit={handleSearch} className='max-w-sm flex-1 flex border border-solid border-green-200 p-1 rounded-sm'>
@@ -41,7 +43,8 @@ const Navbar = () => {
             <FaSearch />
           </button>
         </form>
-        <div className='flex gap-2 items-center'>
+        <div>
+          <div className='hidden md:flex gap-2 items-center'>
           {token ? (
             <>
             <Link to='/new' className='bg-green-100 rounded-sm text-sm font-medium text-green-800 border border-solid border-green-500 px-4 py-2'>Create Post</Link>
@@ -69,6 +72,11 @@ const Navbar = () => {
               <Link to='/register' className='font-medium bg-green-500 text-sm text-white px-3 py-1 rounded'>Register</Link>           
             </>
           )}
+          </div>
+          <div className='md:hidden px-2'>
+            <FaBars className='text-lg' onClick={()=>setIsActive(true)} />
+            {isActive && <NavModal setIsActive={setIsActive} handleLogout={handleLogout}/>}
+          </div>
         </div>
         
  
