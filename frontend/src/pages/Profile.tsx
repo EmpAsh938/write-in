@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState, SyntheticEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Navbar from '../components/Navbar';
@@ -16,6 +16,7 @@ const Profile = () => {
     const [mail, setMail] = useState<string | null>(user.email);
     const [newPassword, setNewPassword] = useState<string>('');
     const [oldPassword, setOldPassword] = useState<string>('');
+    const [activeTab, setActiveTab] = useState<string>('account');
 
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
@@ -59,19 +60,36 @@ const Profile = () => {
         }
     }
 
+    const handleTabs = (event:SyntheticEvent<HTMLButtonElement>) => {
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        event.currentTarget.classList.add('active');
+        if(event.currentTarget.dataset.id) {
+            setActiveTab(event.currentTarget.dataset.id);
+        }
+    }
 
     useEffect(() => {
         if(!token) navigate('/login');
 
         // eslint-disable-next-line
     }, [token])
+
+    useEffect(() => {
+        document.querySelectorAll<HTMLElement>('.tabs').forEach(tabs => {
+            if(tabs.getAttribute('id') === activeTab) tabs.style.display = 'flex'
+            else tabs.style.display = 'none';
+        });
+    }, [activeTab])
     return (
         <div className='bg-slate-100'>
             <Navbar />
             <main className='max-w-lg mx-auto p-5 flex flex-col gap-8 bg-white'>
-                <section className='flex flex-col gap-2'>
+                <section className='flex items-center justify-center flex-wrap gap-2'>
+                    <button className='tab-btn active' onClick={handleTabs} data-id='account'>Account</button>
+                    <button className='tab-btn' onClick={handleTabs} data-id='security'>Security</button>
+                </section>
+                <section className='hidden flex-col gap-2 tabs' id='account'>
 
-                    <h1 className='text-2xl font-bold text-center'>Account</h1>
                     <p className='text-gray-500 text-sm'>Your account summary is displayed here. You can change the account details as per your choice.</p>
                     <div className='flex flex-col gap-2'>
                         <h2 className='text-xl font-medium'>Your Fullname</h2>
@@ -92,8 +110,7 @@ const Profile = () => {
                         </div>
                     </div>
                 </section>
-                <section className='flex flex-col gap-2'>
-                    <h1 className='text-2xl font-bold text-center'>Security</h1>
+                <section className='hidden flex-col gap-2 tabs' id='security'>
                     <p className='text-gray-500 text-sm'>Security details are enlisted below. Unintentional and unwanted changes might risk to permanently lost of an account.</p>
                     <div className='flex flex-col gap-2'>
                         <h2 className='text-xl font-medium'>Change Email</h2>
@@ -122,7 +139,7 @@ const Profile = () => {
                         <h2 className='text-xl font-medium'>
                             Delete Your Account
                         </h2>
-                        <p className='text-gray-500 text-sm'>Your account will be permanently deleted. You won't be able to recover your account back again once it's deleted. Do it on your own risk.</p>
+                        <p className='text-gray-500 text-sm'>Your account will be permanently deleted along with all the blogs you have posted since you last created your account. You won't be able to recover your account back again once it's deleted. Do it on your own risk.</p>
                         <button onClick={handleDeleteUser} className='bg-red-500 w-fit px-10 text-white py-2 rounded-sm'>Delete</button>
                     </div>
 
