@@ -24,10 +24,12 @@ import { listSingleBlogs, saveBlog, resetSinglePost, updateBlog } from '../app/f
 import { uploadFile } from '../app/features/upload/uploadSlice';
 import { getTags } from '../utils/getTags';
 import Preview from '../components/Preview';
+import { useUser } from '../hooks/useUser';
 
 
 const Blog = () => {
     const { id } = useParams();
+    const isAuthorized = useUser();
     const { token } = useAppSelector(state => state.auth);
     const { singlePost } = useAppSelector(state => state.post);
     const [isPreviewOn, setIsPreviewOn] = useState<boolean>(false);
@@ -38,6 +40,10 @@ const Blog = () => {
 
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
+
+    if(!isAuthorized) {
+        navigate('/login');
+    }
     
     const handleCancel = () => {
         dispatch(resetSinglePost());
@@ -80,10 +86,6 @@ const Blog = () => {
     }
 
 
-  useEffect(() => {
-    // if(!token) navigate('/login');
-    // eslint-disable-next-line
-  }, [token])
 
   useEffect(() => {
     if(id && typeof id === 'string') {

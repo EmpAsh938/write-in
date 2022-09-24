@@ -7,9 +7,11 @@ import { emailValidator } from '../utils/emailValidator';
 import { changeAccountInfo, changeEmail, changePassword, deleteAccount, notify } from '../app/features/auth/authSlice';
 import UserImage from '../components/UserImage';
 import { uploadProfile } from '../app/features/auth/authSlice';
+import { useUser } from '../hooks/useUser';
 
 
 const Profile = () => {
+    const isAuthorized = useUser();
     const { token, user } = useAppSelector(state => state.auth);
     const [name, setName] = useState<string | null>(user.fullname);
     const [uname, setUname] = useState<string | null>(user.username);
@@ -20,6 +22,10 @@ const Profile = () => {
 
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
+
+    if(!isAuthorized) {
+        navigate('/login');
+    }
 
     const handlePasswordChange = () => {
         if(oldPassword && newPassword && token) {
@@ -68,12 +74,7 @@ const Profile = () => {
         }
     }
 
-    useEffect(() => {
-        if(!token) navigate('/login');
-
-        // eslint-disable-next-line
-    }, [token])
-
+    
     useEffect(() => {
         document.querySelectorAll<HTMLElement>('.tabs').forEach(tabs => {
             if(tabs.getAttribute('id') === activeTab) tabs.style.display = 'flex'

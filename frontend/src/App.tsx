@@ -34,16 +34,8 @@ function App() {
 
     return () => clearTimeout(timer);
     // eslint-disable-next-line
-  }, [notificationAuth.type, notificationPost.type])
+  }, [notificationAuth.type, notificationPost.type, notificationAuth.message, notificationPost.message])
 
-  useEffect(() => {
-    if(token) {
-      dispatch(verifyUser(token));
-    }
-    
-    // eslint-disable-next-line
-  }, [])
-  
   return (
     <BrowserRouter>
       {notificationAuth.type && <ErrorMessage {...notificationAuth} />}

@@ -6,23 +6,29 @@ import HomeBlogs from '../components/HomeBlogs'
 import Navbar from '../components/Navbar'
 import Pagination from '../components/Pagination'
 import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux'
+import { useUser } from '../hooks/useUser'
 
 const Bookmarks = () => {
 
+    const isAuthorized = useUser();
     const { token } = useAppSelector(state => state.auth);
     const { bookmarkPosts, pages, rows } = useAppSelector(state => state.post);
 
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
 
+    if(!isAuthorized) {
+        navigate('/login');
+    }
+
     useEffect(() => {
         if(token) {
             dispatch(bookmarkLists({pages,rows,token}));
         } else {
-            navigate('/');
+            navigate('/login');
         }
         // eslint-disable-next-line
-    }, [pages])
+    }, [pages,rows,token])
   return (
    <>
     <Navbar />
