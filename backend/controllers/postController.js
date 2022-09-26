@@ -1,5 +1,4 @@
 const jwt = require('jsonwebtoken');
-const mongoose = require('mongoose');
 const asyncHandler = require('express-async-handler');
 
 const Post = require('../models/postModel');

@@ -1,7 +1,16 @@
 const express = require('express');
 
 const verifyUser = require('../middlewares/verifyUserMiddleware');
-const { listBlogsPublic, createNewBlog, getBlogSingle, listBlogsPrivate, likeBlog, editBlog, deleteBlog, searchBlogs } = require('../controllers/postController');
+const { 
+    editBlog,
+    likeBlog,
+    deleteBlog,
+    searchBlogs,
+    getBlogSingle,
+    createNewBlog,
+    listBlogsPublic,
+    listBlogsPrivate,
+ } = require('../controllers/postController');
 
 const postRouter = express.Router();
 
@@ -13,5 +22,6 @@ postRouter.delete('/me/:id', verifyUser, deleteBlog);          // private delete
 postRouter.put('/edit/:id', verifyUser, editBlog);         // private edit
 postRouter.get('/get/:id', getBlogSingle);         // public single blog
 postRouter.get('/like/:id', verifyUser, likeBlog);             // like blog
+postRouter.post('/comment/new', verifyUser, newComment);        // new comment
 
 module.exports = postRouter;
