@@ -37,8 +37,7 @@ function App() {
     }, 2000);
 
     return () => clearTimeout(timer);
-    // eslint-disable-next-line
-  }, [notificationAuth.type, notificationPost.type])
+  }, [dispatch, notificationAuth.type, notificationPost.type])
 
   return (
     <BrowserRouter>

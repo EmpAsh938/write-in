@@ -39,8 +39,7 @@ const SingleBlog = () => {
             return;
         }
         dispatch(listSingleBlogs(id));
-        // eslint-disable-next-line
-    }, [id])
+    }, [id,dispatch,navigate])
     if(Object.keys(singlePost).length === 0) {
         return <p>No items to fetch</p>
     }

@@ -85,8 +85,7 @@ const Blog = () => {
     if(id && typeof id === 'string') {
         dispatch(listSingleBlogs(id));
     }
-    // eslint-disable-next-line
-  }, [id])
+  }, [id,dispatch])
 
   useEffect(() => {
     if(Object.keys(singlePost).length > 0) {

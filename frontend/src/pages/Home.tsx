@@ -15,7 +15,7 @@ const Home = () => {
   useEffect(() => {
     dispatch(resetPages());
     dispatch(listPublicBlogs({pages:1,rows:10}));
-  }, [])  
+  }, [dispatch])  
   return (
     <div className='bg-slate-100'>
       <Navbar />

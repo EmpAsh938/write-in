@@ -21,8 +21,7 @@ const Bookmarks = () => {
         } else {
             navigate('/login');
         }
-        // eslint-disable-next-line
-    }, [pages,rows,token])
+    }, [dispatch,navigate,pages,rows,token])
   return (
    <>
     <Navbar />

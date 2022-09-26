@@ -20,8 +20,7 @@ const Dashboard = () => {
     if(token) {
       dispatch(listPrivate({pages,rows,token}));
     }
-    // eslint-disable-next-line
-  }, [])
+  }, [token,pages,rows,dispatch])
  
   return (
     <div className='bg-slate-100'>

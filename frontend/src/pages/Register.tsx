@@ -36,8 +36,7 @@ const Register = () => {
 
   useEffect(() => {
     if(token) navigate('/');
-    // eslint-disable-next-line
-  }, [token])
+  }, [token,navigate])
   
   return (
     <main className='min-h-screen grid place-items-center bg-green-500 p-2'>
