@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import Card from '../components/Card';
 import Navbar from '../components/Navbar';
@@ -7,20 +6,14 @@ import Blogcard from '../components/Blogcard';
 import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
 import { listPrivate, resetPages } from '../app/features/post/postSlice';
 import Pagination from '../components/Pagination';
-import { useUser } from '../hooks/useUser';
 
 const Dashboard = () => {
-  const isAuthorized = useUser();
   const { token } = useAppSelector(state => state.auth);
   const { privatePosts, pages, rows } = useAppSelector(state => state.post);
 
 
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  if(!isAuthorized) {
-    navigate('/login');
-  }
   
   useEffect(() => {
     dispatch(resetPages());

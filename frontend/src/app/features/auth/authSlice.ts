@@ -5,6 +5,7 @@ import { RegisterAuthState, LoginAuthState, NotificationsType } from '../../../t
 import { profileUpload } from '../upload/uploadService';
 
 export type UserState = {
+  _id: string;
   email: string;
   fullname: string;
   username:string;

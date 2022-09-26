@@ -10,15 +10,12 @@ export const useUser = () => {
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        if(token) {
-            dispatch(verifyUser(token));
-        } else {
+        dispatch(verifyUser(token || ''));
+        if(!token) {
             setIsAuthorized(false);
-        }
-        if(user) {
+        } else {
             setIsAuthorized(true);
         }
-    }, [token, user])
-
+    }, [dispatch,token,user._id])
     return isAuthorized;
 }

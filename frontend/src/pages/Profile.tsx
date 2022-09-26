@@ -1,5 +1,4 @@
 import { ChangeEvent, useEffect, useState, SyntheticEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import Navbar from '../components/Navbar';
 import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
@@ -7,11 +6,9 @@ import { emailValidator } from '../utils/emailValidator';
 import { changeAccountInfo, changeEmail, changePassword, deleteAccount, notify } from '../app/features/auth/authSlice';
 import UserImage from '../components/UserImage';
 import { uploadProfile } from '../app/features/auth/authSlice';
-import { useUser } from '../hooks/useUser';
 
 
 const Profile = () => {
-    const isAuthorized = useUser();
     const { token, user } = useAppSelector(state => state.auth);
     const [name, setName] = useState<string | null>(user.fullname);
     const [uname, setUname] = useState<string | null>(user.username);
@@ -20,12 +17,8 @@ const Profile = () => {
     const [oldPassword, setOldPassword] = useState<string>('');
     const [activeTab, setActiveTab] = useState<string>('account');
 
-    const navigate = useNavigate();
     const dispatch = useAppDispatch();
 
-    if(!isAuthorized) {
-        navigate('/login');
-    }
 
     const handlePasswordChange = () => {
         if(oldPassword && newPassword && token) {

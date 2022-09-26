@@ -1,25 +1,19 @@
 import { useEffect } from 'react'
 import { FaRegBookmark } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
-import { bookmarkLists, loadMore } from '../app/features/post/postSlice'
+import { bookmarkLists } from '../app/features/post/postSlice'
 import HomeBlogs from '../components/HomeBlogs'
 import Navbar from '../components/Navbar'
 import Pagination from '../components/Pagination'
 import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux'
-import { useUser } from '../hooks/useUser'
 
 const Bookmarks = () => {
 
-    const isAuthorized = useUser();
     const { token } = useAppSelector(state => state.auth);
     const { bookmarkPosts, pages, rows } = useAppSelector(state => state.post);
 
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
-
-    if(!isAuthorized) {
-        navigate('/login');
-    }
 
     useEffect(() => {
         if(token) {
