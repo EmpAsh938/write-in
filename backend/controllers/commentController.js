@@ -104,12 +104,15 @@ const deleteComment = asyncHandler(async (req,res) => {
 		if(!doc || doc.author !== decoded._id) {
 			res.status(401);
 			throw new Error('user not authorized');
-		doc = await Comment.findOneAndDelete({_id:id}).exec();
 		// delete subcomments signature from comments
+		doc = await Comment.findOneAndUpdate({_id: doc.root_id}, {$pull: {reply: id});
+		// delete actual comment
+		doc = await Comment.findOneAndDelete({_id:id}).exec();
 		res.json({
 			message: 'comment deleted',
 			result: []
 		});
+
 	} catch (error) {
 		throw new Error(error);
 	}
