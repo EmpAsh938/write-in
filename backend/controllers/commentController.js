@@ -63,7 +63,7 @@ const newReply = asyncHandler(async (req, res) => {
 		post:post_id
 	});
 	result = await Comment.save(doc);
-    result = await Comment.findOneAndUpdate({_id:comment_id},{$push: {reply: result._id}});
+    	result = await Comment.findOneAndUpdate({_id:comment_id},{$push: {reply: result._id}});
 	 if(!result) {
 		throw new Error('can\'t create new reply');
 	 }
@@ -145,7 +145,7 @@ const likeComment = asyncHandler(async (req, res) => {
 			})
 		}
 
-export { newComment, newReply, editComment, deleteComment };
+export { newComment, newReply, editComment, deleteComment, likeComment };
 	
 	
 
