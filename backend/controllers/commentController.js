@@ -119,7 +119,31 @@ const deleteComment = asyncHandler(async (req,res) => {
 
 })
 
-
+const likeComment = asyncHandler(async (req, res) => {
+	const { id } = req.params;
+	const decoded = jwt.decode(req.headers.authorization.split('Bearer')[1].trim());
+	try {
+		let doc = await Comment.findOne({_id:id});
+		if(!doc) {
+			res.status(404);
+			throw new Error('comment not found');
+		}
+		// check if it is already liked
+		doc = await Comment.findOne({_id:id}, {likes: {$eq: decoded._id}});
+		if(doc) {
+			doc = await Comment.finOneAndUpdate({_id:id}, {$pull: {likes: {$eq: decoded._id}}});
+			res.json({
+				message: 'like removed',
+				result: []
+			});
+		} else {
+			// first time liking
+			doc = await Comment.findOneAndUpdate({_id:id}, {$push: {likes: decoded._id}});
+			res.json({
+				message: 'like added',
+				result: []
+			})
+		}
 
 export { newComment, newReply, editComment, deleteComment };
 	
