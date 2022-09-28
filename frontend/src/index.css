@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 @layer components {
-    .markdown-css *{
-        @apply text-base text-gray-700;
+    .markdown-css * {
+        @apply text-base text-gray-800;
     }
     .markdown-css h1,h2,h3,h4,h5,h6 {
         @apply font-semibold my-1;
