@@ -20,14 +20,17 @@ npm run dev
 
 ## Technologies Used
 
-**Frontend:** React, Redux-toolkit, TailwindCSS,
+**Frontend:** React, Redux-toolkit, TailwindCSS, React-Router, Typescript
+
 **Backend:** NodeJS/Express, Cloudinary, JWT, Bcrypt
+
 **Database:** MongoDB, Mongoose 
 
 ## Features
 
 - Proper user authentication and authorization along with token verification
-- Markdown based blogging
-- User blogging anayltics
-- like/unlike and comment
+- Write in markdown format
+- blogging analytics
+- like/unlike comments and blogs
+- comment and reply
 - bookmark intriguing and needed blogs
