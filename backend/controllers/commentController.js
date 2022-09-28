@@ -63,7 +63,7 @@ const newReply = asyncHandler(async (req, res) => {
             post:post_id
         });
         result = await Comment.save(doc);
-            result = await Comment.findOneAndUpdate({_id:comment_id},{$push: {reply: result._id}});
+        result = await Comment.findOneAndUpdate({_id:comment_id},{$push: {reply: result._id}});
         if(!result) {
             throw new Error('can\'t create new reply');
         }
@@ -148,5 +148,35 @@ const likeComment = asyncHandler(async (req, res) => {
         throw new Error(error);
     }
 })
+
+const listComment = asyncHandler(async (req, res) => {
+    	const { pages, rows, type } = req.query;
+	const { id } = req.params;
+    	if(!pages || !rows || type !== 'comment' || type !== 'reply') {
+        	res.status(400);
+        	throw new Error('some fields are missing');
+    	}
+	try {
+		let doc;
+		if(type === 'reply') {
+			doc = await Comment.find({}).populate('reply').skip(rows * (pages - 1)).limit(rows).exec();
+		} else if(type === 'comment') {
+			doc = await Post.find({}).populate('comments').skip(rows * (pages - 1)).limit(rows).exec();
+		}
+		if(doc.length === 0) {
+            		res.json({
+                		message: 'no items found',
+                		result: []
+            		})
+        	} else {
+           	 	res.json({
+                		message: 'successfully retreived',
+                		result: doc
+            		})
+        	}
+    } catch (error) {
+        throw new Error(error);
+    }
+})      
 
 export { newComment, newReply, editComment, deleteComment, likeComment };
