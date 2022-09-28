@@ -57,22 +57,22 @@ const newReply = asyncHandler(async (req, res) => {
         if(!result) {
             throw new Error('parent comment not found');
         }
-	let doc = new Comment({
-		body,
-		author:decoded._id,
-		post:post_id
-	});
-	result = await Comment.save(doc);
-    	result = await Comment.findOneAndUpdate({_id:comment_id},{$push: {reply: result._id}});
-	 if(!result) {
-		throw new Error('can\'t create new reply');
-	 }
+        let doc = new Comment({
+            body,
+            author:decoded._id,
+            post:post_id
+        });
+        result = await Comment.save(doc);
+            result = await Comment.findOneAndUpdate({_id:comment_id},{$push: {reply: result._id}});
+        if(!result) {
+            throw new Error('can\'t create new reply');
+        }
     } catch (error) {
         throw new Error(error);
     }
 })
 
-const editReply = asyncHandler(async (req, res) => {
+const editComment = asyncHandler(async (req, res) => {
     const { id } = req.params;
     const { body } = req.body;
     if(!id || !body) {
@@ -82,15 +82,15 @@ const editReply = asyncHandler(async (req, res) => {
     const decoded = jwt.decode(req.headers.authorization.split('Bearer')[1].trim());
     try {
         let result = await Comment.findOne({_id:id}).exec();
-	if(!result || result.author !== decoded._id) {
-		res.status(401);
-		throw new Error('user not authorized');
-	}
-	result = await Comment.findOneAndUpdate({_id:id},{$set: {body}});
-	res.json({
-		message: 'updated successfully',
-		result
-	});
+        if(!result || result.author !== decoded._id) {
+            res.status(401);
+            throw new Error('user not authorized');
+        }
+	    result = await Comment.findOneAndUpdate({_id:id},{$set: {body}});
+        res.json({
+            message: 'updated successfully',
+            result
+        });
     } catch (error) {
         throw new Error(error);
     }
@@ -104,8 +104,9 @@ const deleteComment = asyncHandler(async (req,res) => {
 		if(!doc || doc.author !== decoded._id) {
 			res.status(401);
 			throw new Error('user not authorized');
+        }
 		// delete subcomments signature from comments
-		doc = await Comment.findOneAndUpdate({_id: doc.root_id}, {$pull: {reply: id});
+		doc = await Comment.findOneAndUpdate({_id: doc.root_id}, {$pull: {reply: id}});
 		// delete actual comment
 		doc = await Comment.findOneAndDelete({_id:id}).exec();
 		res.json({
@@ -116,7 +117,6 @@ const deleteComment = asyncHandler(async (req,res) => {
 	} catch (error) {
 		throw new Error(error);
 	}
-
 })
 
 const likeComment = asyncHandler(async (req, res) => {
@@ -144,11 +144,9 @@ const likeComment = asyncHandler(async (req, res) => {
 				result: []
 			})
 		}
+    } catch (error) {
+        throw new Error(error);
+    }
+})
 
 export { newComment, newReply, editComment, deleteComment, likeComment };
-	
-	
-
-
-
-
