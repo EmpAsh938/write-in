@@ -25,12 +25,32 @@ type CommentState = {
 }
 
 const initialState = {
+	notifications: {
+		type: 'idle',
+		message: ''
+	},
+	comments: []
 }
 
-export const newComment;
-export const newReply;
-export const editComment;
-export const deleteComment;
+export const newComment = createAsyncThunk(
+	'comment/new',
+	async () => {
+		try {
+
+		} catch (error:any) {
+		}
+	};
+export const newReply = createAsyncThunk(
+	'comment/reply',
+	async() => {
+		try {
+		} catch (error:any) {};
+export const editComment = createAsyncThunk(
+	'comment/edit',
+	async() => {};
+export const deleteComment = createAsynThunk(
+	'comment/delete',
+	async() => {};
 
 const commentSlice = {
 	name: 'comment',
