@@ -43,9 +43,9 @@ export const newComment = createAsyncThunk(
 );
 export const newReply = createAsyncThunk(
 	'comment/reply',
-	async({token,comment_id,body},thunkAPI) => {
+	async({token,post_id,comment_id,body},thunkAPI) => {
 		try {
-			return (await addNewReply(comment_id,body,token));
+			return (await addNewReply(post_id,comment_id,body,token));
 		} catch (error:any) {};
 );
 
@@ -58,7 +58,7 @@ export const editComment = createAsyncThunk(
 		}
 	};
 );
-export const deleteComment = createAsynThunk(
+export const deleteComment = createAsyncThunk(
 	'comment/delete',
 	async({token,id},thunkAPI) => {
 		try {
