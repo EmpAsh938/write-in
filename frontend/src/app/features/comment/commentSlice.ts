@@ -34,24 +34,49 @@ const initialState = {
 
 export const newComment = createAsyncThunk(
 	'comment/new',
-	async () => {
+	async ({token,post_id,body},thunkAPI) => {
 		try {
+			return (await addNewComment(post_id,body,token));
+		} catch (error:any) {
+		}
+	}
+);
+export const newReply = createAsyncThunk(
+	'comment/reply',
+	async({token,comment_id,body},thunkAPI) => {
+		try {
+			return (await addNewReply(comment_id,body,token));
+		} catch (error:any) {};
+);
 
+export const editComment = createAsyncThunk(
+	'comment/edit',
+	async({token,post_id,body},thunkAPI) => {
+		try {
+			return (await commentEdit(post_id,body,token));
 		} catch (error:any) {
 		}
 	};
-export const newReply = createAsyncThunk(
-	'comment/reply',
-	async() => {
-		try {
-		} catch (error:any) {};
-export const editComment = createAsyncThunk(
-	'comment/edit',
-	async() => {};
+);
 export const deleteComment = createAsynThunk(
 	'comment/delete',
-	async() => {};
+	async({token,id},thunkAPI) => {
+		try {
+			return (await commentDelete(id,token));
+		} catch (error:any) {
+		}
+	};
+);
 
+export const likeComment = createAsyncThunk(
+	'comment/like',
+	async({token,id},thunkAPI) => {
+		try {
+			return (await commentLike(id,token));
+		} catch (error:any) {
+		}
+	}
+)
 const commentSlice = {
 	name: 'comment',
 	initialState,
