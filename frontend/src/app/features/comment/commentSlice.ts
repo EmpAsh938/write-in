@@ -1,3 +1,5 @@
+import { CommentList } from '../../types/commentTypes';
+
 type ReplyType = {
 	_id: string;
 	body: string;
@@ -34,7 +36,7 @@ const initialState = {
 
 export const newComment = createAsyncThunk(
 	'comment/new',
-	async ({token,post_id,body},thunkAPI) => {
+	async ({token,post_id,body}:{token:string,post_id:string,body:string},thunkAPI) => {
 		try {
 			return (await addNewComment(post_id,body,token));
 		} catch (error:any) {
@@ -43,7 +45,7 @@ export const newComment = createAsyncThunk(
 );
 export const newReply = createAsyncThunk(
 	'comment/reply',
-	async({token,post_id,comment_id,body},thunkAPI) => {
+	async({token,post_id,comment_id,body}:{token:string,post_id:string,comment_id:string,body:string},thunkAPI) => {
 		try {
 			return (await addNewReply(post_id,comment_id,body,token));
 		} catch (error:any) {};
@@ -51,7 +53,7 @@ export const newReply = createAsyncThunk(
 
 export const editComment = createAsyncThunk(
 	'comment/edit',
-	async({token,post_id,body},thunkAPI) => {
+	async({token,post_id,body}:{token:string,post_id:string,body:string},thunkAPI) => {
 		try {
 			return (await commentEdit(post_id,body,token));
 		} catch (error:any) {
@@ -60,7 +62,7 @@ export const editComment = createAsyncThunk(
 );
 export const deleteComment = createAsyncThunk(
 	'comment/delete',
-	async({token,id},thunkAPI) => {
+	async({token,id}:{token:string,id:string},thunkAPI) => {
 		try {
 			return (await commentDelete(id,token));
 		} catch (error:any) {
@@ -70,13 +72,24 @@ export const deleteComment = createAsyncThunk(
 
 export const likeComment = createAsyncThunk(
 	'comment/like',
-	async({token,id},thunkAPI) => {
+	async({token,id}:{token:string,id:string},thunkAPI) => {
 		try {
 			return (await commentLike(id,token));
 		} catch (error:any) {
 		}
 	}
 )
+
+export const listComment = createAsyncThunk(
+	'comment/list',
+	async({token,post_id,pages,rows,type}:{token:string,post_id:string,pages:number,rows:number,type:CommentList}, thunkAPI) => {
+		try {
+			return (await commmentList(post_id,token));
+		} catch (error:any) {
+		}
+	}
+)
+
 const commentSlice = {
 	name: 'comment',
 	initialState,

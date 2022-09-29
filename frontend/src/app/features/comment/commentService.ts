@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { CommentList } from '../../../types/commentTypes';
 
 export const addNewComment = (post_id:string,body:string,token:string) => {
 	const response = await axios.post(`/post/bookmark/new/`,{post_id,body}, {
@@ -42,5 +43,14 @@ export const commentLike = (id:string,token:string) => {
 			Authorization: `Bearer ${token}`
 		}
 	});
+	return response.data();
+}
+
+export const commentList = (post_id:string,pages:number,rows:number,type:CommentList,token:string) => {
+	const response = await axios.get(`/post/bookmark/list/${post_id}?pages=${pages}&rows=${rows}&type=${type}`, {
+		headers: {
+			Authorization: `Bearer ${token}`
+		}
+	})
 	return response.data();
 }
