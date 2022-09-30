@@ -10,6 +10,7 @@ import { likeBlog, listSingleBlogs } from '../app/features/post/postSlice';
 import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
 import { bookmarkPost } from '../app/features/auth/authSlice';
 import Navbar from '../components/Navbar';
+import Comments from '../components/Comments';
 
 
 const SingleBlog = () => {
@@ -84,6 +85,19 @@ const SingleBlog = () => {
                     </h1>
                 </div>
                 <article className='text-lg font-light text-slate-700 markdown-css' dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(marked.parse(markdown))}}>
+                </article>
+                <article className='flex flex-col gap-4'>
+                    <div>
+                        <h2 className='text-lg'>Comments</h2>
+                    </div>
+                    <div className='flex justify-start items-center gap-2'>
+                        <UserImage profileImage={''} fullname={''} />
+                        <input className='text-sm p-2 outline-none border border-solid border-gray-300' type='text' placeholder='type here' />
+                        <button className='bg-green-500 text-white rounded px-2 py-1'>Comment</button>
+                    </div>
+                    <div className=''>
+                       <Comments />
+                    </div>
                 </article>
             </section>
         </main>
