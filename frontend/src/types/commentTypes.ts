@@ -1,1 +1,1 @@
-export type CommentList = 'reply' | 'comment';
+export type CommentListType = 'reply' | 'comment';

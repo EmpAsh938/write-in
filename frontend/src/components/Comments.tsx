@@ -2,9 +2,11 @@
 const Comments = () => {
 	return (
 		<section>
-			<div></div>
 			<div>
-				<div></div>
+				<h2>Comments</h2>
+			</div>
+			<div>
+				<div>Comments</div>
 			</div>
 		</section>
 	)

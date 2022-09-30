@@ -1,4 +1,8 @@
-import { CommentList } from '../../types/commentTypes';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+
+import { CommentListType } from '../../../types/commentTypes';
+import { NotificationsType } from '../../../types/authTypes';
+import { addNewComment,addNewReply,commentEdit,commentDelete,commentLike,commentList } from './commentService';
 
 type ReplyType = {
 	_id: string;
@@ -22,7 +26,7 @@ type CommentType = {
 
 
 type CommentState = {
-	notifications: NotificationsObj;
+	notifications: NotificationsType;
 	comments: CommentType;
 }
 
@@ -49,6 +53,7 @@ export const newReply = createAsyncThunk(
 		try {
 			return (await addNewReply(post_id,comment_id,body,token));
 		} catch (error:any) {};
+	}
 );
 
 export const editComment = createAsyncThunk(
@@ -58,7 +63,7 @@ export const editComment = createAsyncThunk(
 			return (await commentEdit(post_id,body,token));
 		} catch (error:any) {
 		}
-	};
+	}
 );
 export const deleteComment = createAsyncThunk(
 	'comment/delete',
@@ -67,7 +72,7 @@ export const deleteComment = createAsyncThunk(
 			return (await commentDelete(id,token));
 		} catch (error:any) {
 		}
-	};
+	}
 );
 
 export const likeComment = createAsyncThunk(
@@ -82,9 +87,9 @@ export const likeComment = createAsyncThunk(
 
 export const listComment = createAsyncThunk(
 	'comment/list',
-	async({token,post_id,pages,rows,type}:{token:string,post_id:string,pages:number,rows:number,type:CommentList}, thunkAPI) => {
+	async({token,post_id,pages,rows,type}:{token:string,post_id:string,pages:number,rows:number,type:CommentListType}, thunkAPI) => {
 		try {
-			return (await commmentList(post_id,token));
+			return (await commentList(post_id,pages,rows,type,token));
 		} catch (error:any) {
 		}
 	}
