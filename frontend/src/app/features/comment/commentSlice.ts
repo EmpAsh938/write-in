@@ -27,7 +27,7 @@ type CommentType = {
 
 type CommentState = {
 	notifications: NotificationsType;
-	comments: CommentType;
+	comments: CommentType[];
 }
 
 const initialState:CommentState = {
