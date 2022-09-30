@@ -30,7 +30,7 @@ type CommentState = {
 	comments: CommentType;
 }
 
-const initialState = {
+const initialState:CommentState = {
 	notifications: {
 		type: 'idle',
 		message: ''
@@ -95,7 +95,7 @@ export const listComment = createAsyncThunk(
 	}
 )
 
-const commentSlice = {
+const commentSlice = createSlice({
 	name: 'comment',
 	initialState,
 	reducers: {},
@@ -134,6 +134,8 @@ const commentSlice = {
 			state.notifications.message = 'comment delete failed';	
 		})
 	}
-}
+})
 
-export default commentSlice.reducer;
+// export const { } = commentSlice.actions;
+
+export default commentSlice.reducer

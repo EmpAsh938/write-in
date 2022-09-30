@@ -199,10 +199,11 @@ const authSlice = createSlice({
           state.notifications.message = action.payload;
       }
     })
-    .addCase(logoutUser.fulfilled, (() => {
-      return {
-        ...initialState
-      }
+    .addCase(logoutUser.fulfilled, ((state) => {
+	state.token = null;
+	state.user = {} as UserState;
+	state.notifications.type = 'success';
+	state.notifications.message = 'logout successfull';
     }))
     .addCase(verifyUser.fulfilled, ((state, action) => {
       if(typeof action.payload.result === 'object') {
@@ -250,10 +251,11 @@ const authSlice = createSlice({
       }
     })
     .addCase(deleteAccount.fulfilled, (state) => {
-      return {
-        ...initialState
-      }
-    })
+ 	state.token = null;
+	state.user = {} as UserState;
+	state.notifications.type = 'success';
+	state.notifications.message = 'logout successfull';
+   })
     .addCase(deleteAccount.rejected, (state,action) => {
       if(typeof action.payload === 'string') {
         state.notifications.type = 'error';
