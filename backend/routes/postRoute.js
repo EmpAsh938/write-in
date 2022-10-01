@@ -4,6 +4,11 @@ const verifyUser = require('../middlewares/verifyUserMiddleware');
 const { 
     editBlog,
     likeBlog,
+    newComment,
+    replyComment,
+    editComment,
+    deleteComment,
+    likeComment,
     deleteBlog,
     searchBlogs,
     getBlogSingle,
