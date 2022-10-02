@@ -2,6 +2,8 @@ import React from 'react'
 import UserImage from './UserImage'
 
 const Reply = () => {
+    const handleLikeReply = () => {
+    }
   return (
 	<div className='pl-4'>
         <div className='flex justify-start items-center gap-2 text-sm'>
@@ -10,7 +12,7 @@ const Reply = () => {
         </div>
         <p>Cool.</p>
         <div className='flex justify-start items-center gap-2 text-sm'>
-            <button>like</button>
+            <button onClick={handleLikeReply}>like</button>
         </div>
         	
     </div>

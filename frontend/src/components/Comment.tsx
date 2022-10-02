@@ -19,12 +19,16 @@ const Comment = ({  _id, body, author, reply}: CommentType) => {
     const handleLike = () => {
         if(_id && token) {
             dispatch(likeComment({id:_id,token}));
+        } else {
+            console.log('something\'s not right');
         }
     }
     const handleReply = () => {
         if(_id && token && replyText) {
             dispatch(newReply({post_id:singlePost._id,comment_id:_id,token,body:replyText}));
-        }
+        } else console.log('reply not working');
+        setIsReplyOpen(false);
+        setReplyText('');
     }
 	return (
 		<div className=''>

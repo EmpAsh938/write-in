@@ -5,16 +5,6 @@ import { UserState } from '../../../types/authTypes';
 import { CommentType } from '../../../types/postTypes';
 import { addNewComment,addNewReply,commentEdit,commentDelete,commentLike,commentList, replyList } from './commentService';
 
-type ReplyType = {
-	_id: string;
-	body: string;
-	author: UserState;
-	likes: [string];
-	root: string;
-	updatedAt: string;
-	createdAt: string;
-}
-
 type CommentState = {
 	notifications: NotificationsType;
 	comments: CommentType[];
@@ -116,7 +106,7 @@ const commentSlice = createSlice({
 			state.notifications.message = 'fetching comments';
 		})
 		.addCase(listComment.fulfilled, (state, action) => {
-			if(typeof action.payload.result === 'object') {
+			if(typeof action.payload.result === 'object' && action.payload.result.length > 0) {
 				state.notifications.type = 'success';
 				state.notifications.message = 'fetched comments successfully';
                 state.comments = action.payload.result;
@@ -155,7 +145,7 @@ const commentSlice = createSlice({
         .addCase(newComment.fulfilled, (state, action) => {
 			state.notifications.type = 'success';
 			state.notifications.message = 'comment added';
-			if(typeof action.payload.result === 'object') {
+			if(typeof action.payload.result === 'object' && action.payload.result.length > 0) {
 				state.comments = action.payload.result;
 			}
 		})
@@ -166,7 +156,12 @@ const commentSlice = createSlice({
 		.addCase(newReply.fulfilled, (state, action) => {
 			state.notifications.type = 'success';
 			state.notifications.message = 'reply added';
-			console.log(action.payload);	
+            if(typeof action.payload.result === 'object' && action.payload.result) {
+                state.comments = state.comments.map(item => {
+                    if(item === action.payload.result._id || (item._id === action.payload.result._id)) return action.payload.result;
+                    else return item;
+                })
+            }
 		})
 		.addCase(newReply.rejected, (state, action) => {
 			state.notifications.type = 'error';
