@@ -1,6 +1,24 @@
-import { UserState } from '../app/features/auth/authSlice';
+import { UserState } from "./authTypes";
 
 
+export type ReplyType = {
+	_id: string;
+	body: string;
+	author: UserState;
+	likes: [string];
+	root: string;
+	updatedAt: string;
+	createdAt: string;
+}
+export type CommentType = {
+	_id: string;
+	body: string;
+	author: UserState;
+	likes: [string];
+	reply: [ReplyType];
+	updatedAt: string;
+	createdAt: string;
+}
 export type PostsType = {
     _id:string;
     title:string;

@@ -12,3 +12,11 @@ export type NotificationsType = {
     type: 'idle' | 'loading' | 'error' | 'success';
     message: string;
 }
+
+export type UserState = {
+    _id: string;
+    email: string;
+    fullname: string;
+    username:string;
+    profileImage: string;
+}

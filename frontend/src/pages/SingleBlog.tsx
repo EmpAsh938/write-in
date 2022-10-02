@@ -1,22 +1,27 @@
 import { marked } from 'marked';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import * as DOMPurify from 'dompurify';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FaRegHeart, FaRegBookmark } from 'react-icons/fa';
 
-import { getMonth } from '../utils/getMonth';
-import UserImage from '../components/UserImage';
-import { likeBlog, listSingleBlogs } from '../app/features/post/postSlice';
-import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
-import { bookmarkPost } from '../app/features/auth/authSlice';
 import Navbar from '../components/Navbar';
-import Comments from '../components/Comments';
+import Comment from '../components/Comment';
+import UserImage from '../components/UserImage';
+
+import { getMonth } from '../utils/getMonth';
+import { bookmarkPost } from '../app/features/auth/authSlice';
+import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
+import { likeBlog, listSingleBlogs } from '../app/features/post/postSlice';
+import { listComment, newComment } from '../app/features/comment/commentSlice';
 
 
 const SingleBlog = () => {
     const { id } = useParams();
     const { token } = useAppSelector(state => state.auth);
     const { singlePost } = useAppSelector(state => state.post);
+    const { comments } = useAppSelector(state => state.comment);
+
+    const [commentText, setCommentText] = useState<string>('');
 
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
@@ -34,13 +39,30 @@ const SingleBlog = () => {
     }
   }
 
+  const handleSaveComment = () => {
+    if(commentText && token && id) {
+        dispatch(newComment({
+            token,
+            body: commentText,
+            post_id: id
+        }));
+        setCommentText('');
+    }
+  }
+
     useEffect(() => {
-        if(!id) {
+        if(!id || !token) {
             navigate('/');
-            return;
+        } else {
+            dispatch(listSingleBlogs(id));
+            dispatch(listComment({
+                token, 
+                pages: 1, 
+                rows: 5,
+                post_id: id,
+            }));
         }
-        dispatch(listSingleBlogs(id));
-    }, [id,dispatch,navigate])
+    }, [id,dispatch,token,navigate])
     if(Object.keys(singlePost).length === 0) {
         return <p>No items to fetch</p>
     }
@@ -92,11 +114,14 @@ const SingleBlog = () => {
                     </div>
                     <div className='flex justify-start items-center gap-2'>
                         <UserImage profileImage={''} fullname={''} />
-                        <input className='text-sm p-2 outline-none border border-solid border-gray-300' type='text' placeholder='type here' />
-                        <button className='bg-green-500 text-white rounded px-2 py-1'>Comment</button>
+                        <input value={commentText} onChange={e=>setCommentText(e.target.value)} className='text-sm p-2 outline-none border border-solid border-gray-300' type='text' placeholder='type here' />
+                        <button onClick={handleSaveComment} className='bg-green-500 text-white rounded px-2 py-1'>Comment</button>
                     </div>
                     <div className=''>
-                       <Comments />
+                       {comments.length === 0 ? (<p>no comments to display</p>) : (
+                        comments.map(item => {
+                            return (<Comment key={item._id} {...item} />)})
+                       )}
                     </div>
                 </article>
             </section>

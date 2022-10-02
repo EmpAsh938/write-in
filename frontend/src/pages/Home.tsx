@@ -3,7 +3,6 @@ import { useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import HomeBlogs from '../components/HomeBlogs';
 import Pagination from '../components/Pagination';
-import Comments from '../components/Comments';
 import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
 import { listPublicBlogs, resetPages } from '../app/features/post/postSlice';
 
@@ -30,7 +29,6 @@ const Home = () => {
        )}
        <Pagination />
       </main>
-	<Comments />
     </div>
   )
 }

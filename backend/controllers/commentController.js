@@ -14,6 +14,7 @@ const newComment = asyncHandler(async (req, res) => {
 
     try {
         let result = await Post.findOne({_id: post_id}).exec();
+
         if(!result) {
             res.status(401);
             throw new Error('user not authorized');
@@ -23,7 +24,7 @@ const newComment = asyncHandler(async (req, res) => {
             author: decoded._id,
             body
         })
-        result = await Comment.save(comment_doc);
+        result = await Comment.create(comment_doc);
         if(!result) {
             throw new Error('comment cannot be saved');
         }
@@ -31,10 +32,10 @@ const newComment = asyncHandler(async (req, res) => {
         if(!result) {
             throw new Error('comment cannot be saved');
         }
-        result = await Post.findOne({id:post_id}).populate('comments').exec();
+        result = await Post.findOne({id:post_id}).populate('comments');
         res.json({
             message: 'comment created',
-            result
+            result: result.comments
         })
     } catch (error) {
         throw new Error(error);
@@ -150,33 +151,58 @@ const likeComment = asyncHandler(async (req, res) => {
 })
 
 const listComment = asyncHandler(async (req, res) => {
-    	const { pages, rows, type } = req.query;
+    const { pages, rows } = req.query;
 	const { id } = req.params;
-    	if(!pages || !rows || type !== 'comment' || type !== 'reply') {
-        	res.status(400);
-        	throw new Error('some fields are missing');
-    	}
+    if( !id || !pages || !rows ) {
+    	res.status(400);
+    	throw new Error('some fields are missing');
+    }
 	try {
-		let doc;
-		if(type === 'reply') {
-			doc = await Comment.find({}).populate('reply').skip(rows * (pages - 1)).limit(rows).exec();
-		} else if(type === 'comment') {
-			doc = await Post.find({}).populate('comments').skip(rows * (pages - 1)).limit(rows).exec();
-		}
+        let doc = await Post.findOne({_id:id});
 		if(doc.length === 0) {
-            		res.json({
-                		message: 'no items found',
-                		result: []
-            		})
-        	} else {
-           	 	res.json({
-                		message: 'successfully retreived',
-                		result: doc
-            		})
-        	}
+                return res.json({
+                    message: 'no items found',
+                    result: []
+                })
+        } 
+        let comments = [];
+        for(let item of doc.comments) {
+            let id = item.valueOf();
+           comments.push(await Comment.findOne({_id:id}).populate('author'));
+        }
+        res.json({
+            message: 'successfully retreived',
+            result: comments
+        })
+        
     } catch (error) {
         throw new Error(error);
     }
 })      
 
-export { newComment, newReply, editComment, deleteComment, likeComment };
+const listReply = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    const { rows, pages } = req.query;
+    if(!rows || !pages || !id) {
+        res.status(400);
+        throw new Error('some fields are missing');
+    }
+    try {
+        let result = await Comment.findOne({_id:id}).populate('reply');
+        if(result.length === 0) {
+            res.json({
+                message: 'no items found',
+                result: []
+            })
+        } else {
+            res.json({
+                message: 'successfully retrieved',
+                result
+            })
+        }
+    } catch (error) {
+        throw new Error(error);
+    }
+})
+
+module.exports = { newComment, newReply, editComment, deleteComment, listComment, likeComment, listReply};

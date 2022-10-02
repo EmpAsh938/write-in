@@ -1,16 +1,10 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import { register, login, logout, verify, bookmark, passwordChange, removeAccount, accountDetailsChange, emailChange } from './authService'
-import { RegisterAuthState, LoginAuthState, NotificationsType } from '../../../types/authTypes'
+import { RegisterAuthState, LoginAuthState, NotificationsType, UserState } from '../../../types/authTypes'
 import { profileUpload } from '../upload/uploadService';
 
-export type UserState = {
-  _id: string;
-  email: string;
-  fullname: string;
-  username:string;
-  profileImage: string;
-}
+
 
 // Define a type for the slice state
 interface AuthState {
