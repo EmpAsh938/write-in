@@ -159,16 +159,16 @@ const listComment = asyncHandler(async (req, res) => {
     }
 	try {
         let doc = await Post.findOne({_id:id});
-		if(doc.length === 0) {
-                return res.json({
-                    message: 'no items found',
-                    result: []
-                })
+		if(!doc || doc.comments.length === 0) {
+            return res.json({
+                message: 'no items found',
+                result: []
+            })
         } 
         let comments = [];
         for(let item of doc.comments) {
-            let id = item.valueOf();
-           comments.push(await Comment.findOne({_id:id}).populate('author'));
+            let comment_id = item.valueOf();
+           comments.push(await Comment.findOne({_id:comment_id}).populate('author'));
         }
         res.json({
             message: 'successfully retreived',
@@ -188,18 +188,22 @@ const listReply = asyncHandler(async (req, res) => {
         throw new Error('some fields are missing');
     }
     try {
-        let result = await Comment.findOne({_id:id}).populate('reply');
-        if(result.length === 0) {
-            res.json({
+        let doc = await Comment.findOne({_id:id});
+		if(!doc || doc.reply.length === 0) {
+            return res.json({
                 message: 'no items found',
                 result: []
             })
-        } else {
-            res.json({
-                message: 'successfully retrieved',
-                result
-            })
+        } 
+        let replies = [];
+        for(let item of doc.reply) {
+            let reply_id = item.valueOf();
+           replies.push(await Comment.findOne({_id:reply_id}).populate('author'));
         }
+        res.json({
+            message: 'successfully retreived',
+            result: replies
+        })
     } catch (error) {
         throw new Error(error);
     }
