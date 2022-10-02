@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { NotificationsType } from '../../../types/authTypes';
-import { UserState } from '../auth/authSlice';
+import { UserState } from '../../../types/authTypes';
 import { CommentType } from '../../../types/postTypes';
 import { addNewComment,addNewReply,commentEdit,commentDelete,commentLike,commentList, replyList } from './commentService';
 
@@ -136,10 +136,10 @@ const commentSlice = createSlice({
         .addCase(listReply.fulfilled, (state, action) => {
             if(typeof action.payload.result === 'object'){
                 state.comments = state.comments.map(item => {
-                    if(item._id === action.payload.result._id) {
+                    if(item._id === action.payload.result.post) {
                         return {
                             ...item,
-                            reply: action.payload.result.reply
+                            reply: action.payload.result
                         }
                     } 
                     return item;
