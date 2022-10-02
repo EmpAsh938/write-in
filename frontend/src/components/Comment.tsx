@@ -29,7 +29,7 @@ const Comment = ({  _id, body, author, reply}: CommentType) => {
 	return (
 		<div className=''>
 			{/* comments  */}
-			<div className='items-center text-sm flex justify-start gap-2'>
+			<div className='flex items-center justify-start text-sm gap-2'>
 				<UserImage profileImage={profileImage} fullname={fullname} />
 				<h3>{fullname}</h3>
 			</div>
