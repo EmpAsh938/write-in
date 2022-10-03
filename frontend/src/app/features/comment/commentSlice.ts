@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { NotificationsType } from '../../../types/authTypes';
-import { UserState } from '../../../types/authTypes';
 import { CommentType, ReplyType } from '../../../types/postTypes';
 import { addNewComment,addNewReply,commentEdit,commentDelete,commentLike,commentList, replyList } from './commentService';
 
