@@ -1,8 +1,8 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { NotificationsType } from '../../../types/authTypes';
 import { UserState } from '../../../types/authTypes';
-import { CommentType } from '../../../types/postTypes';
+import { CommentType, ReplyType } from '../../../types/postTypes';
 import { addNewComment,addNewReply,commentEdit,commentDelete,commentLike,commentList, replyList } from './commentService';
 
 type CommentState = {
@@ -153,13 +153,14 @@ const commentSlice = createSlice({
 			state.notifications.type = 'error';
 			state.notifications.message = 'comment failed to add';
 		})
-		.addCase(newReply.fulfilled, (state, action) => {
+		.addCase(newReply.fulfilled, (state, action:PayloadAction<{message:string,result:ReplyType}>) => {
 			state.notifications.type = 'success';
-			state.notifications.message = 'reply added';
-            if(typeof action.payload.result === 'object' && action.payload.result) {
-                state.comments = state.comments.map(item => {
-                    if(item === action.payload.result._id || (item._id === action.payload.result._id)) return action.payload.result;
-                    else return item;
+			state.notifications.message = action.payload.message;
+            if(action.payload.result) {
+                state.comments.forEach(item => {
+                    if(item._id === action.payload.result.post) {
+                        item.reply = [...item.reply, action.payload.result];
+                    }
                 })
             }
 		})

@@ -51,7 +51,9 @@ const Comment = ({  _id, body, author, reply}: CommentType) => {
             )}
 
 			{reply.length > 0 && (reply.map(item => {
-				return (<Reply key={item._id} />)
+                if(typeof item !== 'string') {
+                    return (<Reply key={item._id} {...item} />)
+                }
 			}))}
 		</div> 
 	)

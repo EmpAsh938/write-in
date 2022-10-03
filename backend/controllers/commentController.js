@@ -64,13 +64,14 @@ const newReply = asyncHandler(async (req, res) => {
             post:post_id
         });
         result = await Comment.create(doc);
+        doc = result;
         result = await Comment.findOneAndUpdate({_id:comment_id},{$push: {reply: result._id}});
         if(!result) {
             throw new Error('can\'t create new reply');
         } 
         res.json({
             message: 'successfully created',
-            result
+            result:doc
         })
     } catch (error) {
         throw new Error(error);

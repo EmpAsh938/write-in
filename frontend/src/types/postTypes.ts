@@ -3,6 +3,7 @@ import { UserState } from "./authTypes";
 
 export type ReplyType = {
 	_id: string;
+	post: string;
 	body: string;
 	author: UserState;
 	likes: [string];
@@ -15,7 +16,7 @@ export type CommentType = {
 	body: string;
 	author: UserState;
 	likes: [string];
-	reply: [ReplyType];
+	reply: Array<ReplyType|string>;
 	updatedAt: string;
 	createdAt: string;
 }
