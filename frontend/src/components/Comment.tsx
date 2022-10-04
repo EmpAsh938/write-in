@@ -12,6 +12,7 @@ const Comment = ({  _id, body, author, reply}: CommentType) => {
     const { singlePost } = useAppSelector(state => state.post);
     const [isReplyOpen, setIsReplyOpen] = useState<boolean>(false);
     const [replyText, setReplyText] = useState<string>('');
+    const [pages, setPages] = useState<number>(1);
 
     const { profileImage, fullname } = author;
     
@@ -33,11 +34,13 @@ const Comment = ({  _id, body, author, reply}: CommentType) => {
     }
 
     const handleLoadReply = () => {
-        if(_id) {
-            dispatch(listReply({post_id:_id,pages:1,rows:5}));
-        }
+        setPages(prev => prev+1);
     }
-
+    useEffect(() => {
+        if(_id) {
+            dispatch(listReply({post_id:_id,pages,rows:5}));
+        }
+    }, [pages])
 	return (
 		<div className=''>
 			{/* comments  */}
@@ -62,8 +65,9 @@ const Comment = ({  _id, body, author, reply}: CommentType) => {
                 if(typeof item !== 'string') {
                     return (<Reply key={item._id} {...item} />)
                 }
+                return (<div className='hidden'></div>)
 			}))}
-            { reply.length > 0 && (<button className='my-2 w-fit text-sm text-white capitalize px-2 py-1 rounded bg-green-700' onClick={handleLoadReply}>load more reply</button>) }
+            { reply.length > 0 && (<button className='px-2 py-1 my-2 text-sm text-white capitalize bg-green-700 rounded w-fit' onClick={handleLoadReply}>load more reply</button>) }
 		</div> 
 	)
 }
