@@ -61,7 +61,7 @@ const newReply = asyncHandler(async (req, res) => {
         let doc = new Comment({
             body,
             author:decoded._id,
-            post:post_id
+            comment:comment_id
         });
         result = await Comment.create(doc);
         doc = result;
