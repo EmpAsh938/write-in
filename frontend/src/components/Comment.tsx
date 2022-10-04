@@ -13,6 +13,7 @@ const Comment = ({  _id, body, author, reply}: CommentType) => {
     const [isReplyOpen, setIsReplyOpen] = useState<boolean>(false);
     const [replyText, setReplyText] = useState<string>('');
     const [pages, setPages] = useState<number>(1);
+    const [loadReply, setLoadReply] = useState<boolean>(false);
 
     const { profileImage, fullname } = author;
     
@@ -27,6 +28,7 @@ const Comment = ({  _id, body, author, reply}: CommentType) => {
     }
     const handleReply = () => {
         if(_id && token && replyText) {
+            setLoadReply(true);
             dispatch(newReply({post_id:singlePost._id,comment_id:_id,token,body:replyText}));
         } else console.log('reply not working');
         setIsReplyOpen(false);
@@ -34,6 +36,7 @@ const Comment = ({  _id, body, author, reply}: CommentType) => {
     }
 
     const handleLoadReply = () => {
+        setLoadReply(true);
         setPages(prev => prev+1);
     }
     useEffect(() => {
@@ -61,7 +64,7 @@ const Comment = ({  _id, body, author, reply}: CommentType) => {
                     </div>	
             )}
             {/* reply */}
-			{(reply.length > 0) && (reply.map(item => {
+			{(reply.length > 0 && loadReply) && (reply.map(item => {
                 if(typeof item !== 'string') {
                     return (<Reply key={item._id} {...item} />)
                 }

@@ -124,8 +124,11 @@ const commentSlice = createSlice({
         })
         .addCase(listReply.fulfilled, (state, action) => {
             if(typeof action.payload.result === 'object'){
-                state.comments.forEach(item => {
-					if(item.post === action.payload.result[0].post) {
+               state.comments.forEach(item => {
+                   if(typeof action.payload.result[0] === 'string' && item.post === action.payload.result[0]) {
+                       item.reply = action.payload.result;
+                   }
+					if(typeof action.payload.result[0] === 'object' && item.post === action.payload.result[0].post) {
 						item.reply = action.payload.result;
 					}
 				})
