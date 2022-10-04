@@ -27,7 +27,7 @@ const commentSchema = new Schema(
         reply: [
             {
                 type: Schema.Types.ObjectId,
-                ref: 'Comment',
+                ref: 'Reply',
             }
         ]
     },
