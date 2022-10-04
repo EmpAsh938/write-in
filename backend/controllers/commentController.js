@@ -3,6 +3,7 @@ const asyncHandler = require('express-async-handler');
 
 const Post = require('../models/postModel');
 const Comment = require('../models/commentModel');
+const Reply = require('../models/replyModel');
 
 const newComment = asyncHandler(async (req, res) => {
     const { post_id, body } = req.body;
@@ -58,12 +59,12 @@ const newReply = asyncHandler(async (req, res) => {
         if(!result) {
             throw new Error('parent comment not found');
         }
-        let doc = new Comment({
+        let doc = new Reply({
             body,
             author:decoded._id,
             comment:comment_id
         });
-        result = await Comment.create(doc);
+        result = await Reply.create(doc);
         doc = result;
         result = await Comment.findOneAndUpdate({_id:comment_id},{$push: {reply: result._id}});
         if(!result) {
@@ -112,7 +113,11 @@ const deleteComment = asyncHandler(async (req,res) => {
 			throw new Error('user not authorized');
         }
 		// delete subcomments signature from comments
-		doc = await Comment.findOneAndUpdate({_id: doc.root_id}, {$pull: {reply: id}});
+        for(const item of doc.reply) {
+            let reply_id = item.valueOf();
+            await Reply.findOneAndDelete({_id:reply_id});
+        }
+		// doc = await Comment.findOneAndUpdate({_id: doc.root_id}, {$pull: {reply: id}});
 		// delete actual comment
 		doc = await Comment.findOneAndDelete({_id:id}).exec();
 		res.json({
