@@ -128,12 +128,23 @@ const deleteBlog = asyncHandler(async (req, res) => {
         if(!doc) {
             res.status(401);
             throw new Error('Deletion failed');
-        } else {
-            res.json({
-                message: "successfully deleted",
-                result: []
-            })
         }
+        // delete comments with reply
+        for(const item of doc.comments) {
+            let comment_id = item.valueOf();
+            let getReply = await Comment.findOne({_id:comment_id});
+            if(getReply){
+                for(const newItem of getReply.reply) {
+                    let reply_id = newItem.valueOf();
+                    await Reply.findOneAndDelete({_id:reply_id});
+                }
+            }
+            await Comment.findOneAndDelete({_id:comment_id});
+        }
+        res.json({
+            message: "successfully deleted",
+            result: []
+        })
     } catch (error) {
         res.status(401);
         throw new Error(error);
