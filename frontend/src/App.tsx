@@ -67,7 +67,7 @@ function App() {
           <Route path="edit/:id" element={
             <ProtectedRoute isUser={isUser} outlet={<Blog />} />
           } />
-          <Route path=':id'element={
+          <Route path='/:id'element={
             <SingleBlog />
             } />
           <Route path="*" element={<PageNotFound />} />

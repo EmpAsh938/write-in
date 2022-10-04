@@ -45,21 +45,13 @@ export const commentLike = async (id:string,token:string) => {
 	return response.data;
 }
 
-export const commentList = async (post_id:string,pages:number,rows:number,token:string) => {
-	const response = await axios.get(`/post/comment/list/${post_id}?pages=${pages}&rows=${rows}`, {
-		headers: {
-			Authorization: `Bearer ${token}`
-		}
-	})
+export const commentList = async (post_id:string,pages:number,rows:number) => {
+	const response = await axios.get(`/post/comment/list/${post_id}?pages=${pages}&rows=${rows}`)
 	return response.data;
 }
 
 
-export const replyList = async (post_id:string,pages:number,rows:number,token:string) => {
-	const response = await axios.get(`/post/comment/list/reply/${post_id}?pages=${pages}&rows=${rows}`, {
-		headers: {
-			Authorization: `Bearer ${token}`
-		}
-	})
+export const replyList = async (post_id:string,pages:number,rows:number) => {
+	const response = await axios.get(`/post/comment/list/reply/${post_id}?pages=${pages}&rows=${rows}`)
 	return response.data;
 }

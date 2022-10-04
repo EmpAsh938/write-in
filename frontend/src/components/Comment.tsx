@@ -1,17 +1,18 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import Reply from './Reply';
 import UserImage from './UserImage';
 
 import { CommentType }  from '../types/postTypes';
 import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
-import { likeComment, newReply } from '../app/features/comment/commentSlice';
+import { likeComment, listReply, newReply } from '../app/features/comment/commentSlice';
 
 const Comment = ({  _id, body, author, reply}: CommentType) => {
     const { token } = useAppSelector(state => state.auth);
     const { singlePost } = useAppSelector(state => state.post);
     const [isReplyOpen, setIsReplyOpen] = useState<boolean>(false);
     const [replyText, setReplyText] = useState<string>('');
+
     const { profileImage, fullname } = author;
     
     const dispatch = useAppDispatch();
@@ -30,6 +31,13 @@ const Comment = ({  _id, body, author, reply}: CommentType) => {
         setIsReplyOpen(false);
         setReplyText('');
     }
+
+    const handleLoadReply = () => {
+        if(_id) {
+            dispatch(listReply({post_id:_id,pages:1,rows:5}));
+        }
+    }
+
 	return (
 		<div className=''>
 			{/* comments  */}
@@ -42,19 +50,20 @@ const Comment = ({  _id, body, author, reply}: CommentType) => {
 				<button onClick={handleLike}>like</button>
 				<button onClick={()=>setIsReplyOpen(!isReplyOpen)}>reply</button>
 			</div>
-			{/* reply */}
+			{/* reply input */}
             {isReplyOpen && (
                     <div className='flex items-center justify-start gap-2'>
                         <input value={replyText} onChange={e=>setReplyText(e.target.value)} className='p-2 text-sm border border-gray-300 border-solid outline-none' type='text' placeholder='reply here' />
                         <button onClick={handleReply} className='px-2 py-1 text-white bg-green-500 rounded'>Reply</button>
                     </div>	
             )}
-
-			{reply.length > 0 && (reply.map(item => {
+            {/* reply */}
+			{(reply.length > 0) && (reply.map(item => {
                 if(typeof item !== 'string') {
                     return (<Reply key={item._id} {...item} />)
                 }
 			}))}
+            { reply.length > 0 && (<button className='my-2 w-fit text-sm text-white capitalize px-2 py-1 rounded bg-green-700' onClick={handleLoadReply}>load more reply</button>) }
 		</div> 
 	)
 }

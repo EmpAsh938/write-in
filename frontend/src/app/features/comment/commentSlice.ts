@@ -70,9 +70,9 @@ export const likeComment = createAsyncThunk(
 
 export const listComment = createAsyncThunk(
 	'comment/list',
-	async({token,post_id,pages,rows}:{token:string,post_id:string,pages:number,rows:number}, thunkAPI) => {
+	async({post_id,pages,rows}:{post_id:string,pages:number,rows:number}, thunkAPI) => {
 		try {
-			return (await commentList(post_id,pages,rows,token));
+			return (await commentList(post_id,pages,rows));
 		} catch (error:any) {
 		}
 	}
@@ -81,9 +81,9 @@ export const listComment = createAsyncThunk(
 
 export const listReply = createAsyncThunk(
 	'comment/list/reply',
-	async({token,post_id,pages,rows}:{token:string,post_id:string,pages:number,rows:number}, thunkAPI) => {
+	async({post_id,pages,rows}:{post_id:string,pages:number,rows:number}, thunkAPI) => {
 		try {
-			return (await replyList(post_id,pages,rows,token));
+			return (await replyList(post_id,pages,rows));
 		} catch (error:any) {
 		}
 	}
@@ -124,15 +124,11 @@ const commentSlice = createSlice({
         })
         .addCase(listReply.fulfilled, (state, action) => {
             if(typeof action.payload.result === 'object'){
-                state.comments = state.comments.map(item => {
-                    if(item._id === action.payload.result.post) {
-                        return {
-                            ...item,
-                            reply: action.payload.result
-                        }
-                    } 
-                    return item;
-                })
+                state.comments.forEach(item => {
+					if(item.post === action.payload.result[0].post) {
+						item.reply = action.payload.result;
+					}
+				})
             }
         })
         .addCase(listReply.rejected, (state, action) => {

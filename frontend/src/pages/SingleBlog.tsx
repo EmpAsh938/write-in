@@ -51,12 +51,9 @@ const SingleBlog = () => {
   }
 
     useEffect(() => {
-        if(!id || !token) {
-            navigate('/');
-        } else {
+        if(id){
             dispatch(listSingleBlogs(id));
             dispatch(listComment({
-                token, 
                 pages: 1, 
                 rows: 5,
                 post_id: id,

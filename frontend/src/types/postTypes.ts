@@ -13,6 +13,7 @@ export type ReplyType = {
 }
 export type CommentType = {
 	_id: string;
+	post: string;
 	body: string;
 	author: UserState;
 	likes: [string];
