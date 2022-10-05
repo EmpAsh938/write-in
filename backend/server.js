@@ -6,6 +6,8 @@ const morgan = require('morgan');
 const authRouter  = require('./routes/authRoute');
 const postRouter  = require('./routes/postRoute');
 const uploadRouter = require('./routes/uploadRoute');
+const commentRouter = require('./routes/commentRoute');
+const replyRouter = require('./routes/replyRoute');
 const connectDB  = require('./config/db');
 const notFound = require('./middlewares/notFound');
 const errorHandler  = require('./middlewares/errorMiddleware');
@@ -43,6 +45,8 @@ app.use(express.urlencoded({extended:true}));
 app.use('/auth', authRouter);
 app.use('/post', postRouter);
 app.use('/upload', uploadRouter);
+app.use('/comment', commentRouter);
+app.use('/reply', replyRouter);
 
 app.use(errorHandler);
 app.use(notFound);

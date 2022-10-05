@@ -43,42 +43,6 @@ const newComment = asyncHandler(async (req, res) => {
     }
 })
 
-const newReply = asyncHandler(async (req, res) => {
-    const { post_id, comment_id, body } = req.body;
-    if(!post_id || !comment_id || !body) {
-        res.status(400);
-        throw new Error('some fields are empty');
-    }
-    const decoded = jwt.decode(req.headers.authorization.split('Bearer')[1].trim());
-    try {
-        let result = await Post.findById(post_id).exec();
-        if(!result) {
-            throw new Error('post not found');
-        }
-        result = await Comment.findById(comment_id).exec();
-        if(!result) {
-            throw new Error('parent comment not found');
-        }
-        let doc = new Reply({
-            body,
-            author:decoded._id,
-            comment:comment_id
-        });
-        result = await Reply.create(doc);
-        doc = result;
-        result = await Comment.findOneAndUpdate({_id:comment_id},{$push: {reply: result._id}});
-        if(!result) {
-            throw new Error('can\'t create new reply');
-        } 
-        res.json({
-            message: 'successfully created',
-            result:doc
-        })
-    } catch (error) {
-        throw new Error(error);
-    }
-})
-
 const editComment = asyncHandler(async (req, res) => {
     const { id } = req.params;
     const { body } = req.body;
@@ -190,33 +154,6 @@ const listComment = asyncHandler(async (req, res) => {
     }
 })      
 
-const listReply = asyncHandler(async (req, res) => {
-    const { id } = req.params;
-    const { rows, pages } = req.query;
-    if(!rows || !pages || !id) {
-        res.status(400);
-        throw new Error('some fields are missing');
-    }
-    try {
-        let doc = await Comment.findOne({_id:id});
-		if(!doc || doc.reply.length === 0) {
-            return res.json({
-                message: 'no items found',
-                result: []
-            })
-        } 
-        let replies = [];
-        for(let item of doc.reply) {
-            let reply_id = item.valueOf();
-           replies.push(await Comment.findOne({_id:reply_id}).populate('author'));
-        }
-        res.json({
-            message: 'successfully retreived',
-            result: replies
-        })
-    } catch (error) {
-        throw new Error(error);
-    }
-})
 
-module.exports = { newComment, newReply, editComment, deleteComment, listComment, likeComment, listReply};
+
+module.exports = { newComment, editComment, deleteComment, listComment, likeComment};
