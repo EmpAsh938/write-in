@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { NotificationsType } from '../../../types/authTypes';
-import { CommentType, ReplyType } from '../../../types/postTypes';
+import { CommentType, ReplyType } from '../../../types/commentTypes';
 import { addNewComment,addNewReply,commentEdit,commentDelete,commentLike,commentList, replyList, replyLike, replyDelete, replyEdit } from './commentService';
 
 type CommentState = {
@@ -174,7 +174,7 @@ const commentSlice = createSlice({
 				state.comments = action.payload.result;
 			}
 		})
-		.addCase(newComment.rejected, (state, action) => {
+		.addCase(newComment.rejected, (state) => {
 			state.notifications.type = 'error';
 			state.notifications.message = 'comment failed to add';
 		})
@@ -189,7 +189,7 @@ const commentSlice = createSlice({
                 })
             }
 		})
-		.addCase(newReply.rejected, (state, action) => {
+		.addCase(newReply.rejected, (state) => {
 			state.notifications.type = 'error';
 			state.notifications.message = 'reply failed to add';
 		})
@@ -198,7 +198,7 @@ const commentSlice = createSlice({
 			state.notifications.message = 'comment edited';
 			console.log(action.payload);
 		})
-		.addCase(editComment.rejected, (state, action) => {
+		.addCase(editComment.rejected, (state) => {
 			state.notifications.type = 'error';
 			state.notifications.message = 'comment edit failed';	
 		})
@@ -207,25 +207,32 @@ const commentSlice = createSlice({
 			state.notifications.message = 'Reply edited';
 			console.log(action.payload);
 		})
-		.addCase(editReply.rejected, (state, action) => {
+		.addCase(editReply.rejected, (state) => {
 			state.notifications.type = 'error';
 			state.notifications.message = 'Reply edit failed';	
 		})
 		.addCase(deleteComment.fulfilled, (state, action) => {
 			state.notifications.type = 'success';
 			state.notifications.message = 'comment deleted';
-			console.log(action.payload);
+			if(typeof action.payload.result === 'object') {
+				state.comments = state.comments.filter(item => item._id !== action.payload.result._id);
+			}
 		})
-		.addCase(deleteComment.rejected, (state, action) => {
+		.addCase(deleteComment.rejected, (state) => {
 			state.notifications.type = 'error';
 			state.notifications.message = 'comment delete failed';	
 		})
 		.addCase(deleteReply.fulfilled, (state, action) => {
 			state.notifications.type = 'success';
 			state.notifications.message = 'Reply deleted';
-			console.log(action.payload);
+			if(typeof action.payload.result === 'object') {
+				state.comments = state.comments.map(item => {
+					item.reply = item.reply.filter(newitem => newitem !== action.payload.result._id);
+					return item;
+				})
+			}
 		})
-		.addCase(deleteReply.rejected, (state, action) => {
+		.addCase(deleteReply.rejected, (state) => {
 			state.notifications.type = 'error';
 			state.notifications.message = 'Reply delete failed';	
 		})
