@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { NotificationsType } from '../../../types/authTypes';
 import { CommentType, ReplyType } from '../../../types/postTypes';
-import { addNewComment,addNewReply,commentEdit,commentDelete,commentLike,commentList, replyList } from './commentService';
+import { addNewComment,addNewReply,commentEdit,commentDelete,commentLike,commentList, replyList, replyLike, replyDelete, replyEdit } from './commentService';
 
 type CommentState = {
 	notifications: NotificationsType;
@@ -31,7 +31,7 @@ export const newComment = createAsyncThunk(
 	}
 );
 export const newReply = createAsyncThunk(
-	'comment/reply',
+	'reply/new',
 	async({token,post_id,comment_id,body}:{token:string,post_id:string,comment_id:string,body:string},thunkAPI) => {
 		try {
 			return (await addNewReply(post_id,comment_id,body,token));
@@ -48,11 +48,29 @@ export const editComment = createAsyncThunk(
 		}
 	}
 );
+export const editReply = createAsyncThunk(
+	'reply/edit',
+	async({token,post_id,body}:{token:string,post_id:string,body:string},thunkAPI) => {
+		try {
+			return (await replyEdit(post_id,body,token));
+		} catch (error:any) {
+		}
+	}
+);
 export const deleteComment = createAsyncThunk(
 	'comment/delete',
 	async({token,id}:{token:string,id:string},thunkAPI) => {
 		try {
 			return (await commentDelete(id,token));
+		} catch (error:any) {
+		}
+	}
+);
+export const deleteReply = createAsyncThunk(
+	'reply/delete',
+	async({token,id}:{token:string,id:string},thunkAPI) => {
+		try {
+			return (await replyDelete(id,token));
 		} catch (error:any) {
 		}
 	}
@@ -63,6 +81,15 @@ export const likeComment = createAsyncThunk(
 	async({token,id}:{token:string,id:string},thunkAPI) => {
 		try {
 			return (await commentLike(id,token));
+		} catch (error:any) {
+		}
+	}
+)
+export const likeReply = createAsyncThunk(
+	'reply/like',
+	async({token,id}:{token:string,id:string},thunkAPI) => {
+		try {
+			return (await replyLike(id,token));
 		} catch (error:any) {
 		}
 	}
@@ -80,7 +107,7 @@ export const listComment = createAsyncThunk(
 
 
 export const listReply = createAsyncThunk(
-	'comment/list/reply',
+	'reply/list',
 	async({post_id,pages,rows}:{post_id:string,pages:number,rows:number}, thunkAPI) => {
 		try {
 			return (await replyList(post_id,pages,rows));
@@ -175,6 +202,15 @@ const commentSlice = createSlice({
 			state.notifications.type = 'error';
 			state.notifications.message = 'comment edit failed';	
 		})
+		.addCase(editReply.fulfilled, (state, action) => {
+			state.notifications.type = 'success';
+			state.notifications.message = 'Reply edited';
+			console.log(action.payload);
+		})
+		.addCase(editReply.rejected, (state, action) => {
+			state.notifications.type = 'error';
+			state.notifications.message = 'Reply edit failed';	
+		})
 		.addCase(deleteComment.fulfilled, (state, action) => {
 			state.notifications.type = 'success';
 			state.notifications.message = 'comment deleted';
@@ -183,6 +219,15 @@ const commentSlice = createSlice({
 		.addCase(deleteComment.rejected, (state, action) => {
 			state.notifications.type = 'error';
 			state.notifications.message = 'comment delete failed';	
+		})
+		.addCase(deleteReply.fulfilled, (state, action) => {
+			state.notifications.type = 'success';
+			state.notifications.message = 'Reply deleted';
+			console.log(action.payload);
+		})
+		.addCase(deleteReply.rejected, (state, action) => {
+			state.notifications.type = 'error';
+			state.notifications.message = 'Reply delete failed';	
 		})
 	}
 })
