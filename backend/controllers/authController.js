@@ -293,6 +293,41 @@ const deleteAccount = asyncHandler(async (req, res) => {
     }
 })
 
+const followUser = asyncHandler(async (req, res) => {
+    const { follow_id } = req.query;
+    if(!follow_id) {
+        res.status(400);
+        throw new Error('follow_id required');
+    }
+    const decoded = jwt.decode(req.headers.authorization.split('Bearer')[1].trim());
+    try {
+        let doc = await Auth.findOne({_id:follow_id});
+        if(!doc) {
+            res.status(400);
+            throw new Error('user not found');
+        }
+        // check if he is already being followed
+        doc = await Auth.findOne({_id:follow_id}, {followers: {$eq: decoded._id}});
+        if(doc) {
+            // remove him
+            doc = await Auth.findOneAndUpdate({_id:follow_id}, {$pull: {followers: {$eq: decoded._id}}});
+            return res.json({
+                message: 'unfollowed',
+                result: []
+            })
+        }
+        // add him
+        doc = await Auth.findOneAndUpdate({_id:follow_id}, {$push: {followers: decoded._id}});
+        return res.json({
+            message: 'followed',
+            result: []
+        })
+    } catch (error) {
+        throw new Error(error);
+    }
+
+})
+
 module.exports = { 
     loginUser, 
     emailChange, 

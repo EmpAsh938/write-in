@@ -24,7 +24,7 @@ npm run dev
 
 **Backend:** NodeJS/Express, Cloudinary, JWT, Bcrypt
 
-**Database:** MongoDB, Mongoose 
+**Database:** MongoDB, Mongoose
 
 ## Features
 
@@ -34,3 +34,4 @@ npm run dev
 - like/unlike comments and blogs
 - comment and reply
 - bookmark intriguing and needed blogs
+- view user's profile
