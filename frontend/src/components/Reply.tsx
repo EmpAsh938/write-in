@@ -1,6 +1,6 @@
 import {likeComment} from '../app/features/comment/commentSlice';
 import {useAppSelector, useAppDispatch} from '../hooks/useReactRedux'
-import {ReplyType} from '../types/postTypes'
+import {ReplyType} from '../types/commentTypes'
 import UserImage from './UserImage'
 
 const Reply = ({ _id, author, body }:ReplyType) => {
