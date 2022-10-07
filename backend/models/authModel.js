@@ -42,6 +42,10 @@ const authSchema = new Schema(
             type: [Schema.Types.ObjectId],
             ref: 'Post'
         },
+        followers: {
+            type: [Schema.Types.ObjectId],
+            ref: 'Auth'
+        }
     },
     {
         timestamps: true
