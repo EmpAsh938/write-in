@@ -1,19 +1,30 @@
-import {SyntheticEvent, useEffect, useState} from 'react'
+import {MouseEvent, useEffect, useState} from 'react'
 
 import Navbar from '../components/Navbar'
 import {PostsType} from '../types/postTypes'
 import HomeBlogs from '../components/HomeBlogs'
 import UserImage from '../components/UserImage'
+import { UserState } from '../types/authTypes'
 
-const handleBlogsTab = (event:SyntheticEvent<HTMLButtonElement>) => {
-    document.querySelectorAll('.blog-tab').forEach(tab => {
-        tab.classList.remove('active');
-    })
-    (event.target as Element).classList.add('active');
-}
+
+const localstorage_key = JSON.parse(localStorage.getItem('user_db') || '{}');
 
 const User = () => {
     const [userBlogs, setUserBlogs] = useState<PostsType[]>([]);
+    const [userProfile, setUserProfile] = useState<UserState>({} as UserState);
+
+    const handleBlogsTab = (event:MouseEvent<HTMLButtonElement>) => {
+        document.querySelectorAll('.blog-tab').forEach(tab => tab.classList.remove('active'));
+        (event.target as Element).classList.add('active');
+    }
+    const handleFollow = () => {
+        if(userProfile.followers.includes(localstorage_key._id)) {
+            // unfollow 
+        } else {
+            // follow
+        }
+
+    }
     useEffect(() => {
         
     }, [])
@@ -22,8 +33,11 @@ const User = () => {
         <Navbar />
         <main className='flex flex-col max-w-xl m-auto gap-4'>
             <section className='flex items-center justify-start gap-2'>
-                <div>
+                <div className='flex flex-col gap-2'>
                     <UserImage profileImage='' fullname='' width={300} height={300} />
+                    <div>
+                        <button onClick={handleFollow}>{(userProfile.followers.includes(localstorage_key._id)) ? 'Unfollow' : 'follow'}</button>
+                    </div>
                 </div>
                 <div className='flex flex-col gap-2'>
                    <div>

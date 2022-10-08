@@ -19,4 +19,5 @@ export type UserState = {
     fullname: string;
     username:string;
     profileImage: string;
+    followers: [string];
 }
