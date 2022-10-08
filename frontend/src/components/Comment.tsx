@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import Reply from './Reply';
 import UserImage from './UserImage';
 
-import { CommentType }  from '../types/postTypes';
+import { CommentType }  from '../types/commentTypes';
 import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
 import { likeComment, listReply, newReply } from '../app/features/comment/commentSlice';
 

@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
+import User from './pages/User';
 import Blog from './pages/Blog';
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -70,6 +71,9 @@ function App() {
           <Route path='/:id'element={
             <SingleBlog />
             } />
+          <Route path='/user/' element={
+              <User />
+          } />
           <Route path="*" element={<PageNotFound />} />
         </Route>
       </Routes>
