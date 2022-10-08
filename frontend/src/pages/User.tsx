@@ -5,6 +5,7 @@ import {PostsType} from '../types/postTypes'
 import HomeBlogs from '../components/HomeBlogs'
 import UserImage from '../components/UserImage'
 import { UserState } from '../types/authTypes'
+import { tabHandler } from '../utils/tabHandler'
 
 
 const localstorage_key = JSON.parse(localStorage.getItem('user_db') || '{}');
@@ -14,8 +15,11 @@ const User = () => {
     const [userProfile, setUserProfile] = useState<UserState>({} as UserState);
 
     const handleBlogsTab = (event:MouseEvent<HTMLButtonElement>) => {
-        document.querySelectorAll('.blog-tab').forEach(tab => tab.classList.remove('active'));
-        (event.target as Element).classList.add('active');
+        tabHandler(event,'user-blog-tab');
+    }
+
+    const handleProfileTab = (event:MouseEvent<HTMLButtonElement>) => {
+        tabHandler(event,'user-profile-tab');
     }
     const handleFollow = () => {
         if(userProfile.followers.includes(localstorage_key._id)) {
@@ -41,8 +45,8 @@ const User = () => {
                 </div>
                 <div className='flex flex-col gap-2'>
                    <div>
-                        <button>Profile</button>
-                        <button>About</button>
+                        <button className='user-profile-tab'>Profile</button>
+                        <button className='user-profile-tab'>About</button>
                    </div> 
                    <div></div> 
                 </div>
@@ -51,9 +55,9 @@ const User = () => {
                 <div className='flex items-center justify-between border-solid border-bottom border-color-slate-400'>
                     <h2>his blogs</h2>
                     <div className='flex items-center justify-start gap-2'>
-                        <button>Most Recent</button>
-                        <button>Oldest</button>
-                        <button>Most Liked</button>
+                        <button className='user-blog-tab'>Most Recent</button>
+                        <button className='user-blog-tab'>Oldest</button>
+                        <button className='user-blog-tab'>Most Liked</button>
                     </div>
                 </div>
                 <div className='flex flex-col gap-2'>
