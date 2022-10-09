@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState, SyntheticEvent } from 'react';
+import { ChangeEvent, useEffect, useState, MouseEvent } from 'react';
 
 import Navbar from '../components/Navbar';
 import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
@@ -6,6 +6,7 @@ import { emailValidator } from '../utils/emailValidator';
 import { changeAccountInfo, changeEmail, changePassword, deleteAccount, notify } from '../app/features/auth/authSlice';
 import UserImage from '../components/UserImage';
 import { uploadProfile } from '../app/features/auth/authSlice';
+import { tabHandler } from '../utils/tabHandler';
 
 
 const Profile = () => {
@@ -59,9 +60,8 @@ const Profile = () => {
         }
     }
 
-    const handleTabs = (event:SyntheticEvent<HTMLButtonElement>) => {
-        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-        event.currentTarget.classList.add('active');
+    const handleTabs = (event:MouseEvent<HTMLButtonElement>) => {
+        tabHandler(event,'profile-tab-btn');
         if(event.currentTarget.dataset.id) {
             setActiveTab(event.currentTarget.dataset.id);
         }
@@ -79,8 +79,8 @@ const Profile = () => {
             <Navbar />
             <main className='max-w-lg mx-auto p-5 flex flex-col gap-8 bg-white'>
                 <section className='flex items-center justify-center flex-wrap gap-2'>
-                    <button className='tab-btn active' onClick={handleTabs} data-id='account'>Account</button>
-                    <button className='tab-btn' onClick={handleTabs} data-id='security'>Security</button>
+                    <button className='profile-tab-btn active' onClick={handleTabs} data-id='account'>Account</button>
+                    <button className='profile-tab-btn' onClick={handleTabs} data-id='security'>Security</button>
                 </section>
                 <section className='hidden flex-col gap-2 tabs' id='account'>
 
