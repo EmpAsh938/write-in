@@ -25,7 +25,7 @@ const Search = () => {
         <Navbar />
         <main className='max-w-4xl mx-auto p-5'>
             <section className='flex items-center justify-between'>
-                <h3 className='text-2xl'>Search for {query || "''"}</h3>
+                <h3 className='text-2xl'>Search for '{query}'</h3>
                 <div className='flex gap-2 text-sm'>
                     <button onClick={(e)=>handleClick(e,'relevant')} className='btn active'>Most Relevant</button>
                     <button onClick={(e)=>handleClick(e,'desc')} className='btn'>Latest</button>
