@@ -38,7 +38,6 @@ export const newReply = createAsyncThunk(
 		} catch (error:any) {};
 	}
 );
-
 export const editComment = createAsyncThunk(
 	'comment/edit',
 	async({token,post_id,body}:{token:string,post_id:string,body:string},thunkAPI) => {
@@ -75,7 +74,6 @@ export const deleteReply = createAsyncThunk(
 		}
 	}
 );
-
 export const likeComment = createAsyncThunk(
 	'comment/like',
 	async({token,id}:{token:string,id:string},thunkAPI) => {
@@ -84,7 +82,7 @@ export const likeComment = createAsyncThunk(
 		} catch (error:any) {
 		}
 	}
-)
+);
 export const likeReply = createAsyncThunk(
 	'reply/like',
 	async({token,id}:{token:string,id:string},thunkAPI) => {
@@ -93,8 +91,7 @@ export const likeReply = createAsyncThunk(
 		} catch (error:any) {
 		}
 	}
-)
-
+);
 export const listComment = createAsyncThunk(
 	'comment/list',
 	async({post_id,pages,rows}:{post_id:string,pages:number,rows:number}, thunkAPI) => {
@@ -103,9 +100,7 @@ export const listComment = createAsyncThunk(
 		} catch (error:any) {
 		}
 	}
-)
-
-
+);
 export const listReply = createAsyncThunk(
 	'reply/list',
 	async({post_id,pages,rows}:{post_id:string,pages:number,rows:number}, thunkAPI) => {
@@ -114,7 +109,7 @@ export const listReply = createAsyncThunk(
 		} catch (error:any) {
 		}
 	}
-)
+);
 
 const commentSlice = createSlice({
 	name: 'comment',

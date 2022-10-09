@@ -45,8 +45,8 @@ const User = () => {
                 </div>
                 <div className='flex flex-col gap-2'>
                    <div>
-                        <button className='user-profile-tab'>Profile</button>
-                        <button className='user-profile-tab'>About</button>
+                        <button onClick={handleProfileTab} className='user-profile-tab'>Profile</button>
+                        <button onClick={handleProfileTab} className='user-profile-tab'>About</button>
                    </div> 
                    <div></div> 
                 </div>
@@ -55,9 +55,9 @@ const User = () => {
                 <div className='flex items-center justify-between border-solid border-bottom border-color-slate-400'>
                     <h2>his blogs</h2>
                     <div className='flex items-center justify-start gap-2'>
-                        <button className='user-blog-tab'>Most Recent</button>
-                        <button className='user-blog-tab'>Oldest</button>
-                        <button className='user-blog-tab'>Most Liked</button>
+                        <button onClick={handleBlogsTab} className='user-blog-tab'>Most Recent</button>
+                        <button onClick={handleBlogsTab} className='user-blog-tab'>Oldest</button>
+                        <button onClick={handleBlogsTab} className='user-blog-tab'>Most Liked</button>
                     </div>
                 </div>
                 <div className='flex flex-col gap-2'>
@@ -70,7 +70,6 @@ const User = () => {
                             <p>no items to display</p>
                         )
                     }
-                    
                 </div>
             </section>
         </main>
