@@ -83,7 +83,16 @@ const accountDetailsChange = async (fullname:string,username:string,bio:string,t
     localStorage.setItem('user_db',JSON.stringify(response.data.result));
 	return response.data;
 }
+const toggleFollow = async (follow_id:string,token:string) =>  {
+	const response = await axios.get(`/auth/follow/?follow_id:${follow_id}`, {
+		headers: {
+			Authorization: `Bearer ${token}`
+		}
+	})
+    localStorage.setItem('user_db',JSON.stringify(response.data.result));
+	return response.data;
+}
 
 
 
-export { register, login, logout, bookmark, verify, passwordChange,removeAccount, emailChange, accountDetailsChange };
+export { register, login, logout, bookmark, verify, passwordChange,removeAccount, emailChange, accountDetailsChange,toggleFollow };

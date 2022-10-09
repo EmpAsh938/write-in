@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-import { register, login, logout, verify, bookmark, passwordChange, removeAccount, accountDetailsChange, emailChange } from './authService'
+import { register, login, logout, verify, bookmark, passwordChange, removeAccount, accountDetailsChange, emailChange, toggleFollow } from './authService'
 import { RegisterAuthState, LoginAuthState, NotificationsType, UserState } from '../../../types/authTypes'
 import { profileUpload } from '../upload/uploadService';
 
@@ -121,6 +121,18 @@ export const changeAccountInfo = createAsyncThunk(
 	catch (error:any) {
    	 const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString() || '';
 	return thunkAPI.rejectWithValue(message);
+	}
+	}
+)
+export const followUser = createAsyncThunk(
+	'auth/account/follow',
+	async ({follow_id,token}:{follow_id:string,token:string},thunkAPI) => {
+	try {
+		return (await toggleFollow(follow_id,token));
+	}
+	catch (error:any) {
+   	 const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString() || '';
+	  return thunkAPI.rejectWithValue(message);
 	}
 	}
 )
@@ -281,6 +293,21 @@ const authSlice = createSlice({
       }
     })
     .addCase(changeAccountInfo.rejected, (state,action) => {
+      if(typeof action.payload === 'string') {
+        state.notifications.type = 'error';
+        state.notifications.message = action.payload;
+      }
+    })
+    .addCase(followUser.fulfilled, (state,action) => {
+      if(typeof action.payload.result === 'object') {
+        const { token, _doc} = action.payload.result;
+        state.token = token;
+        state.user = _doc;
+        state.notifications.type = 'success';
+        state.notifications.message = action.payload.message;
+      }
+    })
+    .addCase(followUser.rejected, (state,action) => {
       if(typeof action.payload === 'string') {
         state.notifications.type = 'error';
         state.notifications.message = action.payload;
