@@ -27,6 +27,8 @@ export const newComment = createAsyncThunk(
 		try {
 			return (await addNewComment(post_id,body,token));
 		} catch (error:any) {
+			const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString() || '';
+      return thunkAPI.rejectWithValue(message);
 		}
 	}
 );
@@ -35,7 +37,10 @@ export const newReply = createAsyncThunk(
 	async({token,post_id,comment_id,body}:{token:string,post_id:string,comment_id:string,body:string},thunkAPI) => {
 		try {
 			return (await addNewReply(post_id,comment_id,body,token));
-		} catch (error:any) {};
+		} catch (error:any) {
+			const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString() || '';
+      return thunkAPI.rejectWithValue(message);
+		};
 	}
 );
 export const editComment = createAsyncThunk(
@@ -44,6 +49,8 @@ export const editComment = createAsyncThunk(
 		try {
 			return (await commentEdit(post_id,body,token));
 		} catch (error:any) {
+			const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString() || '';
+      return thunkAPI.rejectWithValue(message);
 		}
 	}
 );
@@ -53,6 +60,8 @@ export const editReply = createAsyncThunk(
 		try {
 			return (await replyEdit(post_id,body,token));
 		} catch (error:any) {
+			const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString() || '';
+      return thunkAPI.rejectWithValue(message);
 		}
 	}
 );
@@ -62,6 +71,8 @@ export const deleteComment = createAsyncThunk(
 		try {
 			return (await commentDelete(id,token));
 		} catch (error:any) {
+			const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString() || '';
+      return thunkAPI.rejectWithValue(message);
 		}
 	}
 );
@@ -71,6 +82,8 @@ export const deleteReply = createAsyncThunk(
 		try {
 			return (await replyDelete(id,token));
 		} catch (error:any) {
+			const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString() || '';
+      return thunkAPI.rejectWithValue(message);
 		}
 	}
 );
@@ -80,6 +93,8 @@ export const likeComment = createAsyncThunk(
 		try {
 			return (await commentLike(id,token));
 		} catch (error:any) {
+			const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString() || '';
+      return thunkAPI.rejectWithValue(message);
 		}
 	}
 );
@@ -89,6 +104,8 @@ export const likeReply = createAsyncThunk(
 		try {
 			return (await replyLike(id,token));
 		} catch (error:any) {
+			const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString() || '';
+      return thunkAPI.rejectWithValue(message);
 		}
 	}
 );
@@ -98,6 +115,8 @@ export const listComment = createAsyncThunk(
 		try {
 			return (await commentList(post_id,pages,rows));
 		} catch (error:any) {
+			const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString() || '';
+      return thunkAPI.rejectWithValue(message);
 		}
 	}
 );
@@ -107,6 +126,8 @@ export const listReply = createAsyncThunk(
 		try {
 			return (await replyList(post_id,pages,rows));
 		} catch (error:any) {
+			const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString() || '';
+      return thunkAPI.rejectWithValue(message);
 		}
 	}
 );
@@ -203,6 +224,38 @@ const commentSlice = createSlice({
 			console.log(action.payload);
 		})
 		.addCase(editReply.rejected, (state) => {
+			state.notifications.type = 'error';
+			state.notifications.message = 'Reply edit failed';	
+		})
+		.addCase(likeReply.fulfilled, (state, action) => {
+			state.notifications.type = 'success';
+			state.notifications.message = 'Reply liked';
+			if(typeof action.payload.result === 'object') {
+				state.comments = state.comments.map(item => {
+					if(item._id === action.payload.result.comment) {
+						item.likes = action.payload.result;
+					}
+					return item;
+				})
+			}
+		})
+		.addCase(likeReply.rejected, (state) => {
+			state.notifications.type = 'error';
+			state.notifications.message = 'Reply like/unlike failed';	
+		})
+		.addCase(likeComment.fulfilled, (state, action) => {
+			state.notifications.type = 'success';
+			state.notifications.message = action.payload.result.message;
+			if(typeof action.payload.result === 'object') {
+				state.comments = state.comments.map(item => {
+					if(item._id === action.payload.result._id) {
+						return action.payload.result;
+					}
+					return item;
+				})
+			}
+		})
+		.addCase(likeComment.rejected, (state) => {
 			state.notifications.type = 'error';
 			state.notifications.message = 'Reply edit failed';	
 		})

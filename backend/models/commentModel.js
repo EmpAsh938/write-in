@@ -18,12 +18,10 @@ const commentSchema = new Schema(
             ref: 'Auth',
             required: [true, 'Please add author id']
         },
-        likes: [
-            {
-                type: Schema.Types.ObjectId,
+        likes: {
+                type: [Schema.Types.ObjectId],
                 ref: 'Auth'
-            }
-        ],
+            },
         reply: [
             {
                 type: Schema.Types.ObjectId,

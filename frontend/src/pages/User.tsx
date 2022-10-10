@@ -1,16 +1,18 @@
-import {MouseEvent, useEffect, useState} from 'react'
+import { MouseEvent, useEffect, useState } from 'react'
 
 import Navbar from '../components/Navbar'
-import {PostsType} from '../types/postTypes'
 import HomeBlogs from '../components/HomeBlogs'
 import UserImage from '../components/UserImage'
+
+import { PostsType } from '../types/postTypes'
 import { UserState } from '../types/authTypes'
 import { tabHandler } from '../utils/tabHandler'
+import { useAppSelector } from '../hooks/useReactRedux'
 
 
-const localstorage_key = JSON.parse(localStorage.getItem('user_db') || '{}');
 
 const User = () => {
+    const { user, token } = useAppSelector(state => state.auth);
     const [userBlogs, setUserBlogs] = useState<PostsType[]>([]);
     const [userProfile, setUserProfile] = useState<UserState>({} as UserState);
 
@@ -22,11 +24,14 @@ const User = () => {
         tabHandler(event,'user-profile-tab');
     }
     const handleFollow = () => {
-        if(userProfile.followers.includes(localstorage_key._id)) {
+        if(token) 
+        {
+            if(userProfile.followers.includes(user._id)) {
             // unfollow 
-        } else {
-            // follow
-        }
+            } else {
+                // follow
+            }
+    }
 
     }
     useEffect(() => {
@@ -38,9 +43,9 @@ const User = () => {
         <main className='flex flex-col max-w-xl m-auto gap-4'>
             <section className='flex items-center justify-start gap-2'>
                 <div className='flex flex-col gap-2'>
-                    <UserImage profileImage='' fullname='' width={300} height={300} />
+                    <UserImage profileImage={userProfile.profileImage} fullname={userProfile.fullname} width={300} height={300} />
                     <div>
-                        <button onClick={handleFollow}>{(userProfile.followers.includes(localstorage_key._id)) ? 'Unfollow' : 'follow'}</button>
+                        <button onClick={handleFollow}>{(userProfile.followers.includes(user._id)) ? 'Unfollow' : 'follow'}</button>
                     </div>
                 </div>
                 <div className='flex flex-col gap-2'>

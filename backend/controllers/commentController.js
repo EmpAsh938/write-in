@@ -104,21 +104,22 @@ const likeComment = asyncHandler(async (req, res) => {
 			throw new Error('comment not found');
 		}
 		// check if it is already liked
-		doc = await Comment.findOne({_id:id}, {likes: {$eq: decoded._id}});
+		doc = await Comment.findOne({_id:id, likes: {$eq: decoded._id}});
 		if(doc) {
-			doc = await Comment.finOneAndUpdate({_id:id}, {$pull: {likes: {$eq: decoded._id}}});
-			res.json({
-				message: 'like removed',
-				result: []
+            doc = await Comment.findOneAndUpdate({_id:id}, {$pull: {likes: {$eq: decoded._id}}});
+            doc = await Comment.findOne({_id:id});
+			return res.json({
+                message: 'like removed',
+				result: doc
 			});
-		} else {
-			// first time liking
-			doc = await Comment.findOneAndUpdate({_id:id}, {$push: {likes: decoded._id}});
-			res.json({
-				message: 'like added',
-				result: []
-			})
-		}
+		} 
+		// first time liking
+		doc = await Comment.findOneAndUpdate({_id:id}, {$push: {'likes': decoded._id}});
+        doc = await Comment.findOne({_id:id});
+		res.json({
+			message: 'like added',
+			result: doc
+		})
     } catch (error) {
         throw new Error(error);
     }

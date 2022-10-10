@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const { Schema, model } = mongoose;
 
-const Reply = new model(
+const replySchema = new Schema(
     { 
         comment: {
             type: Schema.Types.ObjectId,
@@ -22,3 +22,7 @@ const Reply = new model(
         timestamps: true
     }
 )
+
+const Reply = model('Reply', replySchema);
+
+module.exports = Reply;
