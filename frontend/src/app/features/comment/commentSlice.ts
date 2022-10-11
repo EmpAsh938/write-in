@@ -289,7 +289,6 @@ const commentSlice = createSlice({
 			state.notifications.message = 'comment delete failed';	
 		})
 		.addCase(deleteReply.fulfilled, (state, action) => {
-			console.log(action.payload)
 			state.notifications.type = 'success';
 			state.notifications.message = 'Reply deleted';
 			if(typeof action.payload.result === 'object') {
