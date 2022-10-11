@@ -72,10 +72,13 @@ const deleteComment = asyncHandler(async (req,res) => {
 	const decoded = jwt.decode(req.headers.authorization.split('Bearer')[1].trim());
 	try {
 		let doc = await Comment.findOne({_id:id}).exec();
-		if(!doc || doc.author !== decoded._id) {
+		if(!doc || doc.author.valueOf() !== decoded._id) {
 			res.status(401);
 			throw new Error('user not authorized');
         }
+        let post_id = doc.post.valueOf();
+        // remove comment from post 
+        await Post.findOneAndUpdate({_id:post_id}, {$pull: {comments: {$eq: id}}});
 		// delete subcomments signature from comments
         for(const item of doc.reply) {
             let reply_id = item.valueOf();
@@ -83,10 +86,10 @@ const deleteComment = asyncHandler(async (req,res) => {
         }
 		// doc = await Comment.findOneAndUpdate({_id: doc.root_id}, {$pull: {reply: id}});
 		// delete actual comment
-		doc = await Comment.findOneAndDelete({_id:id}).exec();
+		doc = await Comment.findOneAndDelete({_id:id});
 		res.json({
 			message: 'comment deleted',
-			result: []
+			result: doc
 		});
 
 	} catch (error) {

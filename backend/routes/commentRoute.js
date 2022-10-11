@@ -14,6 +14,6 @@ commentRouter.post('/new', newComment);
 commentRouter.get('/list/:id', listComment);
 commentRouter.put('/edit/:id', editComment);
 commentRouter.put('/like/:id', likeComment);
-commentRouter.delete('delete/:id', deleteComment);
+commentRouter.delete('/delete/:id', deleteComment);
 
 module.exports = commentRouter;
