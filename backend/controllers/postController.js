@@ -2,6 +2,8 @@ const jwt = require('jsonwebtoken');
 const asyncHandler = require('express-async-handler');
 
 const Post = require('../models/postModel');
+const Comment = require('../models/commentModel');
+const Reply = require('../models/replyModel');
 
 const searchBlogs = asyncHandler(async (req, res) => {
     const { term, pages, rows, sort } = req.query;
@@ -126,27 +128,27 @@ const deleteBlog = asyncHandler(async (req, res) => {
     try {
         const doc = await Post.findByIdAndDelete(id);
         if(!doc) {
-            res.status(401);
+            res.status(404);
             throw new Error('Deletion failed');
         }
         // delete comments with reply
-        for(const item of doc.comments) {
-            let comment_id = item.valueOf();
-            let getReply = await Comment.findOne({_id:comment_id});
-            if(getReply){
-                for(const newItem of getReply.reply) {
-                    let reply_id = newItem.valueOf();
-                    await Reply.findOneAndDelete({_id:reply_id});
+        if(doc.comments > 0){
+            for(const item of doc.comments) {
+                let comment_id = item.valueOf();
+                let getReply = await Comment.findOneAndDelete({_id:comment_id});
+                if(getReply && getReply.reply.length > 0){
+                    for(const newItem of getReply.reply) {
+                        let reply_id = newItem.valueOf();
+                        await Reply.findOneAndDelete({_id:reply_id});
+                    }
                 }
             }
-            await Comment.findOneAndDelete({_id:comment_id});
         }
         res.json({
             message: "successfully deleted",
-            result: []
+            result: doc
         })
     } catch (error) {
-        res.status(401);
         throw new Error(error);
     }
 })
