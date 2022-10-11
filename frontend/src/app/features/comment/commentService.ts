@@ -76,6 +76,6 @@ export const commentList = async (post_id:string,pages:number,rows:number) => {
 
 
 export const replyList = async (post_id:string,pages:number,rows:number) => {
-	const response = await axios.get(`/reply/list/reply/${post_id}?pages=${pages}&rows=${rows}`)
+	const response = await axios.get(`/reply/list/${post_id}?pages=${pages}&rows=${rows}`)
 	return response.data;
 }

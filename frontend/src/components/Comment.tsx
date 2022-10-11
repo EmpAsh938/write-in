@@ -5,7 +5,7 @@ import UserImage from './UserImage';
 
 import { CommentType }  from '../types/commentTypes';
 import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
-import { likeComment, listReply, newReply } from '../app/features/comment/commentSlice';
+import { deleteComment, likeComment, listReply, newReply } from '../app/features/comment/commentSlice';
 
 const Comment = ({  _id, body, author, reply}: CommentType) => {
     const { token } = useAppSelector(state => state.auth);
@@ -39,11 +39,22 @@ const Comment = ({  _id, body, author, reply}: CommentType) => {
         setLoadReply(true);
         setPages(prev => prev+1);
     }
+
+
+    const handleEdit = () => {
+
+    }
+
+    const handleDelete = () => {
+        if(token && _id) {
+            dispatch(deleteComment({token,id:_id}));
+        }
+    }
     useEffect(() => {
         if(_id) {
             dispatch(listReply({post_id:_id,pages,rows:5}));
         }
-    }, [pages])
+    }, [_id,pages,dispatch])
 	return (
 		<div className=''>
 			{/* comments  */}
@@ -52,9 +63,11 @@ const Comment = ({  _id, body, author, reply}: CommentType) => {
 				<h3>{fullname}</h3>
 			</div>
 			<p>{body}</p>
-			<div className='flex items-center justify-start text-sm gap-2'>
+			<div className='flex items-center justify-between text-sm'>
 				<button onClick={handleLike}>like</button>
 				<button onClick={()=>setIsReplyOpen(!isReplyOpen)}>reply</button>
+                <button onClick={handleEdit}>edit</button>
+                <button onClick={handleDelete}>delete</button>
 			</div>
 			{/* reply input */}
             {isReplyOpen && (
@@ -68,7 +81,7 @@ const Comment = ({  _id, body, author, reply}: CommentType) => {
                 if(typeof item !== 'string') {
                     return (<Reply key={item._id} {...item} />)
                 }
-                return (<div className='hidden'></div>)
+                return (<div key={item} className='hidden'></div>)
 			}))}
             { reply.length > 0 && (<button className='px-2 py-1 my-2 text-sm text-white capitalize bg-green-700 rounded w-fit' onClick={handleLoadReply}>load more reply</button>) }
 		</div> 
