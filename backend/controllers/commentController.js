@@ -53,11 +53,12 @@ const editComment = asyncHandler(async (req, res) => {
     const decoded = jwt.decode(req.headers.authorization.split('Bearer')[1].trim());
     try {
         let result = await Comment.findOne({_id:id}).exec();
-        if(!result || result.author !== decoded._id) {
+        if(!result || result.author.valueOf() !== decoded._id) {
             res.status(401);
             throw new Error('user not authorized');
         }
 	    result = await Comment.findOneAndUpdate({_id:id},{$set: {body}});
+	    result = await Comment.findOne({_id:id});
         res.json({
             message: 'updated successfully',
             result

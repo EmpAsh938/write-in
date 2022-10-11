@@ -212,7 +212,14 @@ const commentSlice = createSlice({
 		.addCase(editComment.fulfilled, (state, action) => {
 			state.notifications.type = 'success';
 			state.notifications.message = 'comment edited';
-			console.log(action.payload);
+			if(typeof action.payload.result === 'object') {
+				state.comments = state.comments.map(item => {
+					if(item._id === action.payload.result._id) {
+						return action.payload.result;
+					}
+					return item;
+				})
+			}
 		})
 		.addCase(editComment.rejected, (state) => {
 			state.notifications.type = 'error';
@@ -221,7 +228,18 @@ const commentSlice = createSlice({
 		.addCase(editReply.fulfilled, (state, action) => {
 			state.notifications.type = 'success';
 			state.notifications.message = 'Reply edited';
-			console.log(action.payload);
+            if(typeof action.payload.result === 'object') {
+                state.comments.forEach(item => {
+                    if(item._id === action.payload.result.comment) {
+                        item.reply = item.reply.map(newitem => {
+                            if(typeof newitem === 'object' && newitem._id === action.payload.result._id) {
+                                return action.payload.result;
+                            }
+                            return newitem;
+                })
+            }
+            })
+            }
 		})
 		.addCase(editReply.rejected, (state) => {
 			state.notifications.type = 'error';
