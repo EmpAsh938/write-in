@@ -1,4 +1,4 @@
-import {likeComment} from '../app/features/comment/commentSlice';
+import {deleteReply, likeComment} from '../app/features/comment/commentSlice';
 import {useAppSelector, useAppDispatch} from '../hooks/useReactRedux'
 import {ReplyType} from '../types/commentTypes'
 import UserImage from './UserImage'
@@ -14,6 +14,16 @@ const Reply = ({ _id, author, body }:ReplyType) => {
            dispatch(likeComment({id:_id,token})); 
         }
     }
+
+    const handleEdit = () => {
+
+    }
+
+    const handleDelete = () => {
+      if(token && _id) {
+        dispatch(deleteReply({token,id:_id}));
+      }
+    }
   return (
 	<div className='pl-4'>
         <div className='flex items-center justify-start text-sm gap-2'>
@@ -21,8 +31,10 @@ const Reply = ({ _id, author, body }:ReplyType) => {
             <h3>{fullname}</h3>
         </div>
         <p>{body}</p>
-        <div className='flex items-center justify-start text-sm gap-2'>
+        <div className='flex items-center justify-between text-sm'>
             <button onClick={handleLikeReply}>like</button>
+            <button onClick={handleEdit}>edit</button>
+            <button onClick={handleDelete}>delete</button>
         </div>
         	
     </div>
