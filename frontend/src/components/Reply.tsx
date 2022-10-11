@@ -34,27 +34,31 @@ const Reply = ({ _id, author, body }:ReplyType) => {
     }
   return (
 	  <div className='pl-4'>
-      {!isEditing ? 
-      (
-      <div>
-        <div className='flex items-center justify-start text-sm gap-2'>
-            <UserImage profileImage={profileImage} fullname={fullname} />
-            <h3>{fullname}</h3>
-        </div>
-        <p>{body}</p>
-        <div className='flex items-center justify-between text-sm'>
-            <button onClick={handleLikeReply}>like</button>
-            <button onClick={() => setIsEditing(true)}>edit</button>
-            <button onClick={handleDelete}>delete</button>
-        </div>
+      <div className='flex items-center justify-start text-sm gap-2'>
+          <UserImage profileImage={profileImage} fullname={fullname} />
+          <h3>{fullname}</h3>
       </div>
-      ) :
-      (
-      <div>
-        <input type="text" value={editInput} onChange={e=>setEditInput(e.target.value)}/>
-        <button onClick={handleEdit}>submit</button>
-      </div>
-      )}
+      {isEditing ? 
+        (
+          <div>
+            <input type="text" value={editInput} onChange={e=>setEditInput(e.target.value)}/>
+            <div>
+              <button onClick={()=>setIsEditing(false)}>cancel</button>
+              <button onClick={handleEdit}>submit</button>
+            </div>
+          </div>
+        ) : 
+        (
+          <div>
+            <p>{body}</p>
+            <div className='flex items-center justify-between text-sm'>
+              <button onClick={handleLikeReply}>like</button>
+              <button onClick={() => setIsEditing(true)}>edit</button>
+              <button onClick={handleDelete}>delete</button>
+            </div>
+          </div>
+        )
+      }
     </div>
   )
 }

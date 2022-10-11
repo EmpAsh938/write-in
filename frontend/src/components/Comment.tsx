@@ -5,7 +5,7 @@ import UserImage from './UserImage';
 
 import { CommentType }  from '../types/commentTypes';
 import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
-import { deleteComment, likeComment, listReply, newReply } from '../app/features/comment/commentSlice';
+import { deleteComment, editComment, likeComment, listReply, newReply } from '../app/features/comment/commentSlice';
 
 const Comment = ({  _id, body, author, reply}: CommentType) => {
     const { token } = useAppSelector(state => state.auth);
@@ -14,6 +14,8 @@ const Comment = ({  _id, body, author, reply}: CommentType) => {
     const [replyText, setReplyText] = useState<string>('');
     const [pages, setPages] = useState<number>(1);
     const [loadReply, setLoadReply] = useState<boolean>(false);
+    const [isEditing, setIsEditing] = useState<boolean>(false);
+    const [editText, setEditText] = useState<string>(body);
 
     const { profileImage, fullname } = author;
     
@@ -42,7 +44,10 @@ const Comment = ({  _id, body, author, reply}: CommentType) => {
 
 
     const handleEdit = () => {
-
+        setIsEditing(false);
+        if(token && editText) {
+            dispatch(editComment({token,id:_id,body:editText}));
+        }
     }
 
     const handleDelete = () => {
@@ -62,13 +67,27 @@ const Comment = ({  _id, body, author, reply}: CommentType) => {
 				<UserImage profileImage={profileImage} fullname={fullname} />
 				<h3>{fullname}</h3>
 			</div>
-			<p>{body}</p>
-			<div className='flex items-center justify-between text-sm'>
-				<button onClick={handleLike}>like</button>
-				<button onClick={()=>setIsReplyOpen(!isReplyOpen)}>reply</button>
-                <button onClick={handleEdit}>edit</button>
-                <button onClick={handleDelete}>delete</button>
-			</div>
+            {
+                isEditing ? (
+                    <div>
+                        <input type="text" value={editText} onChange={e=>setEditText(e.target.value)} />
+                        <div>
+                            <button onClick={() => setIsEditing(false)}>cancel</button>
+                            <button onClick={handleEdit}>submit</button>
+                        </div>
+                    </div>
+                ) : (
+                    <div>
+                        <p>{body}</p>
+                        <div className='flex items-center justify-between text-sm'>
+                            <button onClick={handleLike}>like</button>
+                            <button onClick={()=>setIsReplyOpen(!isReplyOpen)}>reply</button>
+                            <button onClick={() => setIsEditing(true)}>edit</button>
+                            <button onClick={handleDelete}>delete</button>
+                        </div>
+                    </div>
+                )
+            }
 			{/* reply input */}
             {isReplyOpen && (
                     <div className='flex items-center justify-start gap-2'>

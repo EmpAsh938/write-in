@@ -45,9 +45,9 @@ export const newReply = createAsyncThunk(
 );
 export const editComment = createAsyncThunk(
 	'comment/edit',
-	async({token,post_id,body}:{token:string,post_id:string,body:string},thunkAPI) => {
+	async({token,id,body}:{token:string,id:string,body:string},thunkAPI) => {
 		try {
-			return (await commentEdit(post_id,body,token));
+			return (await commentEdit(id,body,token));
 		} catch (error:any) {
 			const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString() || '';
       return thunkAPI.rejectWithValue(message);
