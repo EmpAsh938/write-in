@@ -1,4 +1,5 @@
-import {deleteReply, likeReply} from '../app/features/comment/commentSlice';
+import { useState } from 'react';
+import {deleteReply, editReply, likeReply} from '../app/features/comment/commentSlice';
 import {useAppSelector, useAppDispatch} from '../hooks/useReactRedux'
 import {ReplyType} from '../types/commentTypes'
 import UserImage from './UserImage'
@@ -6,6 +7,9 @@ import UserImage from './UserImage'
 const Reply = ({ _id, author, body }:ReplyType) => {
     const { token } = useAppSelector(state => state.auth);
     const { profileImage, fullname } = author;
+    
+    const [isEditing, setIsEditing] = useState<boolean>(false);
+    const [editInput, setEditInput] = useState<string>(body);
     
     const dispatch = useAppDispatch();
 
@@ -16,8 +20,12 @@ const Reply = ({ _id, author, body }:ReplyType) => {
     }
 
     const handleEdit = () => {
-
+      setIsEditing(false);
+      if(token && editInput) {
+        dispatch(editReply({token,body:editInput,reply_id:_id}));
+      }
     }
+
 
     const handleDelete = () => {
       if(token && _id) {
@@ -25,7 +33,10 @@ const Reply = ({ _id, author, body }:ReplyType) => {
       }
     }
   return (
-	<div className='pl-4'>
+	  <div className='pl-4'>
+      {!isEditing ? 
+      (
+      <div>
         <div className='flex items-center justify-start text-sm gap-2'>
             <UserImage profileImage={profileImage} fullname={fullname} />
             <h3>{fullname}</h3>
@@ -33,10 +44,17 @@ const Reply = ({ _id, author, body }:ReplyType) => {
         <p>{body}</p>
         <div className='flex items-center justify-between text-sm'>
             <button onClick={handleLikeReply}>like</button>
-            <button onClick={handleEdit}>edit</button>
+            <button onClick={() => setIsEditing(true)}>edit</button>
             <button onClick={handleDelete}>delete</button>
         </div>
-        	
+      </div>
+      ) :
+      (
+      <div>
+        <input type="text" value={editInput} onChange={e=>setEditInput(e.target.value)}/>
+        <button onClick={handleEdit}>submit</button>
+      </div>
+      )}
     </div>
   )
 }

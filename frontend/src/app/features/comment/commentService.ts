@@ -26,8 +26,8 @@ export const commentEdit = async (id:string,body:string,token:string) => {
 	});
 	return response.data;
 }
-export const replyEdit = async (id:string,body:string,token:string) => {
-	const response = await axios.put(`/reply/edit/${id}`,{id,body},{
+export const replyEdit = async (reply_id:string,body:string,token:string) => {
+	const response = await axios.put(`/reply/edit/${reply_id}`,{id:reply_id,body},{
 		headers: {
 			Authorization: `Bearer ${token}`
 		}
