@@ -14,6 +14,6 @@ replyRouter.post('/new', newReply);
 replyRouter.get('/list/:id', listReply);
 replyRouter.put('/edit/:id', editReply);
 replyRouter.put('/like/:id', likeReply);
-replyRouter.delete('delete/:id', deleteReply);
+replyRouter.delete('/delete/:id', deleteReply);
 
 module.exports = replyRouter;

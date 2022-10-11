@@ -2,7 +2,7 @@ import { UserState } from "./authTypes";
 
 export type ReplyType = {
 	_id: string;
-	post: string;
+	comment: string;
 	body: string;
 	author: UserState;
 	likes: [string];

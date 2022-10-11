@@ -199,7 +199,7 @@ const commentSlice = createSlice({
 			state.notifications.message = action.payload.message;
             if(action.payload.result) {
                 state.comments.forEach(item => {
-                    if(item._id === action.payload.result.post) {
+                    if(item._id === action.payload.result.comment) {
                         item.reply = [...item.reply, action.payload.result];
                     }
                 })
@@ -271,11 +271,12 @@ const commentSlice = createSlice({
 			state.notifications.message = 'comment delete failed';	
 		})
 		.addCase(deleteReply.fulfilled, (state, action) => {
+			console.log(action.payload)
 			state.notifications.type = 'success';
 			state.notifications.message = 'Reply deleted';
 			if(typeof action.payload.result === 'object') {
 				state.comments = state.comments.map(item => {
-					item.reply = item.reply.filter(newitem => newitem !== action.payload.result._id);
+					item.reply = item.reply.filter(newitem => (typeof newitem === 'object' && newitem._id !== action.payload.result._id));
 					return item;
 				})
 			}

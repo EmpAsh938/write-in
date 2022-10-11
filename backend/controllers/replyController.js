@@ -96,13 +96,13 @@ const deleteReply = asyncHandler(async (req, res) => {
 	const decoded = jwt.decode(req.headers.authorization.split('Bearer')[1].trim());
 	try {
 		let doc = await Reply.findOne({_id:id}).exec();
-		if(!doc || doc.author !== decoded._id) {
+		if(!doc || doc.author.valueOf() !== decoded._id) {
 			res.status(401);
 			throw new Error('user not authorized');
         }
 
         // delete from comment
-        await Comment.findOneAndUpdate({_id:doc.comment.valueOf()}, {$pull: {$reply: {$eq: id}}});
+        await Comment.findOneAndUpdate({_id:doc.comment.valueOf()}, {$pull: {reply: {$eq: id}}});
 
 		// delete actual comment
 		doc = await Reply.findOneAndDelete({_id:id}).exec();
