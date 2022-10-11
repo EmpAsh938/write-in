@@ -58,9 +58,9 @@ const listReply = asyncHandler(async (req, res) => {
         let replies = [];
         for(let item of doc.reply) {
             let reply_id = item.valueOf();
-           replies.push(await Comment.findOne({_id:reply_id}).populate('author'));
+           replies.push(await Reply.findOne({_id:reply_id}).populate('author'));
         }
-        res.json({
+        return res.json({
             message: 'successfully retreived',
             result: replies
         })

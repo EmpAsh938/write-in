@@ -16,6 +16,11 @@ const replySchema = new Schema(
         likes: {
             type: [Schema.Types.ObjectId],
             ref: 'Auth'
+        },
+        author: {
+            type: Schema.Types.ObjectId,
+            ref: 'Auth',
+            required:[true, 'please add author ref']
         }
     }, 
     {
