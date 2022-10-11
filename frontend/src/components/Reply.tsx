@@ -1,4 +1,4 @@
-import {deleteReply, likeComment} from '../app/features/comment/commentSlice';
+import {deleteReply, likeReply} from '../app/features/comment/commentSlice';
 import {useAppSelector, useAppDispatch} from '../hooks/useReactRedux'
 import {ReplyType} from '../types/commentTypes'
 import UserImage from './UserImage'
@@ -11,7 +11,7 @@ const Reply = ({ _id, author, body }:ReplyType) => {
 
     const handleLikeReply = () => {
         if(token && _id) {
-           dispatch(likeComment({id:_id,token})); 
+           dispatch(likeReply({id:_id,token})); 
         }
     }
 

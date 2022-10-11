@@ -233,7 +233,7 @@ const commentSlice = createSlice({
 			if(typeof action.payload.result === 'object') {
 				state.comments = state.comments.map(item => {
 					if(item._id === action.payload.result.comment) {
-						item.likes = action.payload.result;
+						item.likes = action.payload.result.likes;
 					}
 					return item;
 				})

@@ -100,12 +100,15 @@ const deleteReply = asyncHandler(async (req, res) => {
 			res.status(401);
 			throw new Error('user not authorized');
         }
-		
+
+        // delete from comment
+        await Comment.findOneAndUpdate({_id:doc.comment.valueOf()}, {$pull: {$reply: {$eq: id}}});
+
 		// delete actual comment
 		doc = await Reply.findOneAndDelete({_id:id}).exec();
 		res.json({
 			message: 'comment deleted',
-			result: []
+			result: doc
 		});
 
 	} catch (error) {
@@ -124,7 +127,7 @@ const likeReply = asyncHandler(async (req, res) => {
 		// check if it is already liked
 		doc = await Reply.findOne({_id:id, likes: {$eq: decoded._id}});
 		if(doc) {
-			doc = await Reply.finOneAndUpdate({_id:id}, {$pull: {likes: {$eq: decoded._id}}});
+			doc = await Reply.findOneAndUpdate({_id:id}, {$pull: {likes: {$eq: decoded._id}}});
             doc = await Reply.findOne({_id:id});
 			return res.json({
                 message: 'like removed',
