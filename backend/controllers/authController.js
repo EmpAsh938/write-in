@@ -336,6 +336,26 @@ const followUser = asyncHandler(async (req, res) => {
 
 })
 
+const getUserProfile = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    if(!id) {
+        res.status(400);
+        throw new Error('id missing');
+    }
+    try {
+        let doc = await Auth.findOne({_id:id});
+        if(!doc) {
+            throw new Error('user not found');
+        }
+        return res.json({
+            message: 'user info retrieved',
+            result: doc
+        })
+    } catch (error) {
+       throw new Error(error); 
+    }
+})
+
 module.exports = { 
     loginUser, 
     followUser,
@@ -347,4 +367,5 @@ module.exports = {
     deleteAccount, 
     passwordChange, 
     accountInfoChange,
+    getUserProfile
 };

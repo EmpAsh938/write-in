@@ -10,17 +10,9 @@ const {
     createNewBlog,
     listBlogsPublic,
     listBlogsPrivate,
+    listUserBlogs,
  } = require('../controllers/postController');
 
- const {
-    newComment,
-    newReply,
-    editComment,
-    deleteComment,
-    likeComment,
-    listComment,
-    listReply
- } = require('../controllers/commentController');
 
 const postRouter = express.Router();
 
@@ -32,6 +24,6 @@ postRouter.delete('/me/:id', verifyUser, deleteBlog);          // private delete
 postRouter.put('/edit/:id', verifyUser, editBlog);         // private edit
 postRouter.get('/get/:id', getBlogSingle);         // public single blog
 postRouter.get('/like/:id', verifyUser, likeBlog);             // like blog
-
+postRouter.get('/user/:id', listUserBlogs); 
 
 module.exports = postRouter;

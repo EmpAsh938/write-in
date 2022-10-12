@@ -303,4 +303,5 @@ module.exports = {
     getBlogSingle,
     listBlogsPublic,
     listBlogsPrivate,
+    listUserBlogs
 }

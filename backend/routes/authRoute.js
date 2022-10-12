@@ -11,7 +11,8 @@ const {
     listBookmark,
     deleteAccount,
     accountInfoChange,
-    followUser, 
+    followUser,
+    getUserProfile, 
 } = require('../controllers/authController');
 
 const authRouter = express.Router();
@@ -26,5 +27,6 @@ authRouter.put('/change/email', verifyUser, emailChange);
 authRouter.put('/change/password', verifyUser, passwordChange);
 authRouter.put('/change/account', verifyUser, accountInfoChange);
 authRouter.delete('/change/account', verifyUser, deleteAccount);
+authRouter.get('/user/:id', getUserProfile);
 
 module.exports = authRouter;
