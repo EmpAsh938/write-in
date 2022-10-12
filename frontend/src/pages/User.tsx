@@ -1,15 +1,14 @@
 import {useParams} from 'react-router-dom'
-import { MouseEvent, useEffect, useState } from 'react'
+import { MouseEvent, useEffect } from 'react'
 
 import Navbar from '../components/Navbar'
 import HomeBlogs from '../components/HomeBlogs'
 import UserImage from '../components/UserImage'
 
-import { PostsType } from '../types/postTypes'
-import { UserState } from '../types/authTypes'
 import { tabHandler } from '../utils/tabHandler'
 import { getUserProfile } from '../app/features/auth/authSlice'
 import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux'
+import {userBlogsList} from '../app/features/post/postSlice'
 
 
 
@@ -41,8 +40,11 @@ const User = () => {
     useEffect(() => {
         if(id) {
             dispatch(getUserProfile({id})); 
+            dispatch(userBlogsList({pages:1,rows:5,id,filter:'latest'}));
         }
     }, [])
+    if(Object.keys(userProfile).length === 0) return <h2>Loading...</h2>
+    
   return (
     <>
         <Navbar />
@@ -51,20 +53,25 @@ const User = () => {
                 <div className='flex flex-col gap-2'>
                     <UserImage profileImage={userProfile.profileImage} fullname={userProfile.fullname} width={300} height={300} />
                     <div>
+                        <h3>{userProfile.followers.length} followers</h3>
                         <button onClick={handleFollow}>{(userProfile.followers.includes(user._id)) ? 'Unfollow' : 'follow'}</button>
                     </div>
                 </div>
                 <div className='flex flex-col gap-2'>
                    <div>
-                        <button onClick={handleProfileTab} className='user-profile-tab'>Profile</button>
-                        <button onClick={handleProfileTab} className='user-profile-tab'>About</button>
+                        <h2>{userProfile.fullname}</h2>
+                      <h3>{userProfile.username}</h3>  
+                       <h3>{userProfile.email}</h3>
+                       <h4>bio</h4>
+                       <a>link</a>
+                       <h4>country</h4>
                    </div> 
                    <div></div> 
                 </div>
             </section>
             <section>
                 <div className='flex items-center justify-between border-solid border-bottom border-color-slate-400'>
-                    <h2>his blogs</h2>
+                    <h2>{userProfile.fullname} blogs</h2>
                     <div className='flex items-center justify-start gap-2'>
                         <button onClick={handleBlogsTab} className='user-blog-tab'>Most Recent</button>
                         <button onClick={handleBlogsTab} className='user-blog-tab'>Oldest</button>

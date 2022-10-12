@@ -10,10 +10,10 @@ const HomeBlogs = ({_id, author, title, createdAt}:PostsType) => {
   
   
   return (
-    <Link to={_id} className='p-3 bg-white border border-green-200 border-solid rounded shadow-md'>
+    <Link to={`/${_id}`} className='p-3 bg-white border border-green-200 border-solid rounded shadow-md'>
       <div className='flex items-center gap-2'>
         <UserImage profileImage='' fullname='Alex Chapman' />
-        <h3><Link to={`/user/${_id}`}>{author.fullname}</Link></h3>
+        <h3><Link to={`/user/${author._id}`}>{author.fullname}</Link></h3>
       </div>
       <div className='ml-[45px] flex flex-col gap-1'>
         <h2 className='text-2xl font-bold'>{title}</h2>
