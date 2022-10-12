@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const asyncHandler = require('express-async-handler');
 
+const Auth = require('../models/authModel');
 const Post = require('../models/postModel');
 const Comment = require('../models/commentModel');
 const Reply = require('../models/replyModel');
@@ -260,6 +261,34 @@ const likeBlog = asyncHandler(async (req, res) => {
         })
     } catch (error) {
         throw new Error(error);
+    }
+})
+
+const listUserBlogs = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    const { pages, rows, filter } = req.query;
+    if(!id || !pages || !rows) {
+        res.status(400);
+        throw new Error('missing parameters');
+    }
+    try {
+        let doc = await Auth.findOne({_id:id});
+        if(!doc) {
+            throw new Error('user not found');
+        }
+        if(filter === 'liked') {
+            doc = await Post.find({author:id,status:'published'}).populate('author').sort({likes: -1}).skip(rows * (pages - 1)).limit(rows);
+        } else if(filter === 'oldest') {
+            doc = await Post.find({author:id,status:'published'}).populate('author').sort({createdAt: 1}).skip(rows * (pages - 1)).limit(rows);
+        } else {
+            doc = await Post.find({author:id,status:'published'}).populate('author').sort({createdAt: -1}).skip(rows * (pages - 1)).limit(rows);
+        }
+        res.json({
+            message: 'user blogs',
+            result: doc
+        })
+    } catch (error) {
+       throw new Error(error); 
     }
 })
 
