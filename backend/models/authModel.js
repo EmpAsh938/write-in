@@ -45,6 +45,12 @@ const authSchema = new Schema(
         followers: {
             type: [Schema.Types.ObjectId],
             ref: 'Auth'
+        },
+        country: {
+            type: String
+        },
+        website: {
+            type: String
         }
     },
     {

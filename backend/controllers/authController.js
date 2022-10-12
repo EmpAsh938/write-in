@@ -66,7 +66,9 @@ const registerUser = asyncHandler(async (req, res) => {
         username,
         password:hashedPassword,
         profileImage:'',
-        bio: ''
+        bio: '',
+        country: '',
+        website: ''
     });
 
     try {
