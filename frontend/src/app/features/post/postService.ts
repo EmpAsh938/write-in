@@ -88,3 +88,9 @@ export const listBookmark =async (pages:number,rows:number,token:string) => {
     })
     return response.data;
 }
+
+// list user blogs 
+export const listUserBlogs = async (pages:number,rows:number,id:string,filter:string) => {
+    const response = await axios.get(`/post/user/${id}?pages=${pages}&rows=${rows}&filter=${filter}`);
+    return response.data;
+}

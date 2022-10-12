@@ -1,3 +1,4 @@
+import {useParams} from 'react-router-dom'
 import { MouseEvent, useEffect, useState } from 'react'
 
 import Navbar from '../components/Navbar'
@@ -7,14 +8,17 @@ import UserImage from '../components/UserImage'
 import { PostsType } from '../types/postTypes'
 import { UserState } from '../types/authTypes'
 import { tabHandler } from '../utils/tabHandler'
-import { useAppSelector } from '../hooks/useReactRedux'
+import { getUserProfile } from '../app/features/auth/authSlice'
+import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux'
 
 
 
 const User = () => {
-    const { user, token } = useAppSelector(state => state.auth);
-    const [userBlogs, setUserBlogs] = useState<PostsType[]>([]);
-    const [userProfile, setUserProfile] = useState<UserState>({} as UserState);
+    const { id } = useParams();
+    const { user, token, userProfile } = useAppSelector(state => state.auth);
+    const { userBlogs } = useAppSelector(state => state.post);
+
+    const dispatch = useAppDispatch();
 
     const handleBlogsTab = (event:MouseEvent<HTMLButtonElement>) => {
         tabHandler(event,'user-blog-tab');
@@ -35,7 +39,9 @@ const User = () => {
 
     }
     useEffect(() => {
-        
+        if(id) {
+            dispatch(getUserProfile({id})); 
+        }
     }, [])
   return (
     <>

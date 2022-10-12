@@ -68,12 +68,12 @@ function App() {
           <Route path="edit/:id" element={
             <ProtectedRoute isUser={isUser} outlet={<Blog />} />
           } />
-          <Route path='/:id'element={
-            <SingleBlog />
-            } />
-          <Route path='/user/' element={
+          <Route path="user/:id" element={
               <User />
           } />
+          <Route path=":id" element={
+            <SingleBlog />
+            } />
           <Route path="*" element={<PageNotFound />} />
         </Route>
       </Routes>

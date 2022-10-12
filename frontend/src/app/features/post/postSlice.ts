@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { RootState } from '../../store';
-import { deleteBlog, editBlog, likePost, listBookmark, listPrivateAll, listPublicAll, listSingle, savePost, searchBlog } from './postService';
+import { deleteBlog, editBlog, likePost, listBookmark, listPrivateAll, listPublicAll, listSingle, listUserBlogs, savePost, searchBlog } from './postService';
 import { PostsObjType, PostsType } from '../../../types/postTypes';
 import { NotificationsType } from '../../../types/authTypes';
 
@@ -16,6 +16,7 @@ interface PostState {
     searchPosts: PostsType[];
     privatePosts: PostsType[];
     bookmarkPosts: PostsType[];
+    userBlogs: PostsType[];
 }
 
 const initialState: PostState = {
@@ -31,7 +32,8 @@ const initialState: PostState = {
     singlePost: {} as PostsType,
     privatePosts: [],
     searchPosts: [],
-    bookmarkPosts:[]
+    bookmarkPosts:[],
+    userBlogs: []
 }
 
 export const listPublicBlogs = createAsyncThunk(
@@ -141,6 +143,17 @@ export const bookmarkLists = createAsyncThunk(
     }
    }
 )
+
+export const userBlogsList = createAsyncThunk(
+    'post/user/list',
+    async ({pages,rows,id,filter}:{pages:number,rows:number,id:string,filter:string},thunkAPI) => {
+        try {
+            return (await listUserBlogs(pages,rows,id,filter));
+        } catch (error:any) {
+            const message = (error.message && error.message.data && error.response.data.message) || error.message || error.toString() || '';
+            return thunkAPI.rejectWithValue(message);
+        }
+    })
 
 const postSlice = createSlice({
     name: 'post',
@@ -343,6 +356,31 @@ const postSlice = createSlice({
                 state.notifications.type = 'error';
                 state.notifications.message = action.payload;
             }
+        })
+        .addCase(userBlogsList.pending, (state) => {
+                state.notifications.type = 'loading';
+                state.notifications.message = 'fetching user blogs';
+        })
+        .addCase(userBlogsList.fulfilled, (state,action) => {
+            if(typeof action.payload === 'object') {
+                if(Array.isArray(action.payload.result)) {
+                    if(action.payload.result.length > 0) {
+                        if(initialState.pages !== state.pages || initialState.rows !== state.rows) {
+                            state.userBlogs = [...state.userBlogs, ...action.payload.result]
+                        } else {
+                            state.userBlogs = [...action.payload.result];
+                        }
+                    } else {
+                        state.pages = state.pages === 1 ? 1 : state.pages- 1;
+                    }
+                }
+            }
+        })
+        .addCase(userBlogsList.rejected, (state,action) => {
+                if(typeof action.payload === 'string') {
+                    state.notifications.type = 'error';
+                    state.notifications.message = action.payload;
+                }
         })
     }
 })

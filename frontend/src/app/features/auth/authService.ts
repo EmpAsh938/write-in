@@ -93,6 +93,9 @@ const toggleFollow = async (follow_id:string,token:string) =>  {
 	return response.data;
 }
 
+const userDetails = async (id:string) => {
+    const response = await axios.get(`/auth/user/${id}`);
+    return response.data;
+}
 
-
-export { register, login, logout, bookmark, verify, passwordChange,removeAccount, emailChange, accountDetailsChange,toggleFollow };
+export { register, login, logout, bookmark, verify, passwordChange,removeAccount, emailChange, accountDetailsChange,toggleFollow, userDetails };

@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-import { register, login, logout, verify, bookmark, passwordChange, removeAccount, accountDetailsChange, emailChange, toggleFollow } from './authService'
+import { register, login, logout, verify, bookmark, passwordChange, removeAccount, accountDetailsChange, emailChange, toggleFollow, userDetails } from './authService'
 import { RegisterAuthState, LoginAuthState, NotificationsType, UserState } from '../../../types/authTypes'
 import { profileUpload } from '../upload/uploadService';
 
@@ -11,6 +11,7 @@ interface AuthState {
   token: string | null;
   notifications: NotificationsType;
   user: UserState;
+  userProfile: UserState;
 }
 
 const lsk = JSON.parse(localStorage.getItem('user_db') || 'null');
@@ -23,6 +24,7 @@ const initialState: AuthState = {
   },
   token: lsk ? lsk.token : null,
   user: lsk ? lsk._doc : {},
+  userProfile: {} as UserState 
 }
 
 export const loginUser = createAsyncThunk(
@@ -147,6 +149,17 @@ export const uploadProfile = createAsyncThunk(
   }
  }
 )
+
+export const getUserProfile = createAsyncThunk(
+    'auth/user/profile',
+    async ({id}:{id:string}, thunkAPI) => {
+        try {
+            return (await userDetails(id));
+        } catch (error:any) {
+            const message = (error.message && error.message.data && error.response.data.message) || error.message || error.toString() || '';
+            return thunkAPI.rejectWithValue(message);
+        }
+    })
 
 const authSlice = createSlice({
   name: 'auth',
@@ -327,6 +340,22 @@ const authSlice = createSlice({
           }
     })
     .addCase(uploadProfile.rejected, (state, action) => {
+        if(typeof action.payload === 'string') {
+            state.notifications.type = 'error';
+            state.notifications.message = action.payload;
+        }
+    })
+    .addCase(getUserProfile.pending, (state) => {
+        state.notifications.type = 'loading';
+        state.notifications.message = 'fetching user records';
+    })
+    .addCase(getUserProfile.fulfilled, (state,action) => {
+       console.log(action.payload); 
+       if(typeof action.payload.result === 'object') {
+          state.userProfile = action.payload.result;
+        }
+    })
+    .addCase(getUserProfile.rejected, (state,action) => {
         if(typeof action.payload === 'string') {
             state.notifications.type = 'error';
             state.notifications.message = action.payload;
