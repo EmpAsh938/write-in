@@ -20,4 +20,8 @@ export type UserState = {
     username:string;
     profileImage: string;
     followers: [string];
+    bio: string;
+    country: string;
+    website: string;
+    updatedAt: string;
 }
