@@ -89,7 +89,6 @@ const toggleFollow = async (follow_id:string,token:string) =>  {
 			Authorization: `Bearer ${token}`
 		}
 	})
-    localStorage.setItem('user_db',JSON.stringify(response.data.result));
 	return response.data;
 }
 

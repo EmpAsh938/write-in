@@ -312,12 +312,10 @@ const authSlice = createSlice({
       }
     })
     .addCase(followUser.fulfilled, (state,action) => {
-      if(typeof action.payload.result === 'object') {
-        const { token, _doc} = action.payload.result;
-        state.token = token;
-        state.user = _doc;
-        state.notifications.type = 'success';
-        state.notifications.message = action.payload.message;
+        if(typeof action.payload.result === 'object') {
+            state.userProfile = action.payload.result;
+            state.notifications.type = 'success';
+            state.notifications.message = action.payload.message;
       }
     })
     .addCase(followUser.rejected, (state,action) => {
@@ -350,7 +348,6 @@ const authSlice = createSlice({
         state.notifications.message = 'fetching user records';
     })
     .addCase(getUserProfile.fulfilled, (state,action) => {
-       console.log(action.payload); 
        if(typeof action.payload.result === 'object') {
           state.userProfile = action.payload.result;
         }
