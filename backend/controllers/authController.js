@@ -277,6 +277,27 @@ const accountInfoChange = asyncHandler(async (req, res) => {
     }
 })
 
+const basicInfo = asyncHandler(async (req, res) => {
+    const { bio, country, website } = req.body;
+    if(!bio && !country && !website) {
+        res.status(400);
+        throw new Error('missing parameters');
+    }
+    try {
+       let doc = await Auth.findOneAndUpdate({_id:id},{$set: {bio,country,website}}); 
+       let newtoken = await jwt.sign(doc.toJSON(),process.env.JWT_SECRET,{expiresIn:'1D'});
+        res.json({
+            message: 'basic info updated',
+            result: {
+                ...doc,
+                token:newtoken
+            }
+        })
+    } catch (error) {
+       throw new Error(error); 
+    }
+})
+
 const deleteAccount = asyncHandler(async (req, res) => {
     const decoded = jwt.decode(req.headers.authorization.split('Bearer')[1].trim());
     try {
@@ -363,5 +384,6 @@ module.exports = {
     deleteAccount, 
     passwordChange, 
     accountInfoChange,
-    getUserProfile
+    getUserProfile,
+    basicInfo
 };

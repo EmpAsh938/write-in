@@ -97,4 +97,14 @@ const userDetails = async (id:string) => {
     return response.data;
 }
 
-export { register, login, logout, bookmark, verify, passwordChange,removeAccount, emailChange, accountDetailsChange,toggleFollow, userDetails };
+const changeBasicInfo = async (bio:string,website:string,country:string,token:string) => {
+    const response = await axios.put('/auth/change/basic', {bio,website,country}, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+    localStorage.setItem('user_db', JSON.stringify(response.data.result));
+    return response.data;
+}
+
+export { register, login, logout, bookmark, verify, passwordChange,removeAccount, emailChange, accountDetailsChange,toggleFollow, userDetails, changeBasicInfo };

@@ -1,12 +1,14 @@
 import { ChangeEvent, useEffect, useState, MouseEvent } from 'react';
 
 import Navbar from '../components/Navbar';
-import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
-import { emailValidator } from '../utils/emailValidator';
-import { changeAccountInfo, changeEmail, changePassword, deleteAccount, notify } from '../app/features/auth/authSlice';
+import Country from '../components/Country';
 import UserImage from '../components/UserImage';
-import { uploadProfile } from '../app/features/auth/authSlice';
+
 import { tabHandler } from '../utils/tabHandler';
+import { emailValidator } from '../utils/emailValidator';
+import { basicInfoChange, uploadProfile } from '../app/features/auth/authSlice';
+import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
+import { changeAccountInfo, changeEmail, changePassword, deleteAccount, notify } from '../app/features/auth/authSlice';
 
 
 const Profile = () => {
@@ -16,6 +18,9 @@ const Profile = () => {
     const [mail, setMail] = useState<string | null>(user.email);
     const [newPassword, setNewPassword] = useState<string>('');
     const [oldPassword, setOldPassword] = useState<string>('');
+    const [country, setCountry] = useState<string>(user.country);
+    const [website, setWebsite] = useState<string>(user.website);
+    const [bio, setBio] = useState<string>(user.bio);
     const [activeTab, setActiveTab] = useState<string>('account');
 
     const dispatch = useAppDispatch();
@@ -42,6 +47,13 @@ const Profile = () => {
             dispatch(changeAccountInfo({fullname:name || '',username:uname || '',bio:'',token}));
         } else {
             dispatch(notify({type:'error',message:'user profile update failed'}));
+        }
+    }
+
+
+    const handleBasicInfo = () => {
+        if(!bio && !website && !country && token) {
+            dispatch(basicInfoChange({bio,website,country,token}));
         }
     }
 
@@ -77,23 +89,24 @@ const Profile = () => {
     return (
         <div className='bg-slate-100'>
             <Navbar />
-            <main className='max-w-lg mx-auto p-5 flex flex-col gap-8 bg-white'>
-                <section className='flex items-center justify-center flex-wrap gap-2'>
+            <main className='flex flex-col max-w-lg p-5 mx-auto bg-white gap-8'>
+                <section className='flex flex-wrap items-center justify-center gap-2'>
                     <button className='profile-tab-btn active' onClick={handleTabs} data-id='account'>Account</button>
+                    <button className='profile-tab-btn active' onClick={handleTabs} data-id='account'>Basic</button>
                     <button className='profile-tab-btn' onClick={handleTabs} data-id='security'>Security</button>
                 </section>
-                <section className='hidden flex-col gap-2 tabs' id='account'>
+                <section className='flex-col hidden gap-2 tabs' id='account'>
 
-                    <p className='text-gray-500 text-sm'>Your account summary is displayed here. You can change the account details as per your choice.</p>
+                    <p className='text-sm text-gray-500'>Your account summary is displayed here. You can change the account details as per your choice.</p>
                     <div className='flex flex-col gap-2'>
                         <h2 className='text-xl font-medium'>Your Fullname</h2>
-                        <input type="text" value={name || ''} onChange={e => setName(e.target.value)} className='outline-none border border-solid border-green-300 rounded px-2 py-1 text-sm' />
+                        <input type="text" value={name || ''} onChange={e => setName(e.target.value)} className='px-2 py-1 text-sm border border-green-300 border-solid rounded outline-none' />
                     </div>
                     <div className='flex flex-col gap-2'>
                         <h2 className='text-xl font-medium'>Your Username</h2>
-                        <input type="text" value={uname || ''} onChange={e => setUname(e.target.value)} className='outline-none border border-solid border-green-300 rounded px-2 py-1 text-sm' />
+                        <input type="text" value={uname || ''} onChange={e => setUname(e.target.value)} className='px-2 py-1 text-sm border border-green-300 border-solid rounded outline-none' />
                     </div>
-                    <button onClick={handleProfileChange} className='bg-green-500 px-10 text-white py-2 rounded-sm'>Change</button>
+                    <button onClick={handleProfileChange} className='px-10 py-2 text-white bg-green-500 rounded-sm'>Change</button>
                     <div className='flex flex-col gap-2'>
                         <h2 className='text-xl font-medium'>Photo</h2>
                         <div>
@@ -104,37 +117,52 @@ const Profile = () => {
                         </div>
                     </div>
                 </section>
-                <section className='hidden flex-col gap-2 tabs' id='security'>
-                    <p className='text-gray-500 text-sm'>Security details are enlisted below. Unintentional and unwanted changes might risk to permanently lost of an account.</p>
+                <section className='flex-col hidden gap-2 tabs' id='basic'>
+                    <p>User basic information can be edited here.</p>
+                    <div>
+                        <h2>Bio</h2>
+                        <input type='text' value={bio} onChange={e=>setBio(e.target.value)}/>
+                    </div>
+                    <Country country={country} setCountry={setCountry}/>
+                    <div>
+                        <h2>Website</h2>
+                        <input type="text" value={website} onChange={e=>setWebsite(e.target.value)}/>
+                    </div>
+                    <div>
+                        <button onClick={handleBasicInfo}>Save Changes</button>
+                    </div>
+                </section>
+                <section className='flex-col hidden gap-2 tabs' id='security'>
+                    <p className='text-sm text-gray-500'>Security details are enlisted below. Unintentional and unwanted changes might risk to permanently lost of an account.</p>
                     <div className='flex flex-col gap-2'>
                         <h2 className='text-xl font-medium'>Change Email</h2>
-                        <p className='text-gray-500 text-sm'>Change Your email here. Old Email will be removed and new email will be assosciated to you.</p>
+                        <p className='text-sm text-gray-500'>Change Your email here. Old Email will be removed and new email will be assosciated to you.</p>
                         <div className='flex flex-col gap-1'>
                             <label htmlFor="email">Enter Email</label>
-                            <input value={mail || ''} onChange={e => setMail(e.target.value)} type="email" id="email" className='outline-none border border-solid border-green-300 rounded px-2 py-1 text-sm' />
+                            <input value={mail || ''} onChange={e => setMail(e.target.value)} type="email" id="email" className='px-2 py-1 text-sm border border-green-300 border-solid rounded outline-none' />
                         </div>
                         
-                        <button onClick={handleEmailChange} className='bg-green-500 px-10 text-white py-2 rounded-sm'>Change</button>
+                        <button onClick={handleEmailChange} className='px-10 py-2 text-white bg-green-500 rounded-sm'>Change</button>
                     </div>
                     <div className='flex flex-col gap-2'>
                         <h2 className='text-xl font-medium'>Change Password</h2>
-                        <p className='text-gray-500 text-sm'>Changing to new password is available here. New Password will be created for your account</p>
+                        <p className='text-sm text-gray-500'>Changing to new password is available here. New Password will be created for your account</p>
                         <div className='flex flex-col gap-1'>
                             <label htmlFor="oldpassword">Enter Old Password</label>
-                            <input value={oldPassword} onChange={e => setOldPassword(e.target.value)} type="password" id="oldpassword" className='outline-none border border-solid border-green-300 rounded px-2 py-1 text-sm' />
+                            <input value={oldPassword} onChange={e => setOldPassword(e.target.value)} type="password" id="oldpassword" className='px-2 py-1 text-sm border border-green-300 border-solid rounded outline-none' />
                         </div>
                         <div className='flex flex-col gap-1'>
                             <label htmlFor="newpassword">Enter New Password</label>
-                            <input value={newPassword} onChange={e => setNewPassword(e.target.value)} type="password" id="newpassword" className='outline-none border border-solid border-green-300 rounded px-2 py-1 text-sm' />
+                            <input value={newPassword} onChange={e => setNewPassword(e.target.value)} type="password" id="newpassword" className='px-2 py-1 text-sm border border-green-300 border-solid rounded outline-none' />
                         </div>
-                        <button className='bg-green-500 px-10 text-white py-2 rounded-sm' onClick={handlePasswordChange}>Change</button>
+                        <button className='px-10 py-2 text-white bg-green-500 rounded-sm' onClick={handlePasswordChange}>Change</button>
                     </div>
                     <div className='flex flex-col gap-2'>
                         <h2 className='text-xl font-medium'>
                             Delete Your Account
                         </h2>
-                        <p className='text-gray-500 text-sm'>Your account will be permanently deleted along with all the blogs you have posted since you last created your account. You won't be able to recover your account back again once it's deleted. Do it on your own risk.</p>
-                        <button onClick={handleDeleteUser} className='bg-red-500 w-fit px-10 text-white py-2 rounded-sm'>Delete</button>
+                        <p className='text-sm text-gray-500'>Your account will be permanently deleted along with all the blogs you have posted since you last created your account. You won't be able to recover your account back again once it's deleted. Do it on your own risk.</p>
+                        <button onClick={handleDeleteUser} className='px-10 py-2 text-white bg-red-500 rounded-sm w-fit'>Delete</button>
                     </div>
 
                 </section>

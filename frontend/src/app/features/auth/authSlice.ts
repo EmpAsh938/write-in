@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-import { register, login, logout, verify, bookmark, passwordChange, removeAccount, accountDetailsChange, emailChange, toggleFollow, userDetails } from './authService'
+import { register, login, logout, verify, bookmark, passwordChange, removeAccount, accountDetailsChange, changeBasicInfo, emailChange, toggleFollow, userDetails } from './authService'
 import { RegisterAuthState, LoginAuthState, NotificationsType, UserState } from '../../../types/authTypes'
 import { profileUpload } from '../upload/uploadService';
 
@@ -101,6 +101,17 @@ export const deleteAccount = createAsyncThunk(
   }
  }
 )
+
+export const basicInfoChange = createAsyncThunk(
+    'auth/account/change/basic',
+    async ({bio,website,country,token}:{bio:string,website:string,country:string,token:string},thunkAPI) => {
+        try {
+           return (await changeBasicInfo(bio,website,country,token));
+        } catch (error:any) {
+            const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString() || '';
+            return thunkAPI.rejectWithValue(message);
+        }
+    })
 
 export const changeEmail = createAsyncThunk(
 	'auth/account/change/email',
@@ -353,6 +364,18 @@ const authSlice = createSlice({
         }
     })
     .addCase(getUserProfile.rejected, (state,action) => {
+        if(typeof action.payload === 'string') {
+            state.notifications.type = 'error';
+            state.notifications.message = action.payload;
+        }
+    })
+    .addCase(basicInfoChange.fulfilled, (state, action) => {
+        if(typeof action.payload.result === 'object') {
+            state.token = action.payload.result.token;
+            state.user = action.payload.result._doc;
+        }
+    })
+    .addCase(basicInfoChange.rejected, (state,action) => {
         if(typeof action.payload === 'string') {
             state.notifications.type = 'error';
             state.notifications.message = action.payload;

@@ -12,7 +12,8 @@ const {
     deleteAccount,
     accountInfoChange,
     followUser,
-    getUserProfile, 
+    getUserProfile,
+    basicInfo, 
 } = require('../controllers/authController');
 
 const authRouter = express.Router();
@@ -26,6 +27,7 @@ authRouter.get('/verify', verifyUser , validateUser);
 authRouter.put('/change/email', verifyUser, emailChange);
 authRouter.put('/change/password', verifyUser, passwordChange);
 authRouter.put('/change/account', verifyUser, accountInfoChange);
+authRouter.put('/change/basic', verifyUser, basicInfo);
 authRouter.delete('/change/account', verifyUser, deleteAccount);
 authRouter.get('/user/:id', getUserProfile);
 
