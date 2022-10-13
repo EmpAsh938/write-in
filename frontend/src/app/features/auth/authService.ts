@@ -84,8 +84,8 @@ const accountDetailsChange = async (fullname:string,username:string,bio:string,t
 	return response.data;
 }
 const toggleFollow = async (follow_id:string,token:string) =>  {
-	const response = await axios.get(`/auth/follow/?follow_id:${follow_id}`, {
-		headers: {
+    const response = await axios.get(`/auth/follow?follow_id=${follow_id}`, {
+        headers: {
 			Authorization: `Bearer ${token}`
 		}
 	})

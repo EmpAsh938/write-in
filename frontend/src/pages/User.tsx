@@ -7,7 +7,7 @@ import HomeBlogs from '../components/HomeBlogs'
 import UserImage from '../components/UserImage'
 
 import { tabHandler } from '../utils/tabHandler'
-import { getUserProfile } from '../app/features/auth/authSlice'
+import { getUserProfile, followUser } from '../app/features/auth/authSlice'
 import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux'
 import {userBlogsList} from '../app/features/post/postSlice'
 
@@ -30,12 +30,8 @@ const User = () => {
     const handleFollow = () => {
         if(token) 
         {
-            if(userProfile.followers.includes(user._id)) {
-            // unfollow 
-            } else {
-                // follow
-            }
-    }
+            dispatch(followUser({token,follow_id:user._id}));
+        }
 
     }
     useEffect(() => {
