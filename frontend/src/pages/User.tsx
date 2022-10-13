@@ -22,13 +22,10 @@ const User = () => {
 
     const handleBlogsTab = (event:MouseEvent<HTMLButtonElement>) => {
         tabHandler(event,'user-blog-tab');
-    }
-
-    const handleProfileTab = (event:MouseEvent<HTMLButtonElement>) => {
-        tabHandler(event,'user-profile-tab');
         let buttontype = event.currentTarget.dataset.type;
         dispatch(userBlogsList({pages:1,rows:5,id:user._id,filter:buttontype||''}));
     }
+
     const handleFollow = () => {
         if(token) 
         {
@@ -41,7 +38,7 @@ const User = () => {
             dispatch(getUserProfile({id})); 
             dispatch(userBlogsList({pages:1,rows:5,id,filter:'latest'}));
         }
-    }, [])
+    }, [id,dispatch])
     if(Object.keys(userProfile).length === 0) return <h2>Loading...</h2>
     
   return (
