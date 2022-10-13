@@ -313,24 +313,18 @@ const followUser = asyncHandler(async (req, res) => {
         if(doc) {
             // remove him
             doc = await Auth.findOneAndUpdate({_id:follow_id}, {$pull: {followers: {$eq: decoded._id}}});
-            let newtoken = await jwt.sign(doc.toJSON(),process.env.JWT_SECRET,{expiresIn:'1D'});
+            doc = await Auth.findOne({_id:follow_id});
             res.json({
                 message:'unfollow success',
-                result: {
-                    ...doc,
-                    token:newtoken
-                }
+                result: doc 
             })
         }
         // add him
         doc = await Auth.findOneAndUpdate({_id:follow_id}, {$push: {followers: decoded._id}});
-        let newtoken = await jwt.sign(doc.toJSON(),process.env.JWT_SECRET,{expiresIn:'1D'});
+        doc = await Auth.findOne({_id:follow_id});
         res.json({
             message:'follow success',
-            result: {
-                ...doc,
-                token:newtoken
-            }
+            result: doc 
         })
     } catch (error) {
         throw new Error(error);
