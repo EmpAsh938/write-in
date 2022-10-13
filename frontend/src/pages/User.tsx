@@ -26,6 +26,8 @@ const User = () => {
 
     const handleProfileTab = (event:MouseEvent<HTMLButtonElement>) => {
         tabHandler(event,'user-profile-tab');
+        let buttontype = event.currentTarget.dataset.type;
+        dispatch(userBlogsList({pages:1,rows:5,id:user._id,filter:buttontype||''}));
     }
     const handleFollow = () => {
         if(token) 
@@ -79,9 +81,9 @@ const User = () => {
                 <div className='flex items-center justify-between border-solid border-bottom border-color-slate-400'>
                     <h2>{userProfile.fullname} blogs</h2>
                     <div className='flex items-center justify-start gap-2'>
-                        <button onClick={handleBlogsTab} className='user-blog-tab'>Most Recent</button>
-                        <button onClick={handleBlogsTab} className='user-blog-tab'>Oldest</button>
-                        <button onClick={handleBlogsTab} className='user-blog-tab'>Most Liked</button>
+                        <button onClick={handleBlogsTab} className='user-blog-tab' data-type='latest'>Most Recent</button>
+                        <button onClick={handleBlogsTab} className='user-blog-tab' date-type='oldest'>Oldest</button>
+                        <button onClick={handleBlogsTab} className='user-blog-tab' data-type='liked'>Most Liked</button>
                     </div>
                 </div>
                 <div className='flex flex-col gap-2'>
