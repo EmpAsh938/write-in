@@ -197,6 +197,7 @@ const getBlogSingle = asyncHandler(async (req, res) => {
         res.status(400);
         throw new Error('id parameter is missing');
     }
+    // Warning: check if the token is valid
     let get_views_id;
     if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
         let get_token = req.headers.authorization.split('Bearer')[1].trim();
@@ -219,7 +220,7 @@ const getBlogSingle = asyncHandler(async (req, res) => {
             let result = await Post.findOne({_id:id, views: {$eq: get_views_id}});
             // if not add him
             if(!result) {
-                result = await Post.findByIdAndUpdate(id, {$push: {views: get_views_id}});
+                await Post.findByIdAndUpdate(id, {$push: {views: get_views_id}});
             }
         }
         res.json({

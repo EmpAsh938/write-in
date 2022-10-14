@@ -36,6 +36,12 @@ const postSchema = new Schema(
                 type: Schema.Types.ObjectId,
                 ref: 'Comment'
             }
+        ],
+        views: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'Auth'
+            }
         ]
     },
     {
