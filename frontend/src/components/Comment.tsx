@@ -64,7 +64,7 @@ const Comment = ({  _id, body, author, reply}: CommentType) => {
 		<div className=''>
 			{/* comments  */}
 			<div className='flex items-center justify-start text-sm gap-2'>
-				<UserImage profileImage={profileImage} fullname={fullname} />
+				<UserImage profileImage={profileImage} fullname={fullname} height={40} width={40} />
 				<h3>{fullname}</h3>
 			</div>
             {

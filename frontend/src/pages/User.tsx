@@ -47,7 +47,7 @@ const User = () => {
         <main className='flex flex-col max-w-xl m-auto gap-4'>
             <section className='flex items-center justify-start gap-2'>
                 <div className='flex flex-col gap-2'>
-                    <UserImage profileImage={userProfile.profileImage} fullname={userProfile.fullname} width={300} height={300} />
+                    <UserImage profileImage={userProfile.profileImage} fullname={userProfile.fullname} width={50} height={50} />
                     <div className='p-2'>
                         <h3 className='font-normal '>{userProfile.followers.length} followers</h3>
                         <button className='px-2 py-1 text-white bg-green-500 rounded' onClick={handleFollow}>{(userProfile.followers.includes(user._id)) ? 'Unfollow' : 'follow'}</button>

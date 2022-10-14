@@ -35,7 +35,7 @@ const Reply = ({ _id, author, body }:ReplyType) => {
   return (
 	  <div className='pl-4'>
       <div className='flex items-center justify-start text-sm gap-2'>
-          <UserImage profileImage={profileImage} fullname={fullname} />
+          <UserImage profileImage={profileImage} fullname={fullname} height={30} width={30} />
           <h3>{fullname}</h3>
       </div>
       {isEditing ? 

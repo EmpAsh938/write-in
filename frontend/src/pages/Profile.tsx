@@ -111,7 +111,7 @@ const Profile = () => {
                     <div className='flex flex-col gap-2'>
                         <h2 className='text-xl font-medium'>Photo</h2>
                         <div>
-                            <UserImage profileImage={user.profileImage} fullname={user.fullname} />
+                            <UserImage profileImage={user.profileImage} fullname={user.fullname} width={50} height={50} />
                             <div className='relative'>
                                 <input onChange={handleFileChange} type='file' name='photos' accept='image/*' />
                             </div>

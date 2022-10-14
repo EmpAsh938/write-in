@@ -30,26 +30,26 @@ const Navbar = () => {
     dispatch(logoutUser());
   }
   return (
-    <header className='border border-solid border-green-200 bg-white'>
-      <nav className='max-w-7xl mx-auto flex justify-between items-center p-2'>
+    <header className='bg-white border border-green-200 border-solid'>
+      <nav className='flex items-center justify-between p-2 mx-auto max-w-7xl'>
         <div>
           <Link to='/' className=''>
             <h2 className='w-fit py-3 px-2 rounded text-center bg-slate-900 text-white font-bold uppercase text-[.9rem]'>Write In</h2>
           </Link>
         </div>
-        <form onSubmit={handleSearch} className='max-w-sm flex-1 flex border border-solid border-green-200 p-1 rounded-sm'>
+        <form onSubmit={handleSearch} className='flex flex-1 max-w-sm p-1 border border-green-200 border-solid rounded-sm'>
           <input value={searchquery} onChange={e=>setSearchQuery(e.target.value)} type='text' placeholder='Search blogs here(>2 letters)' className='flex-1 outline-none'/>
           <button className='text-green-700 opacity-50' onClick={handleSearch}>
             <FaSearch />
           </button>
         </form>
         <div>
-          <div className='hidden md:flex gap-2 items-center'>
+          <div className='items-center hidden md:flex gap-2'>
           {token ? (
             <>
-            <Link to='/new' className='bg-green-100 rounded-sm text-sm font-medium text-green-800 border border-solid border-green-500 px-4 py-2'>Create Post</Link>
+            <Link to='/new' className='px-4 py-2 text-sm font-medium text-green-800 bg-green-100 border border-green-500 border-solid rounded-sm'>Create Post</Link>
               <div className='relative cursor-pointer' onClick={()=>setToggleModal(!toggleModal)}>
-              <UserImage profileImage={user.profileImage} fullname={user.fullname} />
+              <UserImage profileImage={user.profileImage} fullname={user.fullname} width={45} height={45} />
               {toggleModal && <div className='absolute w-[150px] top-[100%] right-[0%] text-sm bg-gray-100 border border-solid border-green-100 flex flex-col gap-2'>
                 <div className='p-1'>
                   <h3 className='font-medium'>{user.fullname}</h3>
@@ -68,12 +68,12 @@ const Navbar = () => {
           </>
           ) : (
             <>
-              <Link to='/login' className='font-medium bg-green-500 text-sm text-white px-3 py-1 rounded'>Login</Link>
-              <Link to='/register' className='font-medium bg-green-500 text-sm text-white px-3 py-1 rounded'>Register</Link>           
+              <Link to='/login' className='px-3 py-1 text-sm font-medium text-white bg-green-500 rounded'>Login</Link>
+              <Link to='/register' className='px-3 py-1 text-sm font-medium text-white bg-green-500 rounded'>Register</Link>           
             </>
           )}
           </div>
-          <div className='md:hidden px-2'>
+          <div className='px-2 md:hidden'>
             <FaBars className='text-lg' onClick={()=>setIsActive(true)} />
             {isActive && <NavModal setIsActive={setIsActive} handleLogout={handleLogout}/>}
           </div>

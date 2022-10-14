@@ -77,15 +77,15 @@ const SingleBlog = () => {
         <>
         <Navbar />
         <main className='p-10'>
-            <section className='max-w-5xl min-h-screen mx-auto p-4 border border-solid border-green-300 rounded flex flex-col gap-3'>
+            <section className='flex flex-col max-w-5xl min-h-screen p-4 mx-auto border border-green-300 border-solid rounded gap-3'>
                 <div className='flex items-center justify-between'>
                     <div>
                         <div>
-                            <UserImage profileImage={author.profileImage} fullname={author.fullname} />
+                            <UserImage profileImage={author.profileImage} fullname={author.fullname} width={45} height={45} />
                         </div>
                         <div className='flex flex-col gap-1'>
                             <h3 className='font-medium'>{author.fullname}</h3>
-                            <span className='text-slate-500 text-sm'>{`Created at ${getMonth(createdAt)} ${new Date(createdAt).getDate()} ${new Date(createdAt).getFullYear()}`}</span>
+                            <span className='text-sm text-slate-500'>{`Created at ${getMonth(createdAt)} ${new Date(createdAt).getDate()} ${new Date(createdAt).getFullYear()}`}</span>
                         </div>
                     </div>
                     <div className='flex items-center gap-2'>
@@ -109,10 +109,10 @@ const SingleBlog = () => {
                     <div>
                         <h2 className='text-lg'>Comments</h2>
                     </div>
-                    <div className='flex justify-start items-center gap-2'>
-                        <UserImage profileImage={''} fullname={''} />
-                        <input value={commentText} onChange={e=>setCommentText(e.target.value)} className='text-sm p-2 outline-none border border-solid border-gray-300' type='text' placeholder='type here' />
-                        <button onClick={handleSaveComment} className='bg-green-500 text-white rounded px-2 py-1'>Comment</button>
+                    <div className='flex items-center justify-start gap-2'>
+                        <UserImage profileImage={''} fullname={''} width={40} height={40} />
+                        <input value={commentText} onChange={e=>setCommentText(e.target.value)} className='p-2 text-sm border border-gray-300 border-solid outline-none' type='text' placeholder='type here' />
+                        <button onClick={handleSaveComment} className='px-2 py-1 text-white bg-green-500 rounded'>Comment</button>
                     </div>
                     <div className=''>
                        {comments.length === 0 ? (<p>no comments to display</p>) : (
