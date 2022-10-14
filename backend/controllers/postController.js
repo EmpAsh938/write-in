@@ -46,17 +46,16 @@ const listBlogsPublic = asyncHandler(async (req, res) => {
     try {
         const doc = await Post.find({ status:{$eq:'published'} }).populate('author').sort({ createdAt: -1 }).skip(rows * (pages - 1)).limit(rows).exec();
         if (doc.length === 0) {
-            res.json({
+            return res.json({
                 message: "items not found: either load more documents or lower the page limit",
                 result: []
             })
-        } else {
-
-            res.json({
-                message: "succesfully retreived",
-                result: doc
-            })
         }
+        res.json({
+            message: "succesfully retreived",
+            result: doc
+        })
+        
     } catch (error) {
         res.status(400);
         throw new Error(error);
@@ -198,22 +197,35 @@ const getBlogSingle = asyncHandler(async (req, res) => {
         res.status(400);
         throw new Error('id parameter is missing');
     }
-
+    let get_views_id;
+    if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+        let get_token = req.headers.authorization.split('Bearer')[1].trim();
+        if(get_token) {
+            let decoded = jwt.decode(get_token);
+            get_views_id = decoded._id;
+        }
+    }
     try {
+        // checking if post exits
         const doc = await Post.findById(id).populate('author').exec();
         if (!doc) {
-            res.json({
+            return res.json({
                 message: 'not found',
                 result: []
             })
         }
-        else {
-
-            res.json({
-                message: 'successfully retrieved',
-                result: doc
-            })
+        if(get_views_id) {
+            // find if that viewer exists
+            let result = await Post.findOne({_id:id, views: {$eq: get_views_id}});
+            // if not add him
+            if(!result) {
+                result = await Post.findByIdAndUpdate(id, {$push: {views: get_views_id}});
+            }
         }
+        res.json({
+            message: 'successfully retrieved',
+            result: doc
+        })
     } catch (error) {
         res.status(400);
         throw new Error(error);
