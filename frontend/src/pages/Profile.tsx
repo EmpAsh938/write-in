@@ -52,7 +52,7 @@ const Profile = () => {
 
 
     const handleBasicInfo = () => {
-        if(!bio && !website && !country && token) {
+        if((bio || website || country) && token) {
             dispatch(basicInfoChange({bio,website,country,token}));
         }
     }
