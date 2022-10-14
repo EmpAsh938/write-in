@@ -19,7 +19,7 @@ const Country = ({country, setCountry}:Props) => {
                 item.setAttribute('selected', 'selected');
             }
         })
-    }, [])
+    }, [country])
     return (
         <div className="flex flex-col gap-1">
             <h2>Country</h2>

@@ -12,7 +12,9 @@ const UserImage = ({ profileImage, fullname, width, height }:Props) => {
       profileImage ? (
         <img src={profileImage} alt={fullname || 'user photo'} className={`rounded-full object-contain w-[${width}px] h-[${height}px]`} referrerPolicy='no-referrer' />
       ) : (
-        <h2 className='w-[`${width}px`] h-[`${height}px`] rounded-full text-lg font-medium text-center bg-green-600 pt-2 text-white uppercase'>{fullname?.charAt((0)) || 'U'}</h2>
+        <div className={`w-[40px] h-[40px] bg-green-400 rounded-full grid place-items-center`}>
+            <h2 className='uppercase'>{fullname?.charAt(0) || 'U'}</h2>
+        </div>
       )
     }
     </>
