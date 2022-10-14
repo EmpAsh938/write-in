@@ -81,6 +81,7 @@ const Profile = () => {
 
     
     useEffect(() => {
+    
         document.querySelectorAll<HTMLElement>('.tabs').forEach(tabs => {
             if(tabs.getAttribute('id') === activeTab) tabs.style.display = 'flex'
             else tabs.style.display = 'none';
@@ -92,7 +93,7 @@ const Profile = () => {
             <main className='flex flex-col max-w-lg p-5 mx-auto bg-white gap-8'>
                 <section className='flex flex-wrap items-center justify-center gap-2'>
                     <button className='profile-tab-btn active' onClick={handleTabs} data-id='account'>Account</button>
-                    <button className='profile-tab-btn active' onClick={handleTabs} data-id='account'>Basic</button>
+                    <button className='profile-tab-btn' onClick={handleTabs} data-id='basic'>Basic</button>
                     <button className='profile-tab-btn' onClick={handleTabs} data-id='security'>Security</button>
                 </section>
                 <section className='flex-col hidden gap-2 tabs' id='account'>
@@ -118,18 +119,18 @@ const Profile = () => {
                     </div>
                 </section>
                 <section className='flex-col hidden gap-2 tabs' id='basic'>
-                    <p>User basic information can be edited here.</p>
-                    <div>
+                    <p className='text-sm text-gray-500'>User basic information can be edited here.</p>
+                    <div className='flex flex-col gap-1'>
                         <h2>Bio</h2>
-                        <input type='text' value={bio} onChange={e=>setBio(e.target.value)}/>
+                        <input type='text' className='p-1 py-3 border border-gray-300 border-solid' value={bio} onChange={e=>setBio(e.target.value)}/>
                     </div>
                     <Country country={country} setCountry={setCountry}/>
-                    <div>
+                    <div className='flex flex-col gap-1'>
                         <h2>Website</h2>
-                        <input type="text" value={website} onChange={e=>setWebsite(e.target.value)}/>
+                        <input className='p-1 border border-gray-300 border-solid' type="text" value={website} onChange={e=>setWebsite(e.target.value)}/>
                     </div>
-                    <div>
-                        <button onClick={handleBasicInfo}>Save Changes</button>
+                    <div className='mt-3'>
+                        <button className='w-[200px] block p-2 mx-auto text-white bg-green-500' onClick={handleBasicInfo}>Save Changes</button>
                     </div>
                 </section>
                 <section className='flex-col hidden gap-2 tabs' id='security'>

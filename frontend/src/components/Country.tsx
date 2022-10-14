@@ -1,14 +1,30 @@
-import {Dispatch, SetStateAction} from "react";
+import { useEffect, ChangeEvent, Dispatch, SetStateAction} from "react";
 
 type Props = {
     country: string,
     setCountry: Dispatch<SetStateAction<string>>
 }
 const Country = ({country, setCountry}:Props) => {
+    const handleChange = (event:ChangeEvent<HTMLSelectElement>) => {
+        let newCountry = event.target.value;
+        if(newCountry !== country && newCountry !== "none") {
+            setCountry(newCountry);
+        }
+    }
+
+    useEffect(() => {
+        let elements: HTMLOptionElement[] = Array.from(document.querySelectorAll('option'));
+        elements.forEach(item => {
+            if(country.toLowerCase() === item.value.toLowerCase() || (country === '' && item.value === "none")) {
+                item.setAttribute('selected', 'selected');
+            }
+        })
+    }, [])
     return (
-        <div>
-            <select id="country" name="country">
-                <option>Select Country</option>
+        <div className="flex flex-col gap-1">
+            <h2>Country</h2>
+            <select id="country" className="w-[300px] p-1 text-sm" onChange={handleChange} name="country">
+                <option value="none">Select Country</option>
                 <option value="Afghanistan">Afghanistan</option>
                 <option value="Aland Islands">Aland Islands</option>
                 <option value="Albania">Albania</option>
