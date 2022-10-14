@@ -28,7 +28,7 @@ const NavModal = ({ setIsActive, handleLogout }: Props) => {
                 <Link to='/new' className=''>Create Post</Link>
                 <UserImage profileImage={user.profileImage} fullname={user.fullname} height={45} width={45} />
                 <div className='p-1 flex flex-col gap-[2px]'>
-                  <h3 className='font-medium'>{user.fullname}</h3>
+                  <h3 className='font-medium capitalize'>{user.fullname}</h3>
                   <p>{user.email}</p>
                 </div>
                 <div className='flex flex-col gap-[2px]'>

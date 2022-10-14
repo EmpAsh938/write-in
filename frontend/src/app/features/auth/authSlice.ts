@@ -370,6 +370,8 @@ const authSlice = createSlice({
         }
     })
     .addCase(basicInfoChange.fulfilled, (state, action) => {
+        state.notifications.type = 'success';
+        state.notifications.message = action.payload.message;
         if(typeof action.payload.result === 'object') {
             state.token = action.payload.result.token;
             state.user = action.payload.result._doc;

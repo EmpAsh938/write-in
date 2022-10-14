@@ -283,8 +283,10 @@ const basicInfo = asyncHandler(async (req, res) => {
         res.status(400);
         throw new Error('missing parameters');
     }
+    const decoded = jwt.decode(req.headers.authorization.split('Bearer')[1].trim());
     try {
-       let doc = await Auth.findOneAndUpdate({_id:id},{$set: {bio,country,website}}); 
+       let doc = await Auth.findOneAndUpdate({_id:decoded._id},{$set: {bio,country,website}}); 
+        doc = await Auth.findOne({_id:decoded._id});
        let newtoken = await jwt.sign(doc.toJSON(),process.env.JWT_SECRET,{expiresIn:'1D'});
         res.json({
             message: 'basic info updated',
@@ -323,6 +325,10 @@ const followUser = asyncHandler(async (req, res) => {
         throw new Error('follow_id required');
     }
     const decoded = jwt.decode(req.headers.authorization.split('Bearer')[1].trim());
+    if(follow_id === decoded._id) {
+        res.status(400);
+        throw new Error('cannot follow yourself');
+    }
     try {
         let doc = await Auth.findOne({_id:follow_id});
         if(!doc) {
@@ -330,12 +336,12 @@ const followUser = asyncHandler(async (req, res) => {
             throw new Error('user not found');
         }
         // check if he is already being followed
-        doc = await Auth.findOne({_id:follow_id}, {followers: {$eq: decoded._id}});
+        doc = await Auth.findOne({_id:follow_id, followers: {$eq: decoded._id}});
         if(doc) {
             // remove him
             doc = await Auth.findOneAndUpdate({_id:follow_id}, {$pull: {followers: {$eq: decoded._id}}});
             doc = await Auth.findOne({_id:follow_id});
-            res.json({
+            return res.json({
                 message:'unfollow success',
                 result: doc 
             })
