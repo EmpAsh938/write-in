@@ -39,7 +39,6 @@ const User = () => {
             dispatch(userBlogsList({pages:1,rows:5,id,filter:'latest'}));
         }
     }, [id,dispatch])
-    if(Object.keys(userProfile).length === 0) return <h2>Loading...</h2>
     
   return (
     <>
