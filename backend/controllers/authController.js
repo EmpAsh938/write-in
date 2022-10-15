@@ -308,7 +308,21 @@ const deleteAccount = asyncHandler(async (req, res) => {
             res.status(401);
             throw new Error('user not authorized');
         }
-        doc = await Post.deleteMany({author: decoded._id}).exec();
+        // doc = await Post.deleteMany({author: decoded._id}).exec();
+        doc = await Post.find({author:decoded._id});
+        if(doc.length > 0) {
+            for(const post of doc){
+                let newdoc = await Comment.find({post:post._id.valueOf()});
+                if(newdoc.length > 0) {
+                    for(const comment of newdoc){
+                        // delete comments
+                        await Comment.findOneAndDelete({post:comment._id.valueOf()});
+                        // delete replies
+                        await Reply.deleteMany({comment:post.comment.valueOf()});
+                    }
+                }
+            }
+        }
         res.json({
             success: 'account deleted',
             result: []
