@@ -4,6 +4,8 @@ const asyncHandler = require('express-async-handler');
 
 const Auth = require('../models/authModel');
 const Post = require('../models/postModel');
+const Comment = require('../models/commentModel');
+const Reply = require('../models/replyModel');
 const { validPassword } = require('../utils/validPassword');
 
 const loginUser = asyncHandler(async (req, res) => {
@@ -303,22 +305,24 @@ const basicInfo = asyncHandler(async (req, res) => {
 const deleteAccount = asyncHandler(async (req, res) => {
     const decoded = jwt.decode(req.headers.authorization.split('Bearer')[1].trim());
     try {
-        let doc = await Auth.findOneAndDelete({_id:decoded._id}).exec();
+        // delete user
+        let doc = await Auth.findOneAndDelete({_id:decoded._id});
         if(!doc) {
             res.status(401);
             throw new Error('user not authorized');
         }
-        // doc = await Post.deleteMany({author: decoded._id}).exec();
         doc = await Post.find({author:decoded._id});
         if(doc.length > 0) {
             for(const post of doc){
+                // delete post
+                await Post.findOneAndDelete({_id:post._id});
                 let newdoc = await Comment.find({post:post._id.valueOf()});
                 if(newdoc.length > 0) {
                     for(const comment of newdoc){
                         // delete comments
-                        await Comment.findOneAndDelete({post:comment._id.valueOf()});
+                        await Comment.findOneAndDelete({_id:comment._id.valueOf()});
                         // delete replies
-                        await Reply.deleteMany({comment:post.comment.valueOf()});
+                        await Reply.deleteMany({comment:comment._id.valueOf()});
                     }
                 }
             }
