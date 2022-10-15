@@ -194,13 +194,13 @@ const commentSlice = createSlice({
 			state.notifications.type = 'error';
 			state.notifications.message = 'comment failed to add';
 		})
-		.addCase(newReply.fulfilled, (state, action:PayloadAction<{message:string,result:ReplyType}>) => {
+		.addCase(newReply.fulfilled, (state, action) => {
 			state.notifications.type = 'success';
 			state.notifications.message = action.payload.message;
-            if(action.payload.result) {
+            if(Array.isArray(action.payload.result) && action.payload.result.length > 0) {
                 state.comments.forEach(item => {
-                    if(item._id === action.payload.result.comment) {
-                        item.reply = [...item.reply, action.payload.result];
+                    if(item._id === action.payload.result[0].comment) {
+                        item.reply = action.payload.result;
                     }
                 })
             }

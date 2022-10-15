@@ -32,9 +32,10 @@ const newReply = asyncHandler(async (req, res) => {
         if(!result) {
             throw new Error('can\'t create new reply');
         } 
+        result = await Reply.find({comment:comment_id}).populate('author');
         res.json({
             message: 'successfully created',
-            result:doc
+            result
         })
     } catch (error) {
         throw new Error(error);
@@ -83,7 +84,7 @@ const editReply = asyncHandler(async (req, res) => {
             throw new Error('user not authorized');
         }
 	    result = await Reply.findOneAndUpdate({_id:id},{$set: {body}});
-	    result = await Reply.findOne({_id:id});
+	    result = await Reply.findOne({_id:id}).populate('author');
         res.json({
             message: 'updated successfully',
             result

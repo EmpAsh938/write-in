@@ -33,10 +33,10 @@ const newComment = asyncHandler(async (req, res) => {
         if(!result) {
             throw new Error('comment cannot be saved');
         }
-        result = await Post.findOne({id:post_id}).populate('comments');
+        result = await Comment.findOne({id:post_id}).populate('author');
         res.json({
             message: 'comment created',
-            result: result.comments
+            result
         })
     } catch (error) {
         throw new Error(error);
@@ -58,7 +58,7 @@ const editComment = asyncHandler(async (req, res) => {
             throw new Error('user not authorized');
         }
 	    result = await Comment.findOneAndUpdate({_id:id},{$set: {body}});
-	    result = await Comment.findOne({_id:id});
+	    result = await Comment.findOne({_id:id}).populate('author');
         res.json({
             message: 'updated successfully',
             result
