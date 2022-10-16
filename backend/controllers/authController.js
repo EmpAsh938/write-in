@@ -101,9 +101,13 @@ const bookmarkPost = asyncHandler(async (req, res) => {
         if(doc) {
             doc = await Auth.findOneAndUpdate({_id:decoded._id}, {$pull: {bookmarks: {$eq: id}}}).exec();
             doc = await Auth.findOne({_id:decoded._id}).exec();
+            let token = await jwt.sign(doc.toJSON(),process.env.JWT_SECRET, { expiresIn: "1D" });
             return res.json({
                 message: 'bookmark removed',
-                result: doc
+                result: {
+                    token,
+                    ...doc
+                } 
             })
         }
         doc = await Auth.findByIdAndUpdate(decoded._id, {$push: {'bookmarks': id}}).exec();
@@ -112,9 +116,13 @@ const bookmarkPost = asyncHandler(async (req, res) => {
             throw new Error('not found');
         }
         doc = await Auth.findOne({_id:decoded._id}).exec();
+        let token = await jwt.sign(doc.toJSON(),process.env.JWT_SECRET, { expiresIn: "1D" });
         res.json({
             message: 'bookmarked',
-            result: doc
+            result:{
+                token,
+                ...doc
+            } 
         })
     } catch (error) {
         throw new Error(error);

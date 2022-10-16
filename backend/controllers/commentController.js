@@ -33,7 +33,7 @@ const newComment = asyncHandler(async (req, res) => {
         if(!result) {
             throw new Error('comment cannot be saved');
         }
-        result = await Comment.findOne({id:post_id}).populate('author');
+        result = await Comment.find({post:post_id}).populate('author');
         res.json({
             message: 'comment created',
             result
