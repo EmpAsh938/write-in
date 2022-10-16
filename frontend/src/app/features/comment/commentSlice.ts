@@ -1,7 +1,7 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { NotificationsType } from '../../../types/authTypes';
-import { CommentType, ReplyType } from '../../../types/commentTypes';
+import { CommentType } from '../../../types/commentTypes';
 import { addNewComment,addNewReply,commentEdit,commentDelete,commentLike,commentList, replyList, replyLike, replyDelete, replyEdit } from './commentService';
 
 type CommentState = {
