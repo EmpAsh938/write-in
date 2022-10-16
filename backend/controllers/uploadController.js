@@ -20,7 +20,7 @@ const uploadFile = asyncHandler(async (req, res) => {
       if(!result) {
          throw new Error('file upload failed');
       }
-      await fs.unlinkSync(req.file.path);
+      await fs.unlink(req.file.path);
       res.json({
          message:'file uploaded',
          result

@@ -83,9 +83,9 @@ const Blog = () => {
 
   useEffect(() => {
     if(id && typeof id === 'string') {
-        dispatch(listSingleBlogs(id));
+        dispatch(listSingleBlogs({id,token:token || ''}));
     }
-  }, [id,dispatch])
+  }, [id,dispatch,token])
 
   useEffect(() => {
     if(Object.keys(singlePost).length > 0) {
@@ -94,19 +94,19 @@ const Blog = () => {
     }
   }, [singlePost])
   return (
-    <div className='bg-slate-100 min-h-screen'>
-    <main className='overflow-y-visible max-w-xl mx-auto p-5 pb-40 flex flex-col gap-8'>
+    <div className='min-h-screen bg-slate-100'>
+    <main className='flex flex-col max-w-xl p-5 pb-40 mx-auto overflow-y-visible gap-8'>
     <section className='flex items-center justify-between'>
-        <h2 className='font-semibold text-lg'>Create Post</h2>
+        <h2 className='text-lg font-semibold'>Create Post</h2>
         <div className='flex gap-2'>
             <button onClick={()=>setIsPreviewOn(false)} className={isPreviewOn ? 'font-normal' : 'font-bold'}>Edit</button>
             <button onClick={()=>setIsPreviewOn(true)} className={isPreviewOn ? 'font-bold' : 'font-normal'}>Preview</button>
         </div>
     </section>
    {!isPreviewOn ? (
-     <section className='flex flex-col gap-5 border border-solid border-green-200 rounded-sm p-3 bg-slate-100'>
+     <section className='flex flex-col p-3 border border-green-200 border-solid rounded-sm gap-5 bg-slate-100'>
      <div>
-         <input type='text' value={title} onChange={e=>setTitle(e.target.value)} placeholder='Untitled' className='outline-none w-full text-4xl font-bold placeholder:text-slate-300' />
+         <input type='text' value={title} onChange={e=>setTitle(e.target.value)} placeholder='Untitled' className='w-full text-4xl font-bold outline-none placeholder:text-slate-300' />
      </div>
      <div className='flex gap-4'>
          <button onClick={handleTags} data-id='header'>
@@ -134,7 +134,7 @@ const Blog = () => {
             <label htmlFor='upload' className='cursor-pointer'>
              <FaImage />
             </label>
-            <input onChange={handleUpload} className='hidden absolute inset-0 w-full h-full' type='file' id='upload' accept='image/*' />
+            <input onChange={handleUpload} className='absolute inset-0 hidden w-full h-full' type='file' id='upload' accept='image/*' />
          </button>
          <button onClick={handleTags} data-id='code'>
              <FaCode />
@@ -149,14 +149,14 @@ const Blog = () => {
  </section>
    ) : (
     <section className='bg-white'>
-        <h2 className='font-semibold text-lg'>Preview</h2>
+        <h2 className='text-lg font-semibold'>Preview</h2>
         <Preview markdown={markdown} />
     </section>
    )}
-    <section className='fixed bottom-0 left-0 w-full bg-white p-5 flex justify-center gap-2 border border-solid border-green-200'>
-        <button onClick={() => handleFinish('published')} className='bg-green-600 text-white px-2 rounded-sm py-1'>Publish</button>
-        <button onClick={() => handleFinish('draft')} className='bg-green-800 text-white px-2 rounded-sm py-1'>Save to Draft</button>
-        <button onClick={handleCancel} className='bg-red-600 text-white px-2 rounded-sm py-1'>Cancel</button>
+    <section className='fixed bottom-0 left-0 flex justify-center w-full p-5 bg-white border border-green-200 border-solid gap-2'>
+        <button onClick={() => handleFinish('published')} className='px-2 py-1 text-white bg-green-600 rounded-sm'>Publish</button>
+        <button onClick={() => handleFinish('draft')} className='px-2 py-1 text-white bg-green-800 rounded-sm'>Save to Draft</button>
+        <button onClick={handleCancel} className='px-2 py-1 text-white bg-red-600 rounded-sm'>Cancel</button>
     </section>
     </main>
     

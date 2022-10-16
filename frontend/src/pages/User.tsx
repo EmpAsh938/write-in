@@ -10,6 +10,7 @@ import { tabHandler } from '../utils/tabHandler'
 import { getUserProfile, followUser } from '../app/features/auth/authSlice'
 import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux'
 import {userBlogsList} from '../app/features/post/postSlice'
+import Loader from '../components/Loader';
 
 
 
@@ -40,11 +41,7 @@ const User = () => {
         }
     }, [id,dispatch])
     if(Object.keys(userProfile).length === 0) return (
-        <div className='flex items-center justify-center py-5'>
-            <div className='inline-block w-10 h-10 border-4 rounded-full border-t-green-800 spinner-border animate-spin'>
-            </div>
-            <span className='ml-2 text-lg font-medium'>Loading...</span>
-        </div>
+        <Loader />
     );    
   return (
     <>

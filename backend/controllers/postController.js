@@ -197,15 +197,6 @@ const getBlogSingle = asyncHandler(async (req, res) => {
         res.status(400);
         throw new Error('id parameter is missing');
     }
-    // Warning: check if the token is valid
-    let get_views_id;
-    if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
-        let get_token = req.headers.authorization.split('Bearer')[1].trim();
-        if(get_token) {
-            let decoded = jwt.decode(get_token);
-            get_views_id = decoded._id;
-        }
-    }
     try {
         // checking if post exits
         const doc = await Post.findById(id).populate('author').exec();
@@ -215,12 +206,18 @@ const getBlogSingle = asyncHandler(async (req, res) => {
                 result: []
             })
         }
-        if(get_views_id) {
-            // find if that viewer exists
-            let result = await Post.findOne({_id:id, views: {$eq: get_views_id}});
-            // if not add him
-            if(!result) {
-                await Post.findByIdAndUpdate(id, {$push: {views: get_views_id}});
+        if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+            let get_token = req.headers.authorization.split('Bearer')[1].trim();
+            if(get_token) {
+                let decoded = await jwt.verify(get_token, process.env.JWT_SECRET);
+                if(decoded) {
+                    // find if that viewer exists
+                    let result = await Post.findOne({_id:id, views: {$eq: decoded._id}});
+                    // if not add him
+                    if(!result) {
+                        await Post.findByIdAndUpdate(id, {$push: {views: decoded._id}});
+                    }
+                }
             }
         }
         res.json({

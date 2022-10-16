@@ -9,8 +9,12 @@ export const listPublicAll = async (pages:number,rows:number) => {
 }
 
 // list single blog
-export const listSingle = async (id:string) => {
-    const response = await axios.get(`/post/get/${id}`);
+export const listSingle = async (id:string, token:string) => {
+    const response = await axios.get(`/post/get/${id}`, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
     return response.data;
 }
 

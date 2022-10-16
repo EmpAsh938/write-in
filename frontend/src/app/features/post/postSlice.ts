@@ -50,9 +50,9 @@ export const listPublicBlogs = createAsyncThunk(
 
 export const listSingleBlogs = createAsyncThunk(
     'post/list/single',
-   async (id:string, thunkAPI) => {
+   async ({id,token}:{id:string,token:string}, thunkAPI) => {
     try {
-        return (await listSingle(id));
+        return (await listSingle(id,token));
     } catch (error:any) {
         const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString() || '';
         return thunkAPI.rejectWithValue(message);
