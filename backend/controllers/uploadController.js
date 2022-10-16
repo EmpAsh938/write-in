@@ -47,12 +47,11 @@ const profileUpdate = asyncHandler(async (req, res) => {
       if(!results) {
          throw new Error('file upload failed');
       }
-      await fs.unlinkSync(req.file.path);
+      await fs.unlink(req.file.path);
 
       if(decoded.profileImage) {
          let len = decoded.profileImage.split('/').length;
-         let c_result = await cloudinary.uploader.destroy(`write-in/avatar/${decoded.profileImage.split('/')[len-1].split('.')[0]}`);
-         console.log(c_result);
+         await cloudinary.uploader.destroy(`write-in/avatar/${decoded.profileImage.split('/')[len-1].split('.')[0]}`);
       }
       let doc = await Auth.findOneAndUpdate({_id:decoded._id}, {$set: {profileImage: results.secure_url}});
       if(!doc) {

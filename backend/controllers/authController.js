@@ -4,8 +4,9 @@ const asyncHandler = require('express-async-handler');
 
 const Auth = require('../models/authModel');
 const Post = require('../models/postModel');
-const Comment = require('../models/commentModel');
 const Reply = require('../models/replyModel');
+const Comment = require('../models/commentModel');
+const cloudinary = require('../config/cloudinary');
 const { validPassword } = require('../utils/validPassword');
 
 const loginUser = asyncHandler(async (req, res) => {
@@ -335,6 +336,11 @@ const deleteAccount = asyncHandler(async (req, res) => {
                 }
             }
         }
+        // delete profile image
+      if(decoded.profileImage) {
+         let len = decoded.profileImage.split('/').length;
+         let c_result = await cloudinary.uploader.destroy(`write-in/avatar/${decoded.profileImage.split('/')[len-1].split('.')[0]}`);
+      }
         res.json({
             success: 'account deleted',
             result: []
