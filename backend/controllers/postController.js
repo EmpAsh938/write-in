@@ -245,10 +245,7 @@ const likeBlog = asyncHandler(async (req, res) => {
         let doc = await Post.findById(id).exec();
         if(!doc) {
             res.status(404);
-            return res.json({
-                message: 'not found',
-                result: []
-            })
+            throw new Error('not found');
         }
         doc = await Post.findOne({_id:id, likes: {$eq: user_ref_id}}).exec();
        
@@ -261,12 +258,6 @@ const likeBlog = asyncHandler(async (req, res) => {
             })
         }
         let results = await Post.findByIdAndUpdate(id,{$push: {"likes": user_ref_id}}).exec();
-        if(!results) {
-            return res.status(404).json({
-                message: 'not found',
-                result: []
-            })
-        }
         results = await Post.findOne({_id:id}).exec();
         res.json({
             message: 'liked',

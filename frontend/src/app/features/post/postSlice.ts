@@ -319,7 +319,9 @@ const postSlice = createSlice({
             state.notifications.message = typeof action.payload === 'string' ? action.payload : '';
         })
         .addCase(likeBlog.fulfilled, (state, action) => {
-            console.log(action.payload);
+            if(typeof action.payload.result === 'object') {
+                state.singlePost = action.payload.result;
+            }
         })
         .addCase(likeBlog.rejected, (state, action) => {
             if(typeof action.payload === 'string') {
