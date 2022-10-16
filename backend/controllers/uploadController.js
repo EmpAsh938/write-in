@@ -20,7 +20,7 @@ const uploadFile = asyncHandler(async (req, res) => {
       if(!result) {
          throw new Error('file upload failed');
       }
-      await fs.unlink(req.file.path);
+      await fs.unlinkSync(req.file.path);
       res.json({
          message:'file uploaded',
          result
@@ -47,7 +47,7 @@ const profileUpdate = asyncHandler(async (req, res) => {
       if(!results) {
          throw new Error('file upload failed');
       }
-      await fs.unlink(req.file.path);
+      await fs.unlinkSync(req.file.path);
 
       if(decoded.profileImage) {
          let len = decoded.profileImage.split('/').length;
