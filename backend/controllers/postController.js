@@ -63,12 +63,14 @@ const listBlogsPublic = asyncHandler(async (req, res) => {
 })
 
 const createNewBlog = asyncHandler(async (req, res) => {
-    const { title, markdown, status } = req.body;
+    const { title, markdown, status, images } = req.body;
     if (!title || !status) {
         res.status(400);
         throw new Error('title or status is empty');
     }
     const decoded = jwt.decode(req.headers.authorization.split('Bearer')[1].trim());
+
+
 
     const newPost = new Post({
         title,
@@ -77,6 +79,15 @@ const createNewBlog = asyncHandler(async (req, res) => {
         author: decoded._id
     });
     try {
+        // cleaning up unused images
+        for(const item of images) {
+            const regex = new RegExp(`\!\[\w*\]\(${item}\)`);
+            // if not found simply remove from upload
+            if(!regex.test(markdown)) {
+                let len = item.split('/').length;
+                await cloudinary.uploader.destroy(`write-in/post/${item.split('/')[len-1].split('.')[0]}`);     
+            }
+        }
         await newPost.save();
         res.json({
             message: "successfully saved",
