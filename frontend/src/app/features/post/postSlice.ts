@@ -74,9 +74,9 @@ export const listPrivate = createAsyncThunk(
 
 export const updateBlog = createAsyncThunk(
     'post/edit',
-    async({id,token,title,status,markdown}:PostsObjType & {id:string,token:string|null}, thunkAPI) => {
+    async({id,token,title,status,markdown,images}:PostsObjType & {id:string,token:string|null,images:string[]}, thunkAPI) => {
         try {
-            return (await editBlog({id,token,title, status, markdown}));
+            return (await editBlog({id,token,title, status, markdown,images}));
         } catch (error:any) {
             const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString() || '';
             return thunkAPI.rejectWithValue(message);
@@ -98,9 +98,9 @@ export const removeBlog = createAsyncThunk(
 
 export const saveBlog = createAsyncThunk(
     'post/save',
-   async ({title,markdown,status,token}:PostsObjType & {token: string | null}, thunkAPI) => {
+   async ({title,markdown,status,token,images}:PostsObjType & {token: string | null,images}, thunkAPI) => {
     try {
-        return (await savePost({title,markdown,status,token}));
+        return (await savePost({title,markdown,status,token,images}));
     } catch (error:any) {
         const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString() || '';
         return thunkAPI.rejectWithValue(message);

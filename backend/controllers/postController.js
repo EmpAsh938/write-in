@@ -101,7 +101,7 @@ const createNewBlog = asyncHandler(async (req, res) => {
 
 const editBlog = asyncHandler(async (req, res) => {
     const { id } = req.params;
-    const { title, markdown, status } = req.body;
+    const { title, markdown, status, images } = req.body;
     if (!id) {
         res.status(400);
         throw new Error('some parameters are missing');
@@ -117,13 +117,21 @@ const editBlog = asyncHandler(async (req, res) => {
         if(!query) {
             res.status(401);
             throw new Error('Editing failed');
-        } else {
-
-            res.json({
-                message: "successfully updated",
-                result: []
-            })
         }
+        // cleaning up unused images
+        for(const item of images) {
+            const regex = new RegExp(`\!\[\w*\]\(${item}\)`);
+            // if not found simply remove from upload
+            if(!regex.test(markdown)) {
+                let len = item.split('/').length;
+                await cloudinary.uploader.destroy(`write-in/post/${item.split('/')[len-1].split('.')[0]}`);     
+            }
+        }
+
+        res.json({
+            message: "successfully updated",
+            result: []
+        })
     } catch (error) {
         res.status(401);
         throw new Error(error);

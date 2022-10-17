@@ -30,9 +30,9 @@ export const listPrivateAll = async (pages:number,rows:number,token:string | nul
 }
 
 // edit blog
-export const editBlog = async ({id,token,title,status,markdown}:PostsObjType & {id:string,token:string | null}) => {
+export const editBlog = async ({id,token,title,status,markdown,images}:PostsObjType & {id:string,token:string | null,images:string[]}) => {
     const response = await axios.put(`/post/edit/${id}`,
-    {title,status,markdown},
+    {title,status,markdown,images},
     {
         headers: {
             Authorization: `Bearer ${token}`
@@ -51,9 +51,9 @@ export const deleteBlog = async (id:string,token:string|null) => {
 }
 
 // save blog
-export const savePost =async ({title,status,markdown,token}:PostsObjType & {token:string | null}) => {
+export const savePost =async ({title,status,markdown,images,token}:PostsObjType & {token:string | null,images:string[]}) => {
     const response = await axios.post(`/post/save`, 
-    {title,markdown,status},
+    {title,markdown,status,images},
     {
         headers: {
             Authorization: `Bearer ${token}`
