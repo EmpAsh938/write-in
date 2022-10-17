@@ -25,7 +25,8 @@ export const uploadFile = createAsyncThunk(
     try {
         return (await upload(file,token));
     } catch (error:any) {
-        return thunkAPI.rejectWithValue('');
+      const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString() || '';
+        return thunkAPI.rejectWithValue(message);
     }
    }
 )

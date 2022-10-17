@@ -30,11 +30,13 @@ const Blog = () => {
     const { id } = useParams();
     const { token } = useAppSelector(state => state.auth);
     const { singlePost } = useAppSelector(state => state.post);
+    const { imageUrl } = useAppSelector(state => state.upload);
     const [isPreviewOn, setIsPreviewOn] = useState<boolean>(false);
     const [title, setTitle] = useState<string>('');
     const [markdown, setMarkdown] = useState<string>('');
     const [startSelect, setStartSelect] = useState<number>(0);
     const [endSelect, setEndSelect] = useState<number>(0);
+    const [images, setImages] = useState<string[]>([]);
 
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
@@ -93,6 +95,12 @@ const Blog = () => {
         setMarkdown(singlePost.markdown);
     }
   }, [singlePost])
+
+  useEffect(() => {
+      if(imageUrl) {
+          setImages(prev => [...prev, imageUrl]);
+      }
+  }, [imageUrl])
   return (
     <div className='min-h-screen bg-slate-100'>
     <main className='flex flex-col max-w-xl p-5 pb-40 mx-auto overflow-y-visible gap-8'>
