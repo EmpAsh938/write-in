@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { NotificationsType } from "../../../types/authTypes"
-import { upload } from "./uploadService";
+import { removeUploads, upload } from "./uploadService";
 
 interface UploadState {
     notifications: NotificationsType;
@@ -29,6 +29,17 @@ export const uploadFile = createAsyncThunk(
    }
 )
 
+    export const cancelUploads = createAsyncThunk(
+        'upload/cancel',
+        async ({images,token}:{images:string[],token:string},thunkAPI) => {
+            try {
+               return (await removeUploads(images,token)); 
+            } catch (error:any) {
+      const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString() || '';
+        return thunkAPI.rejectWithValue(message);
+            }
+        })
+
 const uploadSlice = createSlice({
     name: 'upload',
     initialState,
@@ -47,6 +58,16 @@ const uploadSlice = createSlice({
             }
         })
         .addCase(uploadFile.rejected, (state, action) => {
+            state.uploadStatus = 'error';
+            if(typeof action.payload === 'string') {
+                state.notifications.type = 'error';
+                state.notifications.message = action.payload;
+            }
+        })
+        .addCase(cancelUploads.fulfilled, (state,action)=>{
+
+        })
+        .addCase(cancelUploads.rejected, (state,action)=>{
             state.uploadStatus = 'error';
             if(typeof action.payload === 'string') {
                 state.notifications.type = 'error';

@@ -23,3 +23,12 @@ export const profileUpload = async (file:File,token:string) => {
     localStorage.setItem('user_db',JSON.stringify(response.data.result));
     return response.data;
 }
+
+export const removeUploads = async (images:string[],token:string) => {
+    const response = await axios.post('/upload/cancel',{images}, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+    return response.data;
+})

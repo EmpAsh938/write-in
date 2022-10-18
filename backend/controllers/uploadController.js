@@ -71,4 +71,20 @@ const profileUpdate = asyncHandler(async (req, res) => {
    }
 })
 
-module.exports = { uploadFile, profileUpdate };
+const removeUploads = asyncHandler(async (req, res) => {
+    const { images } = req.body;
+    try {
+        for(const item of images) {
+             let len = item.split('/').length;
+             await cloudinary.uploader.destroy(`write-in/post/${item.split('/')[len-1].split('.')[0]}`);
+        }    
+        res.json({
+            message: 'successfully removed',
+            result: []
+        })
+    } catch (error) {
+        throw new Error(error);
+    }
+})
+
+module.exports = { uploadFile, profileUpdate, removeUploads };

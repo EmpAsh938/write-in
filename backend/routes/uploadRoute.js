@@ -2,7 +2,7 @@ const path = require('path');
 const multer = require('multer');
 const express = require('express');
 
-const { uploadFile, profileUpdate } = require('../controllers/uploadController');
+const { uploadFile, profileUpdate, removeUploads } = require('../controllers/uploadController');
 const verifyUser = require('../middlewares/verifyUserMiddleware');
 
 const uploadRouter = express.Router();
@@ -33,5 +33,6 @@ const upload = multer({
 
 uploadRouter.post('/', verifyUser, upload.single('photos'), uploadFile);
 uploadRouter.post('/profile', verifyUser, upload.single('photos'), profileUpdate);
+uploadRouter.post('/cancel', verifyUser, removeUploads);
 
 module.exports = uploadRouter;
