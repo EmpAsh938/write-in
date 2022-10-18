@@ -98,7 +98,7 @@ export const removeBlog = createAsyncThunk(
 
 export const saveBlog = createAsyncThunk(
     'post/save',
-   async ({title,markdown,status,token,images}:PostsObjType & {token: string | null,images}, thunkAPI) => {
+   async ({title,markdown,status,token,images}:PostsObjType & {token: string | null,images:string[]}, thunkAPI) => {
     try {
         return (await savePost({title,markdown,status,token,images}));
     } catch (error:any) {

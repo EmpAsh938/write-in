@@ -5,12 +5,10 @@ import { upload } from "./uploadService";
 interface UploadState {
     notifications: NotificationsType;
     uploadStatus: 'idle' | 'running' | 'success' | 'error';
-    file: File | null;
     imageUrl: string;
 }
 
 const initialState: UploadState = {
-    file: null,
     uploadStatus: 'idle',
     imageUrl: '',
     notifications: {
@@ -44,6 +42,7 @@ const uploadSlice = createSlice({
         })
         .addCase(uploadFile.fulfilled, (state, action) => {
             state.uploadStatus = 'success';
+            console.log(action.payload);
             if(action.payload.result === 'object') {
                 state.imageUrl = action.payload.result.secure_url;
             }

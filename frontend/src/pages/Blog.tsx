@@ -51,9 +51,9 @@ const Blog = () => {
 
     const handleFinish = (type:'published'|'draft') => {
         if(id) {
-            dispatch(updateBlog({id,token,title,status:type,markdown}));
+            dispatch(updateBlog({id,token,title,images,status:type,markdown}));
         } else {
-            dispatch(saveBlog({title,markdown,status:type,token}));
+            dispatch(saveBlog({title,markdown,images,status:type,token}));
         }
         navigate('/dashboard');
     }
@@ -68,11 +68,13 @@ const Blog = () => {
     const handleTags = (e:SyntheticEvent<HTMLButtonElement>) => {
         if(e.target && e.currentTarget.dataset.id) {
             let tag = e.currentTarget.dataset.id;
-            let firstPart = markdown.substring(0,startSelect);
-            let midPart = markdown.substring(startSelect,endSelect);
-            let secondPart = markdown.substring(endSelect,markdown.length);
-            midPart = getTags(tag,midPart || 'text');
-            setMarkdown(firstPart+midPart+secondPart);
+            if(tag !== 'image') {
+                let firstPart = markdown.substring(0,startSelect);
+                let midPart = markdown.substring(startSelect,endSelect);
+                let secondPart = markdown.substring(endSelect,markdown.length);
+                midPart = getTags(tag,midPart || 'text');
+                setMarkdown(firstPart+midPart+secondPart);
+            }
         }
     }
 
@@ -99,7 +101,12 @@ const Blog = () => {
   useEffect(() => {
       if(imageUrl) {
           setImages(prev => [...prev, imageUrl]);
-      }
+          let firstPart = markdown.substring(0,startSelect);
+          let midPart = markdown.substring(startSelect,endSelect);
+          let secondPart = markdown.substring(endSelect,markdown.length);
+          midPart = getTags('image',imageUrl);
+          setMarkdown(firstPart+midPart+secondPart);
+        }
   }, [imageUrl])
   return (
     <div className='min-h-screen bg-slate-100'>
