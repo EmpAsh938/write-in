@@ -14,9 +14,9 @@ export const getTags = (tag:string,text:string) => {
         case 'blockquote':
             return (`> ${text}`);
         case 'image':
-            return (`![${text}](url)`);
+            return (`![alt](${text})`);
         case 'link':
-            return (`[${text}](url)`);
+            return (`[title](${text})`);
         case 'code':
             return (`\`\`\`${text}\`\`\``);
         case 'task':

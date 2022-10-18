@@ -42,8 +42,7 @@ const uploadSlice = createSlice({
         })
         .addCase(uploadFile.fulfilled, (state, action) => {
             state.uploadStatus = 'success';
-            console.log(action.payload);
-            if(action.payload.result === 'object') {
+            if(typeof action.payload.result === 'object') {
                 state.imageUrl = action.payload.result.secure_url;
             }
         })
