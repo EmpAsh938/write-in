@@ -42,7 +42,10 @@ const postSchema = new Schema(
                 type: Schema.Types.ObjectId,
                 ref: 'Auth'
             }
-        ]
+        ],
+        images: {
+            type: [String]
+        }
     },
     {
         timestamps: true

@@ -6,6 +6,8 @@ const Post = require('../models/postModel');
 const Comment = require('../models/commentModel');
 const Reply = require('../models/replyModel');
 
+const cloudinary = require('../config/cloudinary');
+
 const searchBlogs = asyncHandler(async (req, res) => {
     const { term, pages, rows, sort } = req.query;
     if(!term || !pages || !rows) {
@@ -76,18 +78,10 @@ const createNewBlog = asyncHandler(async (req, res) => {
         title,
         markdown,
         status,
+        images,
         author: decoded._id
     });
     try {
-        // cleaning up unused images
-        for(const item of images) {
-            const regex = new RegExp(`\!\[\w*\]\(${item}\)`);
-            // if not found simply remove from upload
-            if(!regex.test(markdown)) {
-                let len = item.split('/').length;
-                await cloudinary.uploader.destroy(`write-in/post/${item.split('/')[len-1].split('.')[0]}`);     
-            }
-        }
         await newPost.save();
         res.json({
             message: "successfully saved",
@@ -111,6 +105,7 @@ const editBlog = asyncHandler(async (req, res) => {
             $set: {
                 title,
                 status,
+                images,
                 markdown
             }
         })
@@ -118,22 +113,11 @@ const editBlog = asyncHandler(async (req, res) => {
             res.status(401);
             throw new Error('Editing failed');
         }
-        // cleaning up unused images
-        for(const item of images) {
-            const regex = new RegExp(`\!\[\w*\]\(${item}\)`);
-            // if not found simply remove from upload
-            if(!regex.test(markdown)) {
-                let len = item.split('/').length;
-                await cloudinary.uploader.destroy(`write-in/post/${item.split('/')[len-1].split('.')[0]}`);     
-            }
-        }
-
         res.json({
             message: "successfully updated",
             result: []
         })
     } catch (error) {
-        res.status(401);
         throw new Error(error);
     }
 })
@@ -147,13 +131,11 @@ const deleteBlog = asyncHandler(async (req, res) => {
     try {
         const doc = await Post.findByIdAndDelete(id);
         // delete images
-        const regex = new RegExp(/\!\[\w*\]\S+\)/, 'g');
-        let postImages = doc.markdown.match(regex); // match with regex;
         // strip out unnecessary parts and removing all the images from uploads
-        for(const item of postImages) {
-            let firstsplit = item.split('(')[1];
-            let secondsplit = firstsplit.substring(0,firstsplit.length-1).split('/');
-            let contextid = secondsplit[secondsplit.length-1].split('.')[0];
+        for(const item of doc.images) {
+            let firstsplit = item.split('/');
+            let secondsplit = item.split('/')[firstsplit.length-1];
+            let contextid = secondsplit.split('.')[0];
             await cloudinary.uploader.destroy(`write-in/post/${contextid}`);
         }
 

@@ -31,4 +31,4 @@ export const removeUploads = async (images:string[],token:string) => {
         }
     })
     return response.data;
-})
+}

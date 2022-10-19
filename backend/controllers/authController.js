@@ -326,16 +326,12 @@ const deleteAccount = asyncHandler(async (req, res) => {
                 // delete post
                 let singlePost = await Post.findOneAndDelete({_id:post._id});
                 // delete images
-                const regex = new RegExp(/\!\[\w*\]\S+\)/, 'g');
-                let postImages = singlePost.markdown.match(regex); // match with regex;
-                // strip out unnecessary parts and removing all the images from uploads
-                for(const item of postImages) {
-                    let firstsplit = item.split('(')[1];
-                    let secondsplit = firstsplit.substring(0,firstsplit.length-1).split('/');
-                    let contextid = secondsplit[secondsplit.length-1].split('.')[0];
+                for(const item of singlePost.images) {
+                    let firstsplit = item.split('/');
+                    let secondsplit = item.split('/')[firstsplit.length-1];
+                    let contextid = secondsplit.split('.')[0];
                     await cloudinary.uploader.destroy(`write-in/post/${contextid}`);
                 }
-
                 let newdoc = await Comment.find({post:post._id.valueOf()});
                 if(newdoc.length > 0) {
                     for(const comment of newdoc){
