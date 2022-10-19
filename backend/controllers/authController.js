@@ -327,7 +327,7 @@ const deleteAccount = asyncHandler(async (req, res) => {
                 let singlePost = await Post.findOneAndDelete({_id:post._id});
                 // delete images
                 const regex = new RegExp(/\!\[\w*\]\S+\)/, 'g');
-                let postImages = singlePost.match(regex); // match with regex;
+                let postImages = singlePost.markdown.match(regex); // match with regex;
                 // strip out unnecessary parts and removing all the images from uploads
                 for(const item of postImages) {
                     let firstsplit = item.split('(')[1];

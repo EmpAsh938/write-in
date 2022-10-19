@@ -146,6 +146,17 @@ const deleteBlog = asyncHandler(async (req, res) => {
     }
     try {
         const doc = await Post.findByIdAndDelete(id);
+        // delete images
+        const regex = new RegExp(/\!\[\w*\]\S+\)/, 'g');
+        let postImages = doc.markdown.match(regex); // match with regex;
+        // strip out unnecessary parts and removing all the images from uploads
+        for(const item of postImages) {
+            let firstsplit = item.split('(')[1];
+            let secondsplit = firstsplit.substring(0,firstsplit.length-1).split('/');
+            let contextid = secondsplit[secondsplit.length-1].split('.')[0];
+            await cloudinary.uploader.destroy(`write-in/post/${contextid}`);
+        }
+
         if(!doc) {
             res.status(404);
             throw new Error('Deletion failed');
