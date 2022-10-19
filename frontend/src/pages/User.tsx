@@ -1,5 +1,5 @@
 import {useParams} from 'react-router-dom'
-import { MouseEvent, useEffect } from 'react'
+import { useState, MouseEvent, useEffect } from 'react'
 import { MdEmail, MdLink, MdLocationOn } from 'react-icons/md';
 
 import Navbar from '../components/Navbar'
@@ -18,13 +18,14 @@ const User = () => {
     const { id } = useParams();
     const { user, token, userProfile } = useAppSelector(state => state.auth);
     const { userBlogs } = useAppSelector(state => state.post);
+    const [pages, setPages] = useState<number>(1);
 
     const dispatch = useAppDispatch();
 
     const handleBlogsTab = (event:MouseEvent<HTMLButtonElement>) => {
         tabHandler(event,'user-blog-tab');
         let buttontype = event.currentTarget.dataset.type;
-        dispatch(userBlogsList({pages:1,rows:5,id:user._id,filter:buttontype||''}));
+        dispatch(userBlogsList({pages,rows:10,id:user._id,filter:buttontype||''}));
     }
 
     const handleFollow = () => {
@@ -37,7 +38,7 @@ const User = () => {
     useEffect(() => {
         if(id) {
             dispatch(getUserProfile({id})); 
-            dispatch(userBlogsList({pages:1,rows:5,id,filter:'latest'}));
+            dispatch(userBlogsList({pages,rows:10,id,filter:'latest'}));
         }
     }, [id,dispatch])
     if(Object.keys(userProfile).length === 0) return (

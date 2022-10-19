@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 import Navbar from '../components/Navbar';
 import HomeBlogs from '../components/HomeBlogs';
@@ -9,17 +9,21 @@ import { listPublicBlogs, resetPages } from '../app/features/post/postSlice';
 
 const Home = () => {
   const { posts } = useAppSelector(state => state.post);
+  const [pages, setPages] = useState<number>(1);
 
   const dispatch = useAppDispatch();
 
+    const handleLoadPages = () => {
+    setPages(prev => prev+1);
+    }
   useEffect(() => {
     dispatch(resetPages());
-    dispatch(listPublicBlogs({pages:1,rows:10}));
-  }, [dispatch])  
+    dispatch(listPublicBlogs({pages,rows:10}));
+  }, [dispatch,pages])  
   return (
     <div className='bg-slate-100'>
       <Navbar />
-      <main className='max-w-xl min-h-screen mx-auto p-2 flex flex-col gap-2'>
+      <main className='flex flex-col max-w-xl min-h-screen p-2 mx-auto gap-2'>
        {posts.length > 0 && (
         posts.map(item => {
           return (

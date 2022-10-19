@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { MdOutlineDashboardCustomize } from 'react-icons/md';
 
 import Card from '../components/Card';
@@ -11,7 +11,8 @@ import {useNavigate} from 'react-router-dom';
 
 const Dashboard = () => {
   const { token } = useAppSelector(state => state.auth);
-  const { privatePosts, pages, rows } = useAppSelector(state => state.post);
+  const { privatePosts } = useAppSelector(state => state.post);
+  const [pages, setPages] = useState<number>(1);
 
 
   const dispatch = useAppDispatch();
@@ -21,9 +22,9 @@ const Dashboard = () => {
   useEffect(() => {
     dispatch(resetPages());
     if(token) {
-      dispatch(listPrivate({pages,rows,token}));
+      dispatch(listPrivate({pages,rows:10,token}));
     }
-  }, [token,pages,rows,dispatch])
+  }, [token,pages,dispatch])
 
   useEffect(() => {
       if(!token) navigate('/');
