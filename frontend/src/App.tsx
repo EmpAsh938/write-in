@@ -14,31 +14,31 @@ import SingleBlog from './pages/SingleBlog';
 import PageNotFound from './pages/PageNotFound';
 import ErrorMessage from './components/ErrorMessage';
 
-import { useUser } from './hooks/useUser';
 import { notify } from './app/features/auth/authSlice';
-import { ProtectedRoute } from './helper/routes-helper';
 import { useAppDispatch, useAppSelector } from './hooks/useReactRedux';
 import { postNotification } from './app/features/post/postSlice';
+import { resetNotification } from './app/features/upload/uploadSlice';
 
 
 function App() {
-  const isUser = useUser();
   const { notifications: notificationAuth } = useAppSelector(state => state.auth);
   const { notifications: notificationPost } = useAppSelector(state => state.post);
+  const { notifications: notificationUpload } = useAppSelector(state => state.post);
 
   const dispatch = useAppDispatch();
 
   useEffect(() => {
 
     let timer = setTimeout(() => {
-      if(notificationAuth.type !=='idle' || notificationPost.type !== 'idle') {
+      if(notificationAuth.type !=='idle' || notificationPost.type !== 'idle' || notificationUpload.type !== 'idle') {
         dispatch(notify({type:'idle',message:''}));
         dispatch(postNotification({type: 'idle', message:''}));
+        dispatch(resetNotification({type: 'idle', message:''}));
       }
     }, 2000);
 
     return () => clearTimeout(timer);
-  }, [dispatch, notificationAuth.type, notificationPost.type])
+  }, [dispatch, notificationAuth.type, notificationPost.type, notificationUpload.type])
 
   return (
     <BrowserRouter>
@@ -52,22 +52,17 @@ function App() {
           <Route path="register" element={
             <Register />} />
           <Route path="profile" element={
-            <ProtectedRoute isUser={isUser} outlet={<Profile />} />
-            } />
+              <Profile />} />
           <Route path="dashboard" element={
-            <ProtectedRoute isUser={isUser} outlet={<Dashboard />} />
-            } />
+              <Dashboard />} />
           <Route path="bookmark" element={
-            <ProtectedRoute isUser={isUser} outlet={<Bookmarks />} />
-          } />
+              <Bookmarks />} />
           <Route path="search" element={
             <Search />} />
           <Route path="new" element={
-           <ProtectedRoute isUser={isUser} outlet={<Blog />} />
-          } />
+              <Blog />} />
           <Route path="edit/:id" element={
-            <ProtectedRoute isUser={isUser} outlet={<Blog />} />
-          } />
+              <Blog />} />
           <Route path="user/:id" element={
               <User />
           } />

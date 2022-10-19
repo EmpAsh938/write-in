@@ -1,4 +1,5 @@
 import { ChangeEvent, useEffect, useState, MouseEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import Navbar from '../components/Navbar';
 import Country from '../components/Country';
@@ -9,7 +10,6 @@ import { emailValidator } from '../utils/emailValidator';
 import { basicInfoChange, uploadProfile } from '../app/features/auth/authSlice';
 import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
 import { changeAccountInfo, changeEmail, changePassword, deleteAccount, notify } from '../app/features/auth/authSlice';
-
 
 const Profile = () => {
     const { token, user } = useAppSelector(state => state.auth);
@@ -24,6 +24,7 @@ const Profile = () => {
     const [activeTab, setActiveTab] = useState<string>('account');
 
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
 
 
     const handlePasswordChange = () => {
@@ -87,6 +88,10 @@ const Profile = () => {
             else tabs.style.display = 'none';
         });
     }, [activeTab])
+
+    useEffect(() => {
+        if(!token) navigate('/');
+    },[token,navigate])
     return (
         <div className='bg-slate-100'>
             <Navbar />

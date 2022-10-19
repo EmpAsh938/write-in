@@ -25,7 +25,6 @@ import { uploadFile } from '../app/features/upload/uploadSlice';
 import { getTags } from '../utils/getTags';
 import Preview from '../components/Preview';
 
-
 const Blog = () => {
     const { id } = useParams();
     const { token } = useAppSelector(state => state.auth);
@@ -108,6 +107,10 @@ const Blog = () => {
           setMarkdown(firstPart+midPart+secondPart);
         }
   }, [imageUrl])
+
+  useEffect(() => {
+      if(!token) navigate('/');
+  }, [])
   return (
     <div className='min-h-screen bg-slate-100'>
     <main className='flex flex-col max-w-xl p-5 pb-40 mx-auto overflow-y-visible gap-8'>

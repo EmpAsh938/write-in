@@ -8,7 +8,6 @@ import Pagination from '../components/Pagination'
 import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux'
 
 const Bookmarks = () => {
-
     const { token } = useAppSelector(state => state.auth);
     const { bookmarkPosts, pages, rows } = useAppSelector(state => state.post);
 
@@ -22,22 +21,25 @@ const Bookmarks = () => {
             navigate('/login');
         }
     }, [dispatch,navigate,pages,rows,token])
+  useEffect(() => {
+      if(!token) navigate('/');
+  }, [])
   return (
    <>
     <Navbar />
-    <main className='max-w-3xl mx-auto p-4'>
+    <main className='max-w-3xl p-4 mx-auto'>
         <section>
             <div className='flex flex-col gap-2'>
                 <div className='flex items-center justify-start'>
                     <FaRegBookmark className='text-3xl' />
-                    <h1 className='text-2xl text-gray-800 font-semibold'>Bookmarks</h1>
+                    <h1 className='text-2xl font-semibold text-gray-800'>Bookmarks</h1>
                 </div>
-                <div className='flex items-center justify-start pb-1 border-b border-solid border-green-300'>
+                <div className='flex items-center justify-start pb-1 border-b border-green-300 border-solid'>
                     <p className='text-lg'>Your reading list</p>
                 </div>
             </div>
             <div>
-                <div className='flex flex-col gap-4 p-2'>
+                <div className='flex flex-col p-2 gap-4'>
 
                 {
                     bookmarkPosts.length > 0 ? (bookmarkPosts.map(item => {

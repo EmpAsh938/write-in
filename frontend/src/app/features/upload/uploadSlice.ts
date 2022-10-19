@@ -44,31 +44,35 @@ const uploadSlice = createSlice({
     name: 'upload',
     initialState,
     reducers: {
-
+        resetNotification: (state, action) => {
+            state.notifications.type = action.payload.type;
+            state.notifications.message = action.payload.message;
+        }
     },
     extraReducers: (builder) => {
         builder
         .addCase(uploadFile.pending, (state) => {
-            state.uploadStatus = 'running';
+            state.notifications.type = 'loading';
+            state.notifications.message = 'upload pending';
         })
         .addCase(uploadFile.fulfilled, (state, action) => {
-            state.uploadStatus = 'success';
+            state.notifications.type = 'success';
+            state.notifications.message = 'upload success';
             if(typeof action.payload.result === 'object') {
                 state.imageUrl = action.payload.result.secure_url;
             }
         })
         .addCase(uploadFile.rejected, (state, action) => {
-            state.uploadStatus = 'error';
             if(typeof action.payload === 'string') {
                 state.notifications.type = 'error';
                 state.notifications.message = action.payload;
             }
         })
         .addCase(cancelUploads.fulfilled, (state,action)=>{
-
+            state.notifications.type = 'success';
+            state.notifications.message = 'upload cancel success';
         })
         .addCase(cancelUploads.rejected, (state,action)=>{
-            state.uploadStatus = 'error';
             if(typeof action.payload === 'string') {
                 state.notifications.type = 'error';
                 state.notifications.message = action.payload;
@@ -76,5 +80,7 @@ const uploadSlice = createSlice({
         })
     }
 })
+
+export const { resetNotification } = uploadSlice.actions;
 
 export default uploadSlice.reducer

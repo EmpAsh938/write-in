@@ -7,6 +7,7 @@ import Blogcard from '../components/Blogcard';
 import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
 import { listPrivate, resetPages } from '../app/features/post/postSlice';
 import Pagination from '../components/Pagination';
+import {useNavigate} from 'react-router-dom';
 
 const Dashboard = () => {
   const { token } = useAppSelector(state => state.auth);
@@ -14,6 +15,7 @@ const Dashboard = () => {
 
 
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   
   useEffect(() => {
@@ -22,6 +24,10 @@ const Dashboard = () => {
       dispatch(listPrivate({pages,rows,token}));
     }
   }, [token,pages,rows,dispatch])
+
+  useEffect(() => {
+      if(!token) navigate('/');
+  }, [])
  
   return (
     <div className='bg-slate-100'>
