@@ -44,7 +44,7 @@ const Search = () => {
                 ) : (
                     <p>no search results found.</p>
                 )}
-                {searchPosts.length > 0 && <Pagination />}
+                {searchPosts.length > 0 && <Pagination handleClick={()=>{}} />}
             </section>
         </main>
     </>

@@ -31,7 +31,7 @@ const Home = () => {
           )
         })
        )}
-       <Pagination />
+       <Pagination handleClick={()=>{}} />
       </main>
     </div>
   )

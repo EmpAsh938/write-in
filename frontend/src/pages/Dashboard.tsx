@@ -58,7 +58,7 @@ const Dashboard = () => {
             )}
           </div>
         </section>
-        <Pagination />
+        <Pagination handleClick={()=>{}}/>
       </main>
     </div>
   )

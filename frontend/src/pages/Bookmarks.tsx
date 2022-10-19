@@ -54,7 +54,7 @@ const Bookmarks = () => {
                 
                 </div>
                     <div>
-                        {bookmarkPosts.length > 0 && <Pagination />}
+                        {bookmarkPosts.length > 0 && <Pagination handleClick={()=>{}}/>}
                     </div>
             </div>
         </section>

@@ -112,7 +112,7 @@ const Profile = () => {
                         <h2 className='text-xl font-medium'>Your Username</h2>
                         <input type="text" value={uname || ''} onChange={e => setUname(e.target.value)} className='px-2 py-1 text-sm border border-green-300 border-solid rounded outline-none' />
                     </div>
-                    <button onClick={handleProfileChange} className='px-10 py-2 text-white bg-green-500 rounded-sm'>Change</button>
+                    <button onClick={handleProfileChange} className='px-10 py-2 text-white bg-green-500 rounded-sm'>Save Changes</button>
                     <div className='flex flex-col gap-2'>
                         <h2 className='text-xl font-medium'>Photo</h2>
                         <div>
@@ -148,7 +148,7 @@ const Profile = () => {
                             <input value={mail || ''} onChange={e => setMail(e.target.value)} type="email" id="email" className='px-2 py-1 text-sm border border-green-300 border-solid rounded outline-none' />
                         </div>
                         
-                        <button onClick={handleEmailChange} className='px-10 py-2 text-white bg-green-500 rounded-sm'>Change</button>
+                        <button onClick={handleEmailChange} className='px-10 py-2 text-white bg-green-500 rounded-sm'>Save Changes</button>
                     </div>
                     <div className='flex flex-col gap-2'>
                         <h2 className='text-xl font-medium'>Change Password</h2>
@@ -161,7 +161,7 @@ const Profile = () => {
                             <label htmlFor="newpassword">Enter New Password</label>
                             <input value={newPassword} onChange={e => setNewPassword(e.target.value)} type="password" id="newpassword" className='px-2 py-1 text-sm border border-green-300 border-solid rounded outline-none' />
                         </div>
-                        <button className='px-10 py-2 text-white bg-green-500 rounded-sm' onClick={handlePasswordChange}>Change</button>
+                        <button className='px-10 py-2 text-white bg-green-500 rounded-sm' onClick={handlePasswordChange}>Save Changes</button>
                     </div>
                     <div className='flex flex-col gap-2'>
                         <h2 className='text-xl font-medium'>
