@@ -14,14 +14,14 @@ import SingleBlog from './pages/SingleBlog';
 import PageNotFound from './pages/PageNotFound';
 import ErrorMessage from './components/ErrorMessage';
 
-import { notify } from './app/features/auth/authSlice';
+import { notify, verifyUser } from './app/features/auth/authSlice';
 import { useAppDispatch, useAppSelector } from './hooks/useReactRedux';
 import { postNotification } from './app/features/post/postSlice';
 import { resetNotification } from './app/features/upload/uploadSlice';
 
 
 function App() {
-  const { notifications: notificationAuth } = useAppSelector(state => state.auth);
+  const { notifications: notificationAuth, token } = useAppSelector(state => state.auth);
   const { notifications: notificationPost } = useAppSelector(state => state.post);
   const { notifications: notificationUpload } = useAppSelector(state => state.post);
 
@@ -39,6 +39,15 @@ function App() {
 
     return () => clearTimeout(timer);
   }, [dispatch, notificationAuth.type, notificationPost.type, notificationUpload.type])
+
+  useEffect(() => {
+  const tokenValidation = () => {
+      if(token) {
+          dispatch(verifyUser(token));
+      }
+  }
+  tokenValidation();
+}, [dispatch])
 
   return (
     <BrowserRouter>
