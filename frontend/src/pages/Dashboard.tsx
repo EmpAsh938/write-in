@@ -58,7 +58,7 @@ const Dashboard = () => {
             )}
           </div>
         </section>
-        <Pagination handleClick={()=>{}}/>
+        <Pagination handleClick={()=>setPages(prev => prev+1)}/>
       </main>
     </div>
   )

@@ -15,6 +15,10 @@ const Bookmarks = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
 
+    const handlePages = () => {
+        setPages(prev => prev+1);
+    }
+
     useEffect(() => {
         if(token) {
             dispatch(bookmarkLists({pages,rows:10,token}));
@@ -54,7 +58,7 @@ const Bookmarks = () => {
                 
                 </div>
                     <div>
-                        {bookmarkPosts.length > 0 && <Pagination handleClick={()=>{}}/>}
+                        {bookmarkPosts.length > 0 && <Pagination handleClick={()=>handlePages}/>}
                     </div>
             </div>
         </section>
