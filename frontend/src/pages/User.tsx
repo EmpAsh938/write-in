@@ -40,7 +40,7 @@ const User = () => {
             dispatch(getUserProfile({id})); 
             dispatch(userBlogsList({pages,rows:10,id,filter:'latest'}));
         }
-    }, [id,dispatch])
+    }, [id,pages,dispatch])
     if(Object.keys(userProfile).length === 0) return (
         <Loader />
     );    

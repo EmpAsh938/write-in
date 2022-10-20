@@ -24,7 +24,7 @@ const Bookmarks = () => {
     }, [dispatch,navigate,pages,token])
   useEffect(() => {
       if(!token) navigate('/');
-  }, [])
+  }, [token,navigate])
   return (
    <>
     <Navbar />

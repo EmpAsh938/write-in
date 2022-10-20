@@ -24,16 +24,13 @@ const searchBlogs = asyncHandler(async (req, res) => {
             doc = await Post.find({ title: {$regex: re, $options: 'i'} }).populate('author').sort({createdAt: sortParam}).skip(rows * (pages-1)).limit(rows).exec();
         }
         if(doc.length === 0) {
-            res.json({
-                message: 'items not found',
-                result: []
-            })
-        } else {
+            res.status(404);
+            throw new Error('No bookmarks found');
+        }
             res.json({
                 message: 'successfully retrieved',
                 result: doc
             })
-        }
     } catch (error) {
         throw new Error(error);
     } 
@@ -48,10 +45,8 @@ const listBlogsPublic = asyncHandler(async (req, res) => {
     try {
         const doc = await Post.find({ status:{$eq:'published'} }).populate('author').sort({ createdAt: -1 }).skip(rows * (pages - 1)).limit(rows).exec();
         if (doc.length === 0) {
-            return res.json({
-                message: "items not found: either load more documents or lower the page limit",
-                result: []
-            })
+            res.status(404);
+            throw new Error('not found');
         }
         res.json({
             message: "succesfully retreived",
@@ -186,10 +181,8 @@ const listBlogsPrivate = asyncHandler(async (req, res) => {
             }
         }).sort({ createdAt: -1 }).skip(rows * (pages-1)).limit(rows).exec();
         if (docs.length === 0) {
-            res.json({
-                message: 'not enough items to show',
-                result: []
-            })
+            res.status(404);
+            throw new Error('not found');
         } else {
             res.json({
                 message: 'successfully retrieved',
@@ -213,10 +206,8 @@ const getBlogSingle = asyncHandler(async (req, res) => {
         // checking if post exits
         const doc = await Post.findById(id).populate('author').exec();
         if (!doc) {
-            return res.json({
-                message: 'not found',
-                result: []
-            })
+            res.status(404);
+            throw new Error('not found');
         }
         if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
             let get_token = req.headers.authorization.split('Bearer')[1].trim();

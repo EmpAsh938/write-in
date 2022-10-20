@@ -28,7 +28,7 @@ const Dashboard = () => {
 
   useEffect(() => {
       if(!token) navigate('/');
-  }, [])
+  }, [navigate,token])
  
   return (
     <div className='bg-slate-100'>

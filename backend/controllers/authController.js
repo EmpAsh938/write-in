@@ -174,10 +174,8 @@ const listBookmark = asyncHandler(async (req, res) => {
         const doc = await Auth.findOne({_id:user_id}).populate('bookmarks').exec();
         let filtered_doc = doc.bookmarks.splice((rows*(pages-1)),rows);
         if(filtered_doc.length === 0) {
-            return res.status(404).json({
-                message: 'no bookmarks to display',
-                result: []
-            })
+            res.status(404);
+            throw new Error('No bookmarks found');
         }
         return res.json({
             message: 'bookmarks list',
