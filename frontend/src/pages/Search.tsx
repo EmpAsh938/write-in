@@ -1,13 +1,12 @@
 import { useState } from 'react';
-import { searchBlogs } from '../app/features/post/postSlice';
+import { loadMore, searchBlogs } from '../app/features/post/postSlice';
 import HomeBlogs from '../components/HomeBlogs';
 import Navbar from '../components/Navbar'
 import Pagination from '../components/Pagination';
 import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
 
 const Search = () => {
-    const { searchPosts, query } = useAppSelector(state => state.post);
-    const [pages, setPages] = useState<number>(1);
+    const { searchPosts, query, pages, rows } = useAppSelector(state => state.post);
 
     const dispatch = useAppDispatch();
 
@@ -44,7 +43,7 @@ const Search = () => {
                 ) : (
                     <p>no search results found.</p>
                 )}
-                {searchPosts.length > 0 && <Pagination handleClick={()=>setPages(prev => prev+1)} />}
+                {searchPosts.length > 0 && <Pagination handleClick={()=>dispatch(loadMore())} />}
             </section>
         </main>
     </>

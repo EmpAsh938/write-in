@@ -16,7 +16,7 @@ import ErrorMessage from './components/ErrorMessage';
 
 import { notify, verifyUser } from './app/features/auth/authSlice';
 import { useAppDispatch, useAppSelector } from './hooks/useReactRedux';
-import { postNotification } from './app/features/post/postSlice';
+import { postNotification, resetPages } from './app/features/post/postSlice';
 import { resetNotification } from './app/features/upload/uploadSlice';
 
 
@@ -41,12 +41,13 @@ function App() {
   }, [dispatch, notificationAuth.type, notificationPost.type, notificationUpload.type])
 
   useEffect(() => {
-  const tokenValidation = () => {
-      if(token) {
-          dispatch(verifyUser(token));
+      dispatch(resetPages());     
+      const tokenValidation = () => {
+          if(token) {
+              dispatch(verifyUser(token));
+          }
       }
-  }
-  tokenValidation();
+      tokenValidation();
 }, [dispatch])
 
   return (

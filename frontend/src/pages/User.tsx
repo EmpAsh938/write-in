@@ -5,11 +5,12 @@ import { MdEmail, MdLink, MdLocationOn } from 'react-icons/md';
 import Navbar from '../components/Navbar'
 import HomeBlogs from '../components/HomeBlogs'
 import UserImage from '../components/UserImage'
+import Pagination from '../components/Pagination'
 
 import { tabHandler } from '../utils/tabHandler'
 import { getUserProfile, followUser } from '../app/features/auth/authSlice'
 import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux'
-import {userBlogsList} from '../app/features/post/postSlice'
+import {loadMore, userBlogsList} from '../app/features/post/postSlice'
 import Loader from '../components/Loader';
 
 
@@ -17,8 +18,7 @@ import Loader from '../components/Loader';
 const User = () => {
     const { id } = useParams();
     const { user, token, userProfile } = useAppSelector(state => state.auth);
-    const { userBlogs } = useAppSelector(state => state.post);
-    const [pages, setPages] = useState<number>(1);
+    const { userBlogs, pages, rows } = useAppSelector(state => state.post);
 
     const dispatch = useAppDispatch();
 
@@ -95,6 +95,9 @@ const User = () => {
                         ) : (
                             <p>no items to display</p>
                         )
+                    }
+                    {
+                        userBlogs.length > 0 && <Pagination handleClick={()=>dispatch(loadMore())} />
                     }
                 </div>
             </section>

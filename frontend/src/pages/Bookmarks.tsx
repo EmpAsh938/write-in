@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { FaRegBookmark } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
-import { bookmarkLists } from '../app/features/post/postSlice'
+import { bookmarkLists, loadMore } from '../app/features/post/postSlice'
 import HomeBlogs from '../components/HomeBlogs'
 import Navbar from '../components/Navbar'
 import Pagination from '../components/Pagination'
@@ -9,19 +9,18 @@ import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux'
 
 const Bookmarks = () => {
     const { token } = useAppSelector(state => state.auth);
-    const { bookmarkPosts } = useAppSelector(state => state.post);
-    const [pages, setPages] = useState<number>(1);
+    const { bookmarkPosts, pages, rows } = useAppSelector(state => state.post);
 
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
 
     const handlePages = () => {
-        setPages(prev => prev+1);
+        dispatch(loadMore());
     }
 
     useEffect(() => {
         if(token) {
-            dispatch(bookmarkLists({pages,rows:10,token}));
+            dispatch(bookmarkLists({pages,rows,token}));
         } else {
             navigate('/login');
         }

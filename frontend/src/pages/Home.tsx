@@ -4,22 +4,21 @@ import Navbar from '../components/Navbar';
 import HomeBlogs from '../components/HomeBlogs';
 import Pagination from '../components/Pagination';
 import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
-import { listPublicBlogs, resetPages } from '../app/features/post/postSlice';
+import { listPublicBlogs, loadMore, resetPages } from '../app/features/post/postSlice';
 
 
 const Home = () => {
-  const { posts } = useAppSelector(state => state.post);
-  const [pages, setPages] = useState<number>(1);
+  const { posts, pages, rows } = useAppSelector(state => state.post);
 
   const dispatch = useAppDispatch();
 
     const handleLoadPages = () => {
-    setPages(prev => prev+1);
+        dispatch(loadMore());
     }
   useEffect(() => {
     dispatch(resetPages());
-    dispatch(listPublicBlogs({pages,rows:10}));
-  }, [dispatch,pages])  
+    dispatch(listPublicBlogs({pages,rows}));
+  }, [dispatch,pages,rows])  
   return (
     <div className='bg-slate-100'>
       <Navbar />

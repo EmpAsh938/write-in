@@ -5,24 +5,21 @@ import Card from '../components/Card';
 import Navbar from '../components/Navbar';
 import Blogcard from '../components/Blogcard';
 import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
-import { listPrivate, resetPages } from '../app/features/post/postSlice';
+import { listPrivate, resetPages, loadMore } from '../app/features/post/postSlice';
 import Pagination from '../components/Pagination';
 import {useNavigate} from 'react-router-dom';
 
 const Dashboard = () => {
   const { token } = useAppSelector(state => state.auth);
-  const { privatePosts } = useAppSelector(state => state.post);
-  const [pages, setPages] = useState<number>(1);
-
+  const { privatePosts, rows, pages } = useAppSelector(state => state.post);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-
   
   useEffect(() => {
     dispatch(resetPages());
     if(token) {
-      dispatch(listPrivate({pages,rows:10,token}));
+      dispatch(listPrivate({pages,rows,token}));
     }
   }, [token,pages,dispatch])
 
@@ -58,7 +55,7 @@ const Dashboard = () => {
             )}
           </div>
         </section>
-        <Pagination handleClick={()=>setPages(prev => prev+1)}/>
+        <Pagination handleClick={()=>dispatch(loadMore())}/>
       </main>
     </div>
   )
