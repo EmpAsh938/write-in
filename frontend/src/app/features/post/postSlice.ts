@@ -196,7 +196,7 @@ const postSlice = createSlice({
                 if(Array.isArray(action.payload.result)) {
                     if(action.payload.result.length > 0) {
 
-                        if(initialState.pages !== state.pages || initialState.rows !== state.rows) {
+                        if(initialState.pages !== state.pages) {
                             state.posts = [...state.posts, ...action.payload.result]
                         } else {
                             state.posts = [...action.payload.result];
@@ -241,7 +241,7 @@ const postSlice = createSlice({
                 if(Array.isArray(action.payload.result)) {
                     if(action.payload.result.length > 0) {
 
-                        if(initialState.pages !== state.pages || initialState.rows !== state.rows) {
+                        if(initialState.pages !== state.pages) {
                             state.privatePosts = [...state.privatePosts, ...action.payload.result]
                         } else {
                             state.privatePosts = [...action.payload.result];
@@ -302,7 +302,7 @@ const postSlice = createSlice({
                 if(Array.isArray(action.payload.result)) {
                     if(action.payload.result.length > 0) {
 
-                        if(initialState.pages !== state.pages || initialState.rows !== state.rows) {
+                        if(initialState.pages !== state.pages) {
                             state.searchPosts = [...state.searchPosts, ...action.payload.result]
                         } else {
                             state.searchPosts = [...action.payload.result];
@@ -341,7 +341,7 @@ const postSlice = createSlice({
                 if(Array.isArray(action.payload.result)) {
                     if(action.payload.result.length > 0) {
 
-                        if(initialState.pages !== state.pages || initialState.rows !== state.rows) {
+                        if(initialState.pages !== state.pages) {
                             state.bookmarkPosts = [...state.bookmarkPosts, ...action.payload.result]
                         } else {
                             state.bookmarkPosts = [...action.payload.result];
@@ -367,7 +367,7 @@ const postSlice = createSlice({
             if(typeof action.payload === 'object') {
                 if(Array.isArray(action.payload.result)) {
                     if(action.payload.result.length > 0) {
-                        if(initialState.pages !== state.pages || initialState.rows !== state.rows) {
+                        if(initialState.pages !== state.pages) {
                             state.userBlogs = [...state.userBlogs, ...action.payload.result]
                         } else {
                             state.userBlogs = [...action.payload.result];
@@ -388,7 +388,5 @@ const postSlice = createSlice({
 })
 
 export const { searchString, loadMore, resetPages, resetSinglePost, removePrivatePost, postNotification } = postSlice.actions;
-
-export const selectPost = (state: RootState) => state.post
 
 export default postSlice.reducer
