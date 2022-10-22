@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { MdOutlineDashboardCustomize } from 'react-icons/md';
 
 import Card from '../components/Card';
@@ -21,7 +21,7 @@ const Dashboard = () => {
     if(token) {
       dispatch(listPrivate({pages,rows,token}));
     }
-  }, [token,pages,dispatch])
+  }, [token,pages,rows,dispatch])
 
   useEffect(() => {
       if(!token) navigate('/');

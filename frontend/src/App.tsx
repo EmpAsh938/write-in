@@ -48,6 +48,7 @@ function App() {
           }
       }
       tokenValidation();
+      // eslint-disable-next-line
 }, [dispatch])
 
   return (

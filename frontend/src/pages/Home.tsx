@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 
 import Navbar from '../components/Navbar';
 import HomeBlogs from '../components/HomeBlogs';
@@ -13,6 +13,7 @@ const Home = () => {
   const dispatch = useAppDispatch();
 
     const handleLoadPages = () => {
+    console.log('working');
         dispatch(loadMore());
     }
   useEffect(() => {
@@ -30,7 +31,7 @@ const Home = () => {
           )
         })
        )}
-       <Pagination handleClick={()=>handleLoadPages} />
+       <Pagination handleClick={handleLoadPages} />
       </main>
     </div>
   )

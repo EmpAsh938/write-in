@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { loadMore, searchBlogs } from '../app/features/post/postSlice';
 import HomeBlogs from '../components/HomeBlogs';
 import Navbar from '../components/Navbar'
@@ -14,11 +13,11 @@ const Search = () => {
         document.querySelectorAll('.btn').forEach(btnelement => btnelement.classList.remove('active'));
         (e.target as Element).classList.add('active');
         if(type === 'asc') {
-            dispatch(searchBlogs({query,pages, rows:10, sort:1}));
+            dispatch(searchBlogs({query,pages, rows, sort:1}));
         } else if(type === 'desc') {
-            dispatch(searchBlogs({query,pages,rows:10,sort:-1}));
+            dispatch(searchBlogs({query,pages,rows,sort:-1}));
         } else {
-            dispatch(searchBlogs({query,pages,rows:10,sort:0}));
+            dispatch(searchBlogs({query,pages,rows,sort:0}));
         }
     }
   return (

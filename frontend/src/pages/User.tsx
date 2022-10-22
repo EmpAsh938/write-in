@@ -1,5 +1,5 @@
 import {useParams} from 'react-router-dom'
-import { useState, MouseEvent, useEffect } from 'react'
+import { MouseEvent, useEffect } from 'react'
 import { MdEmail, MdLink, MdLocationOn } from 'react-icons/md';
 
 import Navbar from '../components/Navbar'
@@ -25,7 +25,7 @@ const User = () => {
     const handleBlogsTab = (event:MouseEvent<HTMLButtonElement>) => {
         tabHandler(event,'user-blog-tab');
         let buttontype = event.currentTarget.dataset.type;
-        dispatch(userBlogsList({pages,rows:10,id:user._id,filter:buttontype||''}));
+        dispatch(userBlogsList({pages,rows,id:user._id,filter:buttontype||''}));
     }
 
     const handleFollow = () => {
@@ -38,9 +38,9 @@ const User = () => {
     useEffect(() => {
         if(id) {
             dispatch(getUserProfile({id})); 
-            dispatch(userBlogsList({pages,rows:10,id,filter:'latest'}));
+            dispatch(userBlogsList({pages,rows,id,filter:'latest'}));
         }
-    }, [id,pages,dispatch])
+    }, [id,pages,rows,dispatch])
     if(Object.keys(userProfile).length === 0) return (
         <Loader />
     );    
@@ -81,7 +81,7 @@ const User = () => {
                 <div className='flex items-center justify-between border-solid border-bottom border-color-slate-400'>
                     <h2>{userProfile.fullname} blogs</h2>
                     <div className='flex items-center justify-start gap-2'>
-                        <button onClick={handleBlogsTab} className='user-blog-tab' data-type='latest'>Most Recent</button>
+                        <button onClick={handleBlogsTab} className='user-blog-tab active' data-type='latest'>Most Recent</button>
                         <button onClick={handleBlogsTab} className='user-blog-tab' date-type='oldest'>Oldest</button>
                         <button onClick={handleBlogsTab} className='user-blog-tab' data-type='liked'>Most Liked</button>
                     </div>

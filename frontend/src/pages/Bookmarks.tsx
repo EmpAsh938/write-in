@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { FaRegBookmark } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
 import { bookmarkLists, loadMore } from '../app/features/post/postSlice'
@@ -24,7 +24,7 @@ const Bookmarks = () => {
         } else {
             navigate('/login');
         }
-    }, [dispatch,navigate,pages,token])
+    }, [dispatch,navigate,pages,rows,token])
   useEffect(() => {
       if(!token) navigate('/');
   }, [token,navigate])
@@ -57,7 +57,7 @@ const Bookmarks = () => {
                 
                 </div>
                     <div>
-                        {bookmarkPosts.length > 0 && <Pagination handleClick={()=>handlePages}/>}
+                        {bookmarkPosts.length > 0 && <Pagination handleClick={handlePages}/>}
                     </div>
             </div>
         </section>

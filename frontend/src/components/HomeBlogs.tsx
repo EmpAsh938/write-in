@@ -21,11 +21,12 @@ const HomeBlogs = ({_id, author, title, createdAt}:PostsType) => {
       </div>
       <div className='ml-[45px] flex flex-col gap-1'>
         <h2 className='text-2xl font-bold'>{title}</h2>
-        <div className='flex flex-wrap text-sm text-gray-600 gap-2'>
+{/*        <div className='flex flex-wrap text-sm text-gray-600 gap-2'>
           <span className='px-2 py-1 border border-gray-300 border-solid rounded-sm'>#dev</span>
           <span className='px-2 py-1 border border-gray-300 border-solid rounded-sm'>#javascript</span>
           <span className='px-2 py-1 border border-gray-300 border-solid rounded-sm'>#tech</span>
         </div>
+*/}
       </div>
       <div className='flex items-center justify-between'>
         <button className=''>

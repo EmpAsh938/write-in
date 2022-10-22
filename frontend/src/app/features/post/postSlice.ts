@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-import { RootState } from '../../store';
 import { deleteBlog, editBlog, likePost, listBookmark, listPrivateAll, listPublicAll, listSingle, listUserBlogs, savePost, searchBlog } from './postService';
 import { PostsObjType, PostsType } from '../../../types/postTypes';
 import { NotificationsType } from '../../../types/authTypes';
