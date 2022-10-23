@@ -61,9 +61,9 @@ export const listSingleBlogs = createAsyncThunk(
 
 export const listPrivate = createAsyncThunk(
     'post/private/all',
-   async ({pages,rows,token}:{pages:number,rows:number,token:string | null},thunkAPI) => {
+   async ({type,pages,rows,token}:{type:string,pages:number,rows:number,token:string | null},thunkAPI) => {
     try {
-        return (await listPrivateAll(pages,rows,token));
+        return (await listPrivateAll(type,pages,rows,token));
     } catch (error:any) {
         const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString() || '';
         return thunkAPI.rejectWithValue(message);

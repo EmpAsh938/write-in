@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { MouseEvent, useEffect, useState } from 'react';
 import { MdOutlineDashboardCustomize } from 'react-icons/md';
 
 import Card from '../components/Card';
@@ -8,20 +8,29 @@ import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
 import { listPrivate, resetPages, loadMore } from '../app/features/post/postSlice';
 import Pagination from '../components/Pagination';
 import {useNavigate} from 'react-router-dom';
+import { tabHandler } from '../utils/tabHandler';
 
 const Dashboard = () => {
   const { token } = useAppSelector(state => state.auth);
   const { privatePosts, rows, pages } = useAppSelector(state => state.post);
+  const [blogType, setBlogType] = useState<string>('');
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  const handleTabs = (event:MouseEvent<HTMLButtonElement>,type:string) => {
+      tabHandler(event,'dashboard-tab');
+      setBlogType(type);
+  }
   
   useEffect(() => {
-    dispatch(resetPages());
-    if(token) {
-      dispatch(listPrivate({pages,rows,token}));
+    if(pages > 1) {
+        dispatch(resetPages());
     }
-  }, [token,pages,rows,dispatch])
+    if(token) {
+      dispatch(listPrivate({type:blogType,pages,rows,token}));
+    }
+  }, [token,blogType,pages,rows,dispatch])
 
   useEffect(() => {
       if(!token) navigate('/');
@@ -42,7 +51,14 @@ const Dashboard = () => {
           </div>
         </section>
         <section>
+        <div className='flex items-center justify-between'>
           <h2 className='text-lg font-semibold'>Post</h2>
+          <div className='flex items-center gap-2'>
+              <button onClick={(e)=>handleTabs(e,'')} className='dashboard-tab active'>All</button>
+              <button onClick={(e)=>handleTabs(e,'published')} className='dashboard-tab'>Published</button>
+              <button onClick={(e)=>handleTabs(e,'draft')} className='dashboard-tab'>Drafts</button>
+          </div>
+        </div>
           <div className='flex flex-col py-2 border-t-2 border-green-200 border-solid gap-2'>
             {privatePosts.length > 0 ? (
               privatePosts.map(item => {

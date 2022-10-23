@@ -161,7 +161,7 @@ const deleteBlog = asyncHandler(async (req, res) => {
 })
 
 const listBlogsPrivate = asyncHandler(async (req, res) => {
-    const { pages, rows } = req.query;
+    const { type, pages, rows } = req.query;
     const token = req.headers.authorization.split('Bearer')[1].trim();
     const decoded = jwt.decode(token);
     const id = decoded._id;
@@ -174,21 +174,30 @@ const listBlogsPrivate = asyncHandler(async (req, res) => {
         throw new Error('pages or rows are missing');
     }
     try {
-        const docs = await Post.find({}).populate({
-            path: 'author',
-            match: {
-                _id: { $eq: id }
-            }
-        }).sort({ createdAt: -1 }).skip(rows * (pages-1)).limit(rows).exec();
+        let docs;
+        if(!type) {
+            docs = await Post.find({}).populate({
+                path: 'author',
+                match: {
+                    _id: { $eq: id }
+                }
+            }).sort({ createdAt: -1 }).skip(rows * (pages-1)).limit(rows).exec();
+        } else {
+            docs = await Post.find({status:type}).populate({
+                path: 'author',
+                match: {
+                    _id: { $eq: id }
+                }
+            }).sort({ createdAt: -1 }).skip(rows * (pages-1)).limit(rows).exec();
+        }
         if (docs.length === 0) {
             res.status(404);
             throw new Error('not found');
-        } else {
-            res.json({
-                message: 'successfully retrieved',
-                result: docs
-            })
-        }
+        } 
+        res.json({
+            message: 'successfully retrieved',
+            result: docs
+        })
     } catch (error) {
         res.status(401);
         throw new Error(error);
@@ -286,6 +295,10 @@ const listUserBlogs = asyncHandler(async (req, res) => {
             doc = await Post.find({author:id,status:'published'}).populate('author').sort({createdAt: 1}).skip(rows * (pages - 1)).limit(rows);
         } else {
             doc = await Post.find({author:id,status:'published'}).populate('author').sort({createdAt: -1}).skip(rows * (pages - 1)).limit(rows);
+        }
+        if(doc.length === 0) {
+            res.status(404);
+            throw new Error('not found');
         }
         res.json({
             message: 'user blogs',

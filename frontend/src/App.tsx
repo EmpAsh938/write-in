@@ -20,6 +20,7 @@ import { postNotification, resetPages } from './app/features/post/postSlice';
 import { resetNotification } from './app/features/upload/uploadSlice';
 
 
+
 function App() {
   const { notifications: notificationAuth, token } = useAppSelector(state => state.auth);
   const { notifications: notificationPost } = useAppSelector(state => state.post);
@@ -28,7 +29,6 @@ function App() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-
     let timer = setTimeout(() => {
       if(notificationAuth.type !=='idle' || notificationPost.type !== 'idle' || notificationUpload.type !== 'idle') {
         dispatch(notify({type:'idle',message:''}));

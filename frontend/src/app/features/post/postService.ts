@@ -19,8 +19,8 @@ export const listSingle = async (id:string, token:string) => {
 }
 
 // list private all blogs
-export const listPrivateAll = async (pages:number,rows:number,token:string | null) => {
-    const response = await axios.get(`/post/me?pages=${pages}&rows=${rows}`,
+export const listPrivateAll = async (type:string,pages:number,rows:number,token:string | null) => {
+    const response = await axios.get(`/post/me?type=${type}&pages=${pages}&rows=${rows}`,
         {
         headers: {
             Authorization: `Bearer ${token}`
