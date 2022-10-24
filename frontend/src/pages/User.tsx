@@ -1,5 +1,5 @@
 import {useParams} from 'react-router-dom'
-import { MouseEvent, useEffect } from 'react'
+import { MouseEvent, useEffect, useState } from 'react'
 import { MdEmail, MdLink, MdLocationOn } from 'react-icons/md';
 
 import Navbar from '../components/Navbar'
@@ -10,7 +10,7 @@ import Pagination from '../components/Pagination'
 import { tabHandler } from '../utils/tabHandler'
 import { getUserProfile, followUser } from '../app/features/auth/authSlice'
 import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux'
-import {loadMore, userBlogsList} from '../app/features/post/postSlice'
+import {loadMore, resetPages, userBlogsList} from '../app/features/post/postSlice'
 import Loader from '../components/Loader';
 
 
@@ -19,13 +19,16 @@ const User = () => {
     const { id } = useParams();
     const { user, token, userProfile } = useAppSelector(state => state.auth);
     const { userBlogs, pages, rows } = useAppSelector(state => state.post);
+    const [buttonType, setButtonType] = useState<string>('latest');
 
     const dispatch = useAppDispatch();
 
     const handleBlogsTab = (event:MouseEvent<HTMLButtonElement>) => {
         tabHandler(event,'user-blog-tab');
-        let buttontype = event.currentTarget.dataset.type;
-        dispatch(userBlogsList({pages,rows,id:user._id,filter:buttontype||''}));
+        if(event.currentTarget.dataset.type) {
+            setButtonType(event.currentTarget.dataset.type);
+        }
+        dispatch(resetPages());
     }
 
     const handleFollow = () => {
@@ -38,9 +41,9 @@ const User = () => {
     useEffect(() => {
         if(id) {
             dispatch(getUserProfile({id})); 
-            dispatch(userBlogsList({pages,rows,id,filter:'latest'}));
+            dispatch(userBlogsList({pages,rows,id,filter:buttonType}));
         }
-    }, [id,pages,rows,dispatch])
+    }, [id,pages,rows,dispatch,buttonType])
     if(Object.keys(userProfile).length === 0) return (
         <Loader />
     );    

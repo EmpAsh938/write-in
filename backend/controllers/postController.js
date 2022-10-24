@@ -25,7 +25,7 @@ const searchBlogs = asyncHandler(async (req, res) => {
         }
         if(doc.length === 0) {
             res.status(404);
-            throw new Error('No bookmarks found');
+            throw new Error('No search results found');
         }
             res.json({
                 message: 'successfully retrieved',
@@ -199,7 +199,6 @@ const listBlogsPrivate = asyncHandler(async (req, res) => {
             result: docs
         })
     } catch (error) {
-        res.status(401);
         throw new Error(error);
     }
 })

@@ -293,10 +293,12 @@ const postSlice = createSlice({
             }
         })
         .addCase(searchBlogs.pending, (state) => {
-            state.isLoading = true;
+            state.notifications.type = 'loading';
+            state.notifications.message = 'fetching search results';
         })
         .addCase(searchBlogs.fulfilled, (state, action) => {
-            state.isLoading = false;
+            state.notifications.type = 'success';
+            state.notifications.message = 'search result found';
             if(typeof action.payload === 'object') {
                 if(Array.isArray(action.payload.result)) {
                     if(action.payload.result.length > 0) {
@@ -313,7 +315,6 @@ const postSlice = createSlice({
             }
         })
         .addCase(searchBlogs.rejected, (state, action) => {
-            state.isLoading = false;
             state.notifications.type = 'error';
             state.notifications.message = typeof action.payload === 'string' ? action.payload : '';
         })

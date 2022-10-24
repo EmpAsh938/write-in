@@ -57,6 +57,6 @@
     }
 
     .active {
-        @apply font-semibold;
+        @apply font-semibold border-b-2 border-solid border-current;
     }
 }

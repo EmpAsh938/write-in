@@ -21,12 +21,10 @@ const Dashboard = () => {
   const handleTabs = (event:MouseEvent<HTMLButtonElement>,type:string) => {
       tabHandler(event,'dashboard-tab');
       setBlogType(type);
+    dispatch(resetPages());
   }
   
   useEffect(() => {
-    if(pages > 1) {
-        dispatch(resetPages());
-    }
     if(token) {
       dispatch(listPrivate({type:blogType,pages,rows,token}));
     }

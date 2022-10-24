@@ -1,4 +1,5 @@
-import { loadMore, searchBlogs } from '../app/features/post/postSlice';
+import { useState, useEffect } from 'react';
+import { loadMore, searchBlogs, resetPages } from '../app/features/post/postSlice';
 import HomeBlogs from '../components/HomeBlogs';
 import Navbar from '../components/Navbar'
 import Pagination from '../components/Pagination';
@@ -6,20 +7,26 @@ import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
 
 const Search = () => {
     const { searchPosts, query, pages, rows } = useAppSelector(state => state.post);
+    const [blogType, setBlogType] = useState<string>('');
 
     const dispatch = useAppDispatch();
 
     const handleClick = (e:React.MouseEvent<HTMLButtonElement>,type:string) => {
         document.querySelectorAll('.btn').forEach(btnelement => btnelement.classList.remove('active'));
         (e.target as Element).classList.add('active');
-        if(type === 'asc') {
-            dispatch(searchBlogs({query,pages, rows, sort:1}));
-        } else if(type === 'desc') {
-            dispatch(searchBlogs({query,pages,rows,sort:-1}));
-        } else {
-            dispatch(searchBlogs({query,pages,rows,sort:0}));
-        }
+        setBlogType(type);
+        dispatch(resetPages());
     }
+    useEffect(() => {
+        dispatch(searchBlogs({query,pages, rows, sort:!blogType ? 0 : blogType === 'asc' ? 1 : -1}));
+        // if(blogType === 'asc') {
+        //     dispatch(searchBlogs({query,pages, rows, sort:1}));
+        // } else if(blogType === 'desc') {
+        //     dispatch(searchBlogs({query,pages,rows,sort:-1}));
+        // } else {
+        //     dispatch(searchBlogs({query,pages,rows,sort:0}));
+        // }
+    }, [dispatch,pages,query,rows,blogType])
   return (
     <>
         <Navbar />
