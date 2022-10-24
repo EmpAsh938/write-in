@@ -187,14 +187,15 @@ const postSlice = createSlice({
     extraReducers: (builder) => {
         builder
         .addCase(listPublicBlogs.pending, (state) => {
-            state.isLoading = true;
+            state.notifications.type = 'loading';
+            state.notifications.message = 'blogs fetching';
         })
         .addCase(listPublicBlogs.fulfilled, (state, action) => {
-            state.isLoading = false;
+            state.notifications.type = 'success';
+            state.notifications.message = 'blogs fetching success';
             if(typeof action.payload === 'object') {
                 if(Array.isArray(action.payload.result)) {
                     if(action.payload.result.length > 0) {
-
                         if(initialState.pages !== state.pages) {
                             state.posts = [...state.posts, ...action.payload.result]
                         } else {
@@ -207,24 +208,24 @@ const postSlice = createSlice({
             }
         })
         .addCase(listPublicBlogs.rejected, (state, action) => {
-            state.isLoading = false;
             if(typeof action.payload === 'string') {
                 state.notifications.type = 'error';
                 state.notifications.message = action.payload
             }
         })
         .addCase(listSingleBlogs.pending, (state) => {
-            state.isLoading = true;
+            state.notifications.type = 'loading';
+            state.notifications.message = 'fetching blogs';
         })
         .addCase(listSingleBlogs.fulfilled, (state, action) => {
-            state.isLoading = false;
+            state.notifications.type = 'success';
+            state.notifications.message = 'fetching blogs success';
             if(typeof action.payload.result === 'object') {
                 state.singlePost = action.payload.result;
             }
         })
 
         .addCase(listSingleBlogs.rejected, (state, action) => {
-            state.isLoading = false;
             if(typeof action.payload === 'string') {
                 state.notifications.type = 'error';
                 state.notifications.message = action.payload;
@@ -232,10 +233,12 @@ const postSlice = createSlice({
 
         })
         .addCase(listPrivate.pending, (state) => {
-            state.isLoading = true;
+            state.notifications.type = 'loading';
+            state.notifications.message = 'fetching blogs';
         })
         .addCase(listPrivate.fulfilled, (state, action) => {
-            state.isLoading = false;
+            state.notifications.type = 'success';
+            state.notifications.message = 'fetching blogs success';
             if(typeof action.payload === 'object') {
                 if(Array.isArray(action.payload.result)) {
                     if(action.payload.result.length > 0) {
@@ -252,31 +255,26 @@ const postSlice = createSlice({
             }
         })
         .addCase(listPrivate.rejected, (state, action) => {
-            state.isLoading = false;
             if(typeof action.payload === 'string') {
                 state.notifications.type = 'error';
                 state.notifications.message = action.payload;
             }
         })
-        .addCase(updateBlog.fulfilled, (state, action) => {
-            state.isLoading = false;
+        .addCase(updateBlog.fulfilled, (state) => {
             state.notifications.type = 'success';
             state.notifications.message = 'post edited';
         })
         .addCase(updateBlog.rejected, (state, action) => {
-            state.isLoading = false;
             if(typeof action.payload === 'string') {
                 state.notifications.type = 'error';
                 state.notifications.message = action.payload;
             }
         })
         .addCase(removeBlog.fulfilled, (state) => {
-            state.isLoading = false;
             state.notifications.type = 'success';
             state.notifications.message = 'post removed';
         })
         .addCase(removeBlog.rejected, (state, action) => {
-            state.isLoading = false;
             if(typeof action.payload === 'string') {
                 state.notifications.type = 'error';
                 state.notifications.message = action.payload;
@@ -353,7 +351,6 @@ const postSlice = createSlice({
             }
         })
         .addCase(bookmarkLists.rejected, (state, action) => {
-            state.isLoading = false;
             if(typeof action.payload === 'string') {
                 state.notifications.type = 'error';
                 state.notifications.message = action.payload;
