@@ -80,12 +80,12 @@ const SingleBlog = () => {
         <main className='p-10'>
             <section className='flex flex-col max-w-5xl min-h-screen p-4 mx-auto border border-green-300 border-solid rounded gap-3'>
                 <div className='flex items-center justify-between'>
-                    <div>
+                    <div className='flex items-center gap-2'>
                         <div>
                             <UserImage profileImage={author.profileImage} fullname={author.fullname} width={45} height={45} />
                         </div>
                         <div className='flex flex-col gap-1'>
-                            <h3 className='font-medium'>{author.fullname}</h3>
+                            <h3 className='font-medium capitalize'>{author.fullname}</h3>
                             <span className='text-sm text-slate-500'>{`Created at ${getMonth(createdAt)} ${new Date(createdAt).getDate()} ${new Date(createdAt).getFullYear()}`}</span>
                         </div>
                     </div>
