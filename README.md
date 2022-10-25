@@ -35,3 +35,4 @@ npm run dev
 - comment and reply
 - bookmark intriguing and needed blogs
 - view user's profile
+- follow/unfollow user
