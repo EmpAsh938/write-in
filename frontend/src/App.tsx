@@ -53,8 +53,11 @@ function App() {
 
   return (
     <BrowserRouter>
+    {(notificationAuth.type || notificationPost.type || notificationUpload) && (<div className='flex flex-col gap-4'>
       {notificationAuth.type && <ErrorMessage {...notificationAuth} />}
       {notificationPost.type && <ErrorMessage {...notificationPost} />}
+      {notificationUpload.type && <ErrorMessage {...notificationUpload} />}
+    </div>)}
       <Routes>
         <Route path="/">
           <Route index element={<Home />} />
