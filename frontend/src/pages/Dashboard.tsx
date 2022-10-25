@@ -21,7 +21,7 @@ const Dashboard = () => {
   const handleTabs = (event:MouseEvent<HTMLButtonElement>,type:string) => {
       tabHandler(event,'dashboard-tab');
       setBlogType(type);
-    dispatch(resetPages());
+      dispatch(resetPages());
   }
   
   useEffect(() => {

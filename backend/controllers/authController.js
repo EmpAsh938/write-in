@@ -171,15 +171,26 @@ const listBookmark = asyncHandler(async (req, res) => {
     }
     const user_id = jwt.decode(req.headers.authorization.split('Bearer')[1].trim())._id;
     try {
-        const doc = await Auth.findOne({_id:user_id}).populate('bookmarks').exec();
+        const doc = await Auth.findOne({_id:user_id});
         let filtered_doc = doc.bookmarks.splice((rows*(pages-1)),rows);
         if(filtered_doc.length === 0) {
             res.status(404);
             throw new Error('No bookmarks found');
         }
+        let bookmarks = [];
+        for(const item of filtered_doc) {
+            let singlepost = await Post.findOne({_id:item.valueOf()}).populate('author');
+            if(singlepost !== null) {
+                bookmarks.push(singlepost);
+            }
+        }
+        if(bookmarks.length === 0) {
+            res.status(404);
+            throw new Error('No bookmarks found');
+        }
         return res.json({
             message: 'bookmarks list',
-            result: filtered_doc
+            result: bookmarks
         })
     } catch (error) {
         throw new Error(error);

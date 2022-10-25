@@ -5,7 +5,6 @@ const Auth = require('../models/authModel');
 const Post = require('../models/postModel');
 const Comment = require('../models/commentModel');
 const Reply = require('../models/replyModel');
-
 const cloudinary = require('../config/cloudinary');
 
 const searchBlogs = asyncHandler(async (req, res) => {
