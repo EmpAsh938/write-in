@@ -266,7 +266,7 @@ const likeBlog = asyncHandler(async (req, res) => {
             })
         }
         let results = await Post.findByIdAndUpdate(id,{$push: {"likes": user_ref_id}}).exec();
-        results = await Post.findOne({_id:id}).exec();
+        results = await Post.findOne({_id:id}).populate('author');
         res.json({
             message: 'liked',
             result: results
