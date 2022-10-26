@@ -11,7 +11,7 @@ import {useNavigate} from 'react-router-dom';
 import { tabHandler } from '../utils/tabHandler';
 
 const Dashboard = () => {
-  const { token } = useAppSelector(state => state.auth);
+  const { token, user } = useAppSelector(state => state.auth);
   const { privatePosts, rows, pages } = useAppSelector(state => state.post);
   const [blogType, setBlogType] = useState<string>('');
 
@@ -43,9 +43,11 @@ const Dashboard = () => {
               <MdOutlineDashboardCustomize className='text-3xl' />
               <h1 className='mb-2 text-2xl font-semibold'>Dashboard</h1>
           </div>
-          <div className='flex items-center gap-4'>
+          <div className='flex items-center flex-wrap gap-4'>
             <Card count={1} title='Total likes'/>
             <Card count={1} title='Total views'/>
+            <Card count={user.followers.length} title='Total followers'/>
+            <Card count={1} title='Total Blogs'/>
           </div>
         </section>
         <section>
