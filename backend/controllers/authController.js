@@ -76,7 +76,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
     try {
         const doc = await user.save()
-        const token = await jwt.sign(doc.toJSON(),process.env.JWT_SECRET, { expiresIn: "1D" });
+        const token = await tokenGenerate(doc.toJSON());
         res.status(200).json({
             message: 'register user',
             result: {
@@ -102,7 +102,7 @@ const bookmarkPost = asyncHandler(async (req, res) => {
         if(doc) {
             doc = await Auth.findOneAndUpdate({_id:decoded._id}, {$pull: {bookmarks: {$eq: id}}}).exec();
             doc = await Auth.findOne({_id:decoded._id}).exec();
-            let token = await jwt.sign(doc.toJSON(),process.env.JWT_SECRET, { expiresIn: "1D" });
+            let token = await tokenGenerate(doc.toJSON());
             return res.json({
                 message: 'bookmark removed',
                 result: {
@@ -117,7 +117,7 @@ const bookmarkPost = asyncHandler(async (req, res) => {
             throw new Error('not found');
         }
         doc = await Auth.findOne({_id:decoded._id}).exec();
-        let token = await jwt.sign(doc.toJSON(),process.env.JWT_SECRET, { expiresIn: "1D" });
+        token = await tokenGenerate(doc.toJSON());
         res.json({
             message: 'bookmarked',
             result:{
@@ -144,7 +144,8 @@ const validateUser = asyncHandler(async (req, res) => {
             res.status(401);
             throw new Error('user not authorized');
         } else {
-            const token = await jwt.sign(result.toJSON(),process.env.JWT_SECRET,{expiresIn:'1D'});
+        let token = await tokenGenerate(doc.toJSON());
+        res.json({
             res.json({
                 message: 'verified',
                 result: {
@@ -223,12 +224,12 @@ const passwordChange = asyncHandler(async (req, res) => {
         if(!updatePass) {
             throw new Error('update failed');
         }
-        let newtoken = await jwt.sign(updatePass.toJSON(),process.env.JWT_SECRET,{expiresIn:'1D'});
+        let token = await tokenGenerate(doc.toJSON());
         res.status(200).json({
             message: 'password changed',
             result: {
                 ...updatePass,
-                token: newtoken
+                token
             }
         })
 
@@ -255,12 +256,12 @@ const emailChange = asyncHandler(async (req, res) => {
         if(!doc) {
             throw new Error('email change failed');
         }
-        let newtoken = await jwt.sign(doc.toJSON(),process.env.JWT_SECRET,{expiresIn:'1D'});
+        let token = await tokenGenerate(doc.toJSON());
         res.status(200).json({
             message: 'email changed',
             result: {
                 ...doc,
-                token: newtoken
+                token
             }
         })
     } catch (error) {
@@ -284,12 +285,12 @@ const accountInfoChange = asyncHandler(async (req, res) => {
         if(!doc) {
             throw new Error('update failed');
         }
-        let newtoken = await jwt.sign(doc.toJSON(),process.env.JWT_SECRET,{expiresIn:'1D'});
+        let token = await tokenGenerate(doc.toJSON());
         res.json({
             message:'update success',
             result: {
                 ...doc,
-                token:newtoken
+                token
             }
         })
     } catch (error) {
@@ -307,12 +308,12 @@ const basicInfo = asyncHandler(async (req, res) => {
     try {
        let doc = await Auth.findOneAndUpdate({_id:decoded._id},{$set: {bio,country,website}}); 
         doc = await Auth.findOne({_id:decoded._id});
-       let newtoken = await jwt.sign(doc.toJSON(),process.env.JWT_SECRET,{expiresIn:'1D'});
+        let token = await tokenGenerate(doc.toJSON());
         res.json({
             message: 'basic info updated',
             result: {
                 ...doc,
-                token:newtoken
+                token
             }
         })
     } catch (error) {
