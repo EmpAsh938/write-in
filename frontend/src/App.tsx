@@ -5,7 +5,6 @@ import User from './pages/User';
 import Blog from './pages/Blog';
 import Home from './pages/Home';
 import Login from './pages/Login';
-import Admin from './pages/Admin';
 import Search from './pages/Search';
 import Profile from './pages/Profile';
 import Register from './pages/Register';
@@ -59,7 +58,6 @@ function App() {
       {notificationUpload.type && <ErrorMessage {...notificationUpload} />}
       <Routes>
         <Route path="/">
-          <Route path="admin" element={<Admin />} />
           <Route index element={<Home />} />
           <Route path="login" element={
             <Login />} />
