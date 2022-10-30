@@ -51,7 +51,11 @@ const authSchema = new Schema(
         },
         website: {
             type: String
-        }
+        },
+        role: {
+            type: String,
+            enum: ['admin','default'],
+            message: '{VALUE} is not supported'
     },
     {
         timestamps: true

@@ -8,6 +8,7 @@ const Reply = require('../models/replyModel');
 const Comment = require('../models/commentModel');
 const cloudinary = require('../config/cloudinary');
 const { validPassword } = require('../utils/validPassword');
+const { tokenGenerate } = require('../utils/tokenGenerate');
 
 const loginUser = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
@@ -22,7 +23,7 @@ const loginUser = asyncHandler(async (req, res) => {
             res.status(401);
             throw new Error('user not authorized');
         }
-        const token = await jwt.sign(user.toJSON(),process.env.JWT_SECRET, { expiresIn: "1D" });
+        const token = await tokenGenerate(user.toJSON());
 
         res.status(200).json({
             message: 'login user',
@@ -101,7 +102,7 @@ const bookmarkPost = asyncHandler(async (req, res) => {
         let doc = await Auth.findOne({_id:decoded._id, bookmarks: {$eq: id}}).exec();
         if(doc) {
             doc = await Auth.findOneAndUpdate({_id:decoded._id}, {$pull: {bookmarks: {$eq: id}}}).exec();
-            doc = await Auth.findOne({_id:decoded._id}).exec();
+            doc = await Auth.findOne({_id:decoded._id});
             let token = await tokenGenerate(doc.toJSON());
             return res.json({
                 message: 'bookmark removed',
@@ -116,7 +117,7 @@ const bookmarkPost = asyncHandler(async (req, res) => {
             res.status(400);
             throw new Error('not found');
         }
-        doc = await Auth.findOne({_id:decoded._id}).exec();
+        doc = await Auth.findOne({_id:decoded._id});
         token = await tokenGenerate(doc.toJSON());
         res.json({
             message: 'bookmarked',
@@ -144,7 +145,7 @@ const validateUser = asyncHandler(async (req, res) => {
             res.status(401);
             throw new Error('user not authorized');
         } else {
-        let token = await tokenGenerate(doc.toJSON());
+        let token = await tokenGenerate(result.toJSON());
         res.json({
             res.json({
                 message: 'verified',
@@ -224,7 +225,8 @@ const passwordChange = asyncHandler(async (req, res) => {
         if(!updatePass) {
             throw new Error('update failed');
         }
-        let token = await tokenGenerate(doc.toJSON());
+        let result = await Auth.findOne({_id:user._id});
+        let token = await tokenGenerate(result.toJSON());
         res.status(200).json({
             message: 'password changed',
             result: {
@@ -256,6 +258,7 @@ const emailChange = asyncHandler(async (req, res) => {
         if(!doc) {
             throw new Error('email change failed');
         }
+        doc = await Auth.findOne({_id:decoded._id});
         let token = await tokenGenerate(doc.toJSON());
         res.status(200).json({
             message: 'email changed',
@@ -285,6 +288,7 @@ const accountInfoChange = asyncHandler(async (req, res) => {
         if(!doc) {
             throw new Error('update failed');
         }
+        doc = await Auth.findOne({_id:decoded._id});
         let token = await tokenGenerate(doc.toJSON());
         res.json({
             message:'update success',
