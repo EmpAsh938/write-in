@@ -5,7 +5,7 @@ import { PostsType } from '../types/postTypes';
 import { getMonth } from '../utils/getMonth';
 import { Link, useNavigate } from 'react-router-dom';
 
-const HomeBlogs = ({_id, author, title, createdAt}:PostsType) => {
+const HomeBlogs = ({_id, author, title, images, createdAt}:PostsType) => {
 
     const navigate = useNavigate();
 
@@ -15,6 +15,8 @@ const HomeBlogs = ({_id, author, title, createdAt}:PostsType) => {
   
   return (
     <div onClick={handleClick} className='p-3 bg-white border border-green-200 border-solid rounded shadow-md'>
+    <div className='flex'>
+    <div>
       <div className='flex items-center gap-2'>
         <UserImage profileImage={author.profileImage} fullname={author.fullname} width={45} height={45} />
         <h3 className='capitalize'><Link to={`/user/${author._id}`}>{author.fullname}</Link></h3>
@@ -28,6 +30,9 @@ const HomeBlogs = ({_id, author, title, createdAt}:PostsType) => {
         </div>
 */}
       </div>
+  </div>
+    {images.length > 0 && (<img src={images[0]} alt=""/>)}
+    </div>
       <div className='flex items-center justify-between'>
         <button className=''>
           <FaRegHeart className='hover:fill-red-500'/>

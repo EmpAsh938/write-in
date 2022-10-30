@@ -11,6 +11,7 @@ export type PostsType = {
     likes: [string];
     createdAt: string;
     updatedAt: string;
+    images: [string];
 }
 
 export type PostsObjType = {
