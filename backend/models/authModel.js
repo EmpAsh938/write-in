@@ -55,6 +55,7 @@ const authSchema = new Schema(
         role: {
             type: String,
             enum: ['admin','default'],
+            required: [true, 'Please insert role'],
             message: '{VALUE} is not supported'
     },
     {
