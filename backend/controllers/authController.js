@@ -72,7 +72,8 @@ const registerUser = asyncHandler(async (req, res) => {
         profileImage:'',
         bio: '',
         country: '',
-        website: ''
+        website: '',
+        role: 'default'
     });
 
     try {
@@ -144,17 +145,15 @@ const validateUser = asyncHandler(async (req, res) => {
         if(!result) {
             res.status(401);
             throw new Error('user not authorized');
-        } else {
+        }
         let token = await tokenGenerate(result.toJSON());
         res.json({
-            res.json({
-                message: 'verified',
-                result: {
-                    ...result,
-                    token
-                }
-            })
-        }
+            message: 'verified',
+            result: {
+                ...result,
+                token
+            }
+        })
     } catch (error) {
         res.status(401);
         throw new Error(error);
