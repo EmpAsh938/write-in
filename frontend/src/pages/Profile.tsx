@@ -1,6 +1,7 @@
 import { ChangeEvent, useEffect, useState, MouseEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import Modal from '../components/Modal';
 import Navbar from '../components/Navbar';
 import Country from '../components/Country';
 import UserImage from '../components/UserImage';
@@ -22,6 +23,7 @@ const Profile = () => {
     const [website, setWebsite] = useState<string>(user.website);
     const [bio, setBio] = useState<string>(user.bio);
     const [activeTab, setActiveTab] = useState<string>('account');
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
@@ -94,6 +96,7 @@ const Profile = () => {
     },[token,navigate])
     return (
         <div className='bg-slate-100'>
+            { isModalOpen && <Modal message={"Deleting User will lead to permanent removal of account. You won't be able to access anything afterwards."} handleExecute={handleDeleteUser} handleCancel={()=>setIsModalOpen(false)} /> }
             <Navbar />
             <main className='flex flex-col max-w-lg p-5 mx-auto bg-white gap-8'>
                 <section className='flex flex-wrap items-center justify-center gap-2'>
@@ -168,7 +171,7 @@ const Profile = () => {
                             Delete Your Account
                         </h2>
                         <p className='text-sm text-gray-500'>Your account will be permanently deleted along with all the blogs you have posted since you last created your account. You won't be able to recover your account back again once it's deleted. Do it on your own risk.</p>
-                        <button onClick={handleDeleteUser} className='px-10 py-2 text-white bg-red-500 rounded-sm w-fit'>Delete</button>
+                        <button onClick={()=>setIsModalOpen(true)} className='px-10 py-2 text-white bg-red-500 rounded-sm w-fit'>Delete</button>
                     </div>
 
                 </section>
