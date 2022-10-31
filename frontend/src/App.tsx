@@ -53,9 +53,11 @@ function App() {
 
   return (
     <BrowserRouter>
-      {notificationAuth.type && <ErrorMessage {...notificationAuth} />}
-      {notificationPost.type && <ErrorMessage {...notificationPost} />}
-      {notificationUpload.type && <ErrorMessage {...notificationUpload} />}
+    <div className={`${(notificationAuth.type === 'idle' && notificationPost.type === 'idle' && notificationUpload.type === 'idle') ? 'hidden': 'z-50 fixed top-3 right-1 p-6 max-w-sm mx-auto bg-transparent flex flex-col gap-4'}`}>
+      {notificationAuth.type !== 'idle' && <ErrorMessage {...notificationAuth} />}
+      {notificationPost.type !== 'idle' && <ErrorMessage {...notificationPost} />}
+      {notificationUpload.type !== 'idle' && <ErrorMessage {...notificationUpload} />}
+    </div>
       <Routes>
         <Route path="/">
           <Route index element={<Home />} />
