@@ -47,6 +47,9 @@ const uploadSlice = createSlice({
         resetNotification: (state, action) => {
             state.notifications.type = action.payload.type;
             state.notifications.message = action.payload.message;
+        },
+        resetImageUrl: (state) => {
+            state.imageUrl = '';
         }
     },
     extraReducers: (builder) => {
@@ -81,6 +84,6 @@ const uploadSlice = createSlice({
     }
 })
 
-export const { resetNotification } = uploadSlice.actions;
+export const { resetNotification, resetImageUrl } = uploadSlice.actions;
 
 export default uploadSlice.reducer

@@ -21,9 +21,10 @@ import {
 
 import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
 import { listSingleBlogs, saveBlog, resetSinglePost, updateBlog } from '../app/features/post/postSlice';
-import { uploadFile } from '../app/features/upload/uploadSlice';
+import { resetImageUrl, uploadFile } from '../app/features/upload/uploadSlice';
 import { getTags } from '../utils/getTags';
 import Preview from '../components/Preview';
+import Modal from '../components/Modal';
 
 const Blog = () => {
     const { id } = useParams();
@@ -36,11 +37,19 @@ const Blog = () => {
     const [startSelect, setStartSelect] = useState<number>(0);
     const [endSelect, setEndSelect] = useState<number>(0);
     const [images, setImages] = useState<string[]>([]);
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
 
-    const handleCancel = () => {
+    const handleCancelPost = () => {
+        if(markdown || title || images.length > 0) {
+            if(id) {
+                dispatch(updateBlog({id,token,title:title || 'untitled',images,status:singlePost.status,markdown}));
+            } else {
+                dispatch(saveBlog({title:title || 'untitled',markdown,images,status:'draft',token}));
+            }
+        }
         dispatch(resetSinglePost());
         setTitle('');
         setMarkdown('');
@@ -105,12 +114,13 @@ const Blog = () => {
           let secondPart = markdown.substring(endSelect,markdown.length);
           midPart = getTags('image',imageUrl);
           setMarkdown(firstPart+midPart+secondPart);
+          dispatch(resetImageUrl());
         }
-  }, [imageUrl])
+  }, [imageUrl, markdown, startSelect, endSelect, dispatch])
 
   useEffect(() => {
       if(!token) navigate('/');
-  }, [])
+  }, [token, navigate])
   return (
     <div className='min-h-screen bg-slate-100'>
     <main className='flex flex-col max-w-xl p-5 pb-40 mx-auto overflow-y-visible gap-8'>
@@ -174,10 +184,10 @@ const Blog = () => {
     <section className='fixed bottom-0 left-0 flex justify-center w-full p-5 bg-white border border-green-200 border-solid gap-2'>
         <button onClick={() => handleFinish('published')} className='px-2 py-1 text-white bg-green-600 rounded-sm'>Publish</button>
         <button onClick={() => handleFinish('draft')} className='px-2 py-1 text-white bg-green-800 rounded-sm'>Save to Draft</button>
-        <button onClick={handleCancel} className='px-2 py-1 text-white bg-red-600 rounded-sm'>Cancel</button>
+        <button onClick={()=>setIsModalOpen(true)} className='px-2 py-1 text-white bg-red-600 rounded-sm'>Cancel</button>
     </section>
     </main>
-    
+   { isModalOpen && <Modal message='Do you seriously want to exit from here? Your post will be saved as draft if there are any unsaved changes.' handleExecute={handleCancelPost} handleCancel={()=>setIsModalOpen(false)} /> } 
     </div>
   )
 }
