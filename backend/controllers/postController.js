@@ -322,11 +322,12 @@ const userBlogAnalytics = asyncHandler(async (req, res) => {
             views += item.views.length;
         }
         res.json({
-            message: 'blog analytics'
+            message: 'blog analytics',
             result: {
                 likes,
                 views,
                 total: doc.length
+            }
         })
     } catch (error) {
         throw new Error(error);

@@ -118,7 +118,7 @@ const Profile = () => {
                     <button onClick={handleProfileChange} className='px-10 py-2 text-white bg-green-500 rounded-sm'>Save Changes</button>
                     <div className='flex flex-col gap-2'>
                         <h2 className='text-xl font-medium'>Photo</h2>
-                        <div>
+                        <div className='flex flex-col gap-2'>
                             <UserImage profileImage={user.profileImage} fullname={user.fullname} width={50} height={50} />
                             <div className='relative'>
                                 <input onChange={handleFileChange} type='file' name='photos' accept='image/*' />

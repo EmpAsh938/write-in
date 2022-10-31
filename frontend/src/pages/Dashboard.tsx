@@ -35,7 +35,7 @@ const Dashboard = () => {
   useEffect(() => {
       if(!token) navigate('/');
       if(token) dispatch(getBlogAnalytic({token}));
-  }, [navigate,token])
+  }, [navigate,token,dispatch])
  
   return (
     <div className='bg-slate-100'>
