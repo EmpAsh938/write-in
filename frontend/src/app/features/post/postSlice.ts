@@ -182,6 +182,9 @@ const postSlice = createSlice({
             const { type, message } = action.payload;
             state.notifications.type = type;
             state.notifications.message = message;
+        },
+        resetPrivatePost: (state) => {
+            state.privatePosts = [];
         }
     },
     extraReducers: (builder) => {
@@ -384,6 +387,6 @@ const postSlice = createSlice({
     }
 })
 
-export const { searchString, loadMore, resetPages, resetSinglePost, removePrivatePost, postNotification } = postSlice.actions;
+export const { searchString, loadMore, resetPages, resetSinglePost, removePrivatePost, postNotification, resetPrivatePost } = postSlice.actions;
 
 export default postSlice.reducer

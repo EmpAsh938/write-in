@@ -5,7 +5,7 @@ import Card from '../components/Card';
 import Navbar from '../components/Navbar';
 import Blogcard from '../components/Blogcard';
 import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
-import { listPrivate, resetPages, loadMore } from '../app/features/post/postSlice';
+import { listPrivate, resetPages, loadMore, resetPrivatePost } from '../app/features/post/postSlice';
 import Pagination from '../components/Pagination';
 import {useNavigate} from 'react-router-dom';
 import { tabHandler } from '../utils/tabHandler';
@@ -22,6 +22,7 @@ const Dashboard = () => {
       tabHandler(event,'dashboard-tab');
       setBlogType(type);
       dispatch(resetPages());
+      dispatch(resetPrivatePost());
   }
   
   useEffect(() => {
