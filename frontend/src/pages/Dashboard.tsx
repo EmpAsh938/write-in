@@ -1,18 +1,19 @@
+import {useNavigate} from 'react-router-dom';
 import { MouseEvent, useEffect, useState } from 'react';
 import { MdOutlineDashboardCustomize } from 'react-icons/md';
 
 import Card from '../components/Card';
 import Navbar from '../components/Navbar';
 import Blogcard from '../components/Blogcard';
-import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
-import { listPrivate, resetPages, loadMore, resetPrivatePost } from '../app/features/post/postSlice';
 import Pagination from '../components/Pagination';
-import {useNavigate} from 'react-router-dom';
+
 import { tabHandler } from '../utils/tabHandler';
+import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
+import { listPrivate, resetPages, loadMore, resetPrivatePost, getBlogAnalytic } from '../app/features/post/postSlice';
 
 const Dashboard = () => {
   const { token, user } = useAppSelector(state => state.auth);
-  const { privatePosts, rows, pages } = useAppSelector(state => state.post);
+  const { privatePosts, rows, pages, views, likes, totals } = useAppSelector(state => state.post);
   const [blogType, setBlogType] = useState<string>('');
 
   const dispatch = useAppDispatch();
@@ -33,6 +34,7 @@ const Dashboard = () => {
 
   useEffect(() => {
       if(!token) navigate('/');
+      if(token) dispatch(getBlogAnalytic({token}));
   }, [navigate,token])
  
   return (
@@ -45,10 +47,10 @@ const Dashboard = () => {
               <h1 className='mb-2 text-2xl font-semibold'>Dashboard</h1>
           </div>
           <div className='flex items-center flex-wrap gap-4'>
-            <Card count={1} title='Total likes'/>
-            <Card count={1} title='Total views'/>
+            <Card count={likes} title='Total likes'/>
+            <Card count={views} title='Total views'/>
             <Card count={user.followers.length} title='Total followers'/>
-            <Card count={1} title='Total Blogs'/>
+            <Card count={totals} title='Total Blogs'/>
           </div>
         </section>
         <section>

@@ -307,7 +307,31 @@ const listUserBlogs = asyncHandler(async (req, res) => {
     }
 })
 
-
+const userBlogAnalytics = asyncHandler(async (req, res) => {
+    const decoded = jwt.decode(req.headers.authorization.split('Bearer')[1].trim());
+    try {
+        let doc = await Auth.findById(decoded._id);
+        if(!doc) {
+            throw new Error('user not found');
+        }
+        doc = await Post.find({author:decoded._id});
+        let likes = 0;
+        let views = 0;
+        for(const item of doc) {
+            likes += item.likes.length;
+            views += item.views.length;
+        }
+        res.json({
+            message: 'blog analytics'
+            result: {
+                likes,
+                views,
+                total: doc.length
+        })
+    } catch (error) {
+        throw new Error(error);
+    }
+})
 
 module.exports = {
     likeBlog,
@@ -318,5 +342,6 @@ module.exports = {
     getBlogSingle,
     listBlogsPublic,
     listBlogsPrivate,
-    listUserBlogs
+    listUserBlogs,
+    userBlogAnalytics
 }

@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-import { deleteBlog, editBlog, likePost, listBookmark, listPrivateAll, listPublicAll, listSingle, listUserBlogs, savePost, searchBlog } from './postService';
+import { deleteBlog, editBlog, likePost, listBookmark, listPrivateAll, listPublicAll, listSingle, listUserBlogs, savePost, searchBlog, userBlogAnalytic } from './postService';
 import { PostsObjType, PostsType } from '../../../types/postTypes';
 import { NotificationsType } from '../../../types/authTypes';
 
@@ -10,6 +10,9 @@ interface PostState {
     notifications: NotificationsType;
     query:string,
     isLoading: boolean;
+    likes: number;
+    views: number;
+    totals: number;
     posts: PostsType[];
     singlePost: PostsType;
     searchPosts: PostsType[];
@@ -21,6 +24,9 @@ interface PostState {
 const initialState: PostState = {
     pages: 1,
     rows: 10,
+    likes: 0,
+    views: 0,
+    totals: 0,
     notifications: {
         type: 'idle',
         message: '',
@@ -154,6 +160,16 @@ export const userBlogsList = createAsyncThunk(
         }
     })
 
+export const getBlogAnalytic = createAsyncThunk(
+    'post/analytic',
+    async ({token}:{token:string},thunkAPI) => {
+        try {
+            return (await userBlogAnalytic(token));
+        } catch (error:any) {
+            const message = (error.message && error.message.data && error.response.data.message) || error.message || error.toString() || '';
+            return thunkAPI.rejectWithValue(message);
+        }
+    })
 const postSlice = createSlice({
     name: 'post',
     initialState,
@@ -384,6 +400,20 @@ const postSlice = createSlice({
                     state.notifications.message = action.payload;
                 }
         })
+        .addCase(getBlogAnalytic.fulfilled, (state,action) => {
+            if(typeof action.payload === 'object') {
+                state.totals = action.payload.result.total;
+                state.views = action.payload.result.views;
+                state.likes = action.payload.result.likes;
+            }
+        })
+        .addCase(getBlogAnalytic.rejected, (state, action) => {
+                if(typeof action.payload === 'string') {
+                    state.notifications.type = 'error';
+                    state.notifications.message = action.payload;
+                }
+        })
+            
     }
 })
 

@@ -98,3 +98,12 @@ export const listUserBlogs = async (pages:number,rows:number,id:string,filter:st
     const response = await axios.get(`/post/user/${id}?pages=${pages}&rows=${rows}&filter=${filter}`);
     return response.data;
 }
+
+
+// list user blog analytics 
+export const userBlogAnalytic = async (token:string) => {
+    const response = await axios.get(`/post/count`, {
+        headers: { Authorization: `Bearer ${token}` }
+    });
+    return response.data;
+}
