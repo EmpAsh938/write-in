@@ -34,7 +34,7 @@ const Dashboard = () => {
 
   useEffect(() => {
       if(!token) navigate('/');
-      if(token) dispatch(getBlogAnalytic({token}));
+      else dispatch(getBlogAnalytic({token}));
   }, [navigate,token,dispatch])
  
   return (
@@ -49,7 +49,7 @@ const Dashboard = () => {
           <div className='flex items-center flex-wrap gap-4'>
             <Card count={likes} title='Total likes'/>
             <Card count={views} title='Total views'/>
-            <Card count={user.followers.length} title='Total followers'/>
+            <Card count={user.followers ? user.followers.length : 0} title='Total followers'/>
             <Card count={totals} title='Total Blogs'/>
           </div>
         </section>

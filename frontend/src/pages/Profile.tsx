@@ -14,6 +14,7 @@ import { changeAccountInfo, changeEmail, changePassword, deleteAccount, notify }
 
 const Profile = () => {
     const { token, user } = useAppSelector(state => state.auth);
+
     const [name, setName] = useState<string | null>(user.fullname);
     const [uname, setUname] = useState<string | null>(user.username);
     const [mail, setMail] = useState<string | null>(user.email);
@@ -132,7 +133,7 @@ const Profile = () => {
                         <h2>Bio</h2>
                         <input type='text' className='p-1 py-3 border border-gray-300 border-solid' value={bio} onChange={e=>setBio(e.target.value)}/>
                     </div>
-                    <Country country={country} setCountry={setCountry}/>
+                    {token && <Country country={country} setCountry={setCountry}/>}
                     <div className='flex flex-col gap-1'>
                         <h2>Website</h2>
                         <input className='p-1 border border-gray-300 border-solid' type="text" value={website} onChange={e=>setWebsite(e.target.value)}/>
