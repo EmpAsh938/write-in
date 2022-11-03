@@ -11,10 +11,8 @@ import { tabHandler } from '../utils/tabHandler'
 import { numberCount } from '../utils/numberCount'
 import { getUserProfile, followUser } from '../app/features/auth/authSlice'
 import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux'
-import {loadMore, resetPages, userBlogsList} from '../app/features/post/postSlice'
+import {loadMore, resetPages, resetuserBlogs, userBlogsList} from '../app/features/post/postSlice'
 import Loader from '../components/Loader';
-
-
 
 const User = () => {
     const { id } = useParams();
@@ -30,6 +28,7 @@ const User = () => {
             setButtonType(event.currentTarget.dataset.type);
         }
         dispatch(resetPages());
+        dispatch(resetuserBlogs());
     }
 
     const handleFollow = () => {
@@ -42,6 +41,10 @@ const User = () => {
     useEffect(() => {
         if(id) {
             dispatch(getUserProfile({id})); 
+        }
+    }, [id,dispatch])
+    useEffect(() => {
+        if(id) {
             dispatch(userBlogsList({pages,rows,id,filter:buttonType}));
         }
     }, [id,pages,rows,dispatch,buttonType])
@@ -86,7 +89,7 @@ const User = () => {
                     <h2>{userProfile.fullname} blogs</h2>
                     <div className='flex items-center justify-start gap-2'>
                         <button onClick={handleBlogsTab} className='user-blog-tab active' data-type='latest'>Most Recent</button>
-                        <button onClick={handleBlogsTab} className='user-blog-tab' date-type='oldest'>Oldest</button>
+                        <button onClick={handleBlogsTab} className='user-blog-tab' data-type='oldest'>Oldest</button>
                         <button onClick={handleBlogsTab} className='user-blog-tab' data-type='liked'>Most Liked</button>
                     </div>
                 </div>

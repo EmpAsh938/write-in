@@ -201,6 +201,9 @@ const postSlice = createSlice({
         },
         resetPrivatePost: (state) => {
             state.privatePosts = [];
+        },
+        resetuserBlogs: (state) => {
+            state.userBlogs = [];
         }
     },
     extraReducers: (builder) => {
@@ -417,6 +420,6 @@ const postSlice = createSlice({
     }
 })
 
-export const { searchString, loadMore, resetPages, resetSinglePost, removePrivatePost, postNotification, resetPrivatePost } = postSlice.actions;
+export const { searchString, loadMore, resetPages, resetSinglePost, removePrivatePost, postNotification, resetPrivatePost, resetuserBlogs } = postSlice.actions;
 
 export default postSlice.reducer
