@@ -1,10 +1,7 @@
 import { ChangeEvent, useEffect, useState, MouseEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import Modal from '../components/Modal';
-import Navbar from '../components/Navbar';
-import Country from '../components/Country';
-import UserImage from '../components/UserImage';
+import { Modal, Country, Navbar, UserImage } from '../components';
 
 import { tabHandler } from '../utils/tabHandler';
 import { emailValidator } from '../utils/emailValidator';

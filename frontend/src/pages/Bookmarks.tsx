@@ -2,9 +2,7 @@ import { useEffect } from 'react'
 import { FaRegBookmark } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
 import { bookmarkLists, loadMore } from '../app/features/post/postSlice'
-import HomeBlogs from '../components/HomeBlogs'
-import Navbar from '../components/Navbar'
-import Pagination from '../components/Pagination'
+import { HomeBlogs, Pagination, Navbar } from '../components'
 import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux'
 
 const Bookmarks = () => {

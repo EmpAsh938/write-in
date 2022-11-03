@@ -2,10 +2,12 @@ import {useNavigate} from 'react-router-dom';
 import { MouseEvent, useEffect, useState } from 'react';
 import { MdOutlineDashboardCustomize } from 'react-icons/md';
 
-import Card from '../components/Card';
-import Navbar from '../components/Navbar';
-import Blogcard from '../components/Blogcard';
-import Pagination from '../components/Pagination';
+import { 
+    Card,
+    Blogcard,
+    Pagination,
+    Navbar
+} from '../components';
 
 import { tabHandler } from '../utils/tabHandler';
 import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';

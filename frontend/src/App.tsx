@@ -1,18 +1,8 @@
 import { useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import User from './pages/User';
-import Blog from './pages/Blog';
-import Home from './pages/Home';
-import Login from './pages/Login';
-import Search from './pages/Search';
-import Profile from './pages/Profile';
-import Register from './pages/Register';
-import Dashboard from './pages/Dashboard';
-import Bookmarks from './pages/Bookmarks';
-import SingleBlog from './pages/SingleBlog';
-import PageNotFound from './pages/PageNotFound';
-import ErrorMessage from './components/ErrorMessage';
+import { User, Blog, Home, Login, Search, Profile, Register, Dashboard, Bookmarks, SingleBlog, PageNotFound } from './pages';
+import { ErrorMessage } from './components';
 
 import { notify, verifyUser } from './app/features/auth/authSlice';
 import { useAppDispatch, useAppSelector } from './hooks/useReactRedux';

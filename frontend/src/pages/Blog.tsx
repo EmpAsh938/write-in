@@ -23,8 +23,7 @@ import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
 import { listSingleBlogs, saveBlog, resetSinglePost, updateBlog } from '../app/features/post/postSlice';
 import { resetImageUrl, uploadFile } from '../app/features/upload/uploadSlice';
 import { getTags } from '../utils/getTags';
-import Preview from '../components/Preview';
-import Modal from '../components/Modal';
+import { Preview, Modal } from '../components';
 
 const Blog = () => {
     const { id } = useParams();

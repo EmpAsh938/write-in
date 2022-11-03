@@ -1,8 +1,7 @@
 import { useEffect } from 'react';
 
-import Navbar from '../components/Navbar';
-import HomeBlogs from '../components/HomeBlogs';
-import Pagination from '../components/Pagination';
+import { HomeBlogs, Pagination, Navbar } from '../components';
+
 import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
 import { listPublicBlogs, loadMore, resetPages } from '../app/features/post/postSlice';
 
