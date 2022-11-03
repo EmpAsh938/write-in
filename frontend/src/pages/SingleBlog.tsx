@@ -92,10 +92,10 @@ const SingleBlog = () => {
                     </div>
                     <div className='flex items-center gap-2'>
                         <button className='relative' onClick={handleLike}>
-                            <FaRegHeart className={`${likes.includes(user._id) ? 'text-red-500' : ''}`} />
+                            <FaRegHeart className={`${(token && likes.includes(user._id)) ? 'text-red-500' : ''}`} />
                             {likes.length > 0 && <span className='absolute w-[25px] h-[25px] text-xs font-semibold text-center top-[-50%] left-[-130%] border border-solid border-gray-800 p-1 bg-white rounded-full'>{numberCount(likes.length)}</span>}
                         </button>
-                        <button onClick={handleBookmark} className={`${user.bookmarks.includes(id||'') ? 'text-green-500': ''}`}>
+                        <button onClick={handleBookmark} className={`${(token && user.bookmarks.includes(id||'')) ? 'text-green-500': ''}`}>
                             <FaRegBookmark />
                         </button>
                     </div>
