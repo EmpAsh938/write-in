@@ -4,7 +4,7 @@
 
 @layer components {
     .markdown-css * {
-        @apply text-base text-gray-800;
+        @apply text-base text-gray-900;
     }
     .markdown-css h1,h2,h3,h4,h5,h6 {
         @apply font-semibold my-1;
@@ -37,7 +37,7 @@
         @apply underline;
     }
     .markdown-css code {
-        @apply block p-2 bg-[rgba(0,0,0,.6)] text-white;
+        @apply block p-2 bg-[rgba(0,0,0,.8)] text-white;
     }
     .markdown-css img {
         @apply w-full object-contain;
@@ -46,10 +46,10 @@
         @apply underline;
     }
     .markdown-css ul {
-        @apply list-disc pl-6 italic;
+        @apply list-disc pl-6;
     }
     .markdown-css ol {
-        @apply list-decimal pl-6 italic;
+        @apply list-decimal pl-6;
     }
     
     .markdown-css p {
