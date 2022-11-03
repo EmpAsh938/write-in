@@ -17,23 +17,10 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 8801;
 
-// const corsUrl = process.env.ALLOWED_URLS || '';
 
 
 // mongodb connection 
 connectDB();
-
-// cors configuration
-// const whitelist = corsUrl.split(',').map(item => item.trim())
-// const corsOptions = {
-//     origin: (origin:any, callback:any) => {
-//         if(whitelist.includes(origin) || origin === undefined) {
-//             callback(null, true);
-//         } else {
-//             callback(new Error('Not allowed by CORS'));
-//         }
-//     }
-// }
 
 // middlewares
 app.use(morgan('dev'));
@@ -47,6 +34,16 @@ app.use('/post', postRouter);
 app.use('/upload', uploadRouter);
 app.use('/comment', commentRouter);
 app.use('/reply', replyRouter);
+
+// serve frontend
+if(process.env.NODE_ENV === 'production') {
+    app.use(express.static(path.join(__dirname, '../frontend/build')));
+    app.get('*',(req, res) => {
+        res.sendFile(path.resolve(__dirname, '../frontend/build/index.html'));
+    })
+} else {
+        app.get('/', (req, res) => res.send('Application is on development mode.'));
+}
 
 app.use(errorHandler);
 app.use(notFound);
