@@ -1,0 +1,4 @@
+PORT = 8800
+ALLOWED_URLS =
+MONGO_URI = mongodb+srv://empash-admin:empash-admin@cluster0.7ywclsq.mongodb.net/?retryWrites=true&w=majority
+JWT_SECRET = apple1234
