@@ -14,6 +14,10 @@ processes = []
   allowed_public_ports = []
   auto_rollback = true
 
+[build]
+  builder = "paketobuildpacks/builder:base"
+  buildpacks = ["gcr.io/paketo-buildpacks/nodejs"]
+
 [[services]]
   http_checks = []
   internal_port = 8080
