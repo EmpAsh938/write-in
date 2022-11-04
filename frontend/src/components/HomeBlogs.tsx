@@ -19,9 +19,9 @@ const HomeBlogs = ({_id, author, title, images, createdAt}:PostsType) => {
     <div>
       <div className='flex items-center gap-2'>
         <UserImage profileImage={author.profileImage} fullname={author.fullname} width={45} height={45} />
-        <h3 className='capitalize'><Link to={`/user/${author._id}`}>{author.fullname}</Link></h3>
+        <h3 className='capitalize cursor-pointer'><Link to={`/user/${author._id}`}>{author.fullname}</Link></h3>
       </div>
-      <div onClick={handleClick}className='ml-[45px] flex flex-col gap-1'>
+      <div onClick={handleClick}className='ml-[45px] flex flex-col gap-1 cursor-pointer'>
         <h2 className='text-2xl font-bold'>{title}</h2>
 {/*        <div className='flex flex-wrap text-sm text-gray-600 gap-2'>
           <span className='px-2 py-1 border border-gray-300 border-solid rounded-sm'>#dev</span>
@@ -33,7 +33,7 @@ const HomeBlogs = ({_id, author, title, images, createdAt}:PostsType) => {
   </div>
     {images.length > 0 && (<img src={images[0]} alt=""/>)}
     </div>
-      <div onClick={handleClick} className='flex items-center justify-between'>
+      <div onClick={handleClick} className='flex items-center justify-between cursor-pointer'>
         <button className=''>
           <FaRegHeart className='hover:fill-red-500'/>
         </button>
