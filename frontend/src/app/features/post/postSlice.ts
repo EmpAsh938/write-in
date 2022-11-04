@@ -208,13 +208,7 @@ const postSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-        .addCase(listPublicBlogs.pending, (state) => {
-            state.notifications.type = 'loading';
-            state.notifications.message = 'blogs fetching';
-        })
         .addCase(listPublicBlogs.fulfilled, (state, action) => {
-            state.notifications.type = 'success';
-            state.notifications.message = 'blogs fetching success';
             if(typeof action.payload === 'object') {
                 if(Array.isArray(action.payload.result)) {
                     if(action.payload.result.length > 0) {
@@ -235,13 +229,7 @@ const postSlice = createSlice({
                 state.notifications.message = action.payload
             }
         })
-        .addCase(listSingleBlogs.pending, (state) => {
-            state.notifications.type = 'loading';
-            state.notifications.message = 'fetching blogs';
-        })
         .addCase(listSingleBlogs.fulfilled, (state, action) => {
-            state.notifications.type = 'success';
-            state.notifications.message = 'fetching blogs success';
             if(typeof action.payload.result === 'object') {
                 state.singlePost = action.payload.result;
             }
@@ -254,13 +242,7 @@ const postSlice = createSlice({
             }
 
         })
-        .addCase(listPrivate.pending, (state) => {
-            state.notifications.type = 'loading';
-            state.notifications.message = 'fetching blogs';
-        })
         .addCase(listPrivate.fulfilled, (state, action) => {
-            state.notifications.type = 'success';
-            state.notifications.message = 'fetching blogs success';
             if(typeof action.payload === 'object') {
                 if(Array.isArray(action.payload.result)) {
                     if(action.payload.result.length > 0) {
@@ -312,13 +294,7 @@ const postSlice = createSlice({
                 state.notifications.message = action.payload;
             }
         })
-        .addCase(searchBlogs.pending, (state) => {
-            state.notifications.type = 'loading';
-            state.notifications.message = 'fetching search results';
-        })
         .addCase(searchBlogs.fulfilled, (state, action) => {
-            state.notifications.type = 'success';
-            state.notifications.message = 'search result found';
             if(typeof action.payload === 'object') {
                 if(Array.isArray(action.payload.result)) {
                     if(action.payload.result.length > 0) {
@@ -350,12 +326,8 @@ const postSlice = createSlice({
             }
 
         })
-        .addCase(bookmarkLists.pending, (state) => {
-            state.isLoading = true;
-        })
 
         .addCase(bookmarkLists.fulfilled, (state, action) => {
-            state.isLoading = false;
 
             if(typeof action.payload === 'object') {
                 if(Array.isArray(action.payload.result)) {
@@ -377,10 +349,6 @@ const postSlice = createSlice({
                 state.notifications.type = 'error';
                 state.notifications.message = action.payload;
             }
-        })
-        .addCase(userBlogsList.pending, (state) => {
-                state.notifications.type = 'loading';
-                state.notifications.message = 'fetching user blogs';
         })
         .addCase(userBlogsList.fulfilled, (state,action) => {
             if(typeof action.payload === 'object') {

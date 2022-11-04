@@ -143,14 +143,8 @@ const commentSlice = createSlice({
 	},
 	extraReducers: (builder) => {
 		builder
-		.addCase(listComment.pending, (state) => {
-			state.notifications.type = 'loading';
-			state.notifications.message = 'fetching comments';
-		})
 		.addCase(listComment.fulfilled, (state, action) => {
 			if(typeof action.payload.result === 'object' && action.payload.result.length > 0) {
-				state.notifications.type = 'success';
-				state.notifications.message = 'fetched comments successfully';
                 state.comments = action.payload.result;
 			
 			}
@@ -161,10 +155,6 @@ const commentSlice = createSlice({
 				state.notifications.message = action.payload;
 			}
 		})
-	    .addCase(listReply.pending, (state) => {
-            state.notifications.type = 'loading';
-            state.notifications.message = 'fetching replies';
-        })
         .addCase(listReply.fulfilled, (state, action) => {
             if(typeof action.payload.result === 'object'){
                state.comments.forEach(item => {
@@ -184,8 +174,6 @@ const commentSlice = createSlice({
             }
         })
         .addCase(newComment.fulfilled, (state, action) => {
-			state.notifications.type = 'success';
-			state.notifications.message = 'comment added';
 			if(typeof action.payload.result === 'object' && action.payload.result.length > 0) {
 				state.comments = action.payload.result;
 			}
@@ -246,8 +234,6 @@ const commentSlice = createSlice({
 			state.notifications.message = 'Reply edit failed';	
 		})
 		.addCase(likeReply.fulfilled, (state, action) => {
-			state.notifications.type = 'success';
-			state.notifications.message = 'Reply liked';
 			if(typeof action.payload.result === 'object') {
 				state.comments = state.comments.map(item => {
 					if(item._id === action.payload.result.comment) {
