@@ -4,7 +4,7 @@ It is a fullstack blogging app created by Ashok Thapa as side project. It has al
 
 ## Preview
 
-Go visit: https://xxxxxxxxxx.com
+Go visit: https://writein.fly.dev
 
 ## Installation
 
