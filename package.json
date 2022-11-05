@@ -12,13 +12,18 @@
   "keywords": [
     "node",
     "express",
-    "mongodb"
+    "mongodb",
+    "mongoose",
+    "cloudinary",
+    "jwt",
+    "jsonwebtoken"
   ],
   "author": "Ashok Thapa",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.0.1",
     "cloudinary": "^1.32.0",
+    "concurrently": "^7.5.0",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "express-async-handler": "^1.2.0",

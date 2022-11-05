@@ -5,7 +5,7 @@ import UserImage from './UserImage';
 import { PostsType } from '../types/postTypes';
 import { getMonth } from '../utils/getMonth';
 
-const HomeBlogs = ({_id, author, title, images, createdAt}:PostsType) => {
+const HomeBlogs = ({_id, author, title, images, createdAt, likes}:PostsType) => {
 
     const navigate = useNavigate();
 
@@ -36,6 +36,7 @@ const HomeBlogs = ({_id, author, title, images, createdAt}:PostsType) => {
       <div onClick={handleClick} className='flex items-center justify-between cursor-pointer'>
         <button className=''>
           <FaRegHeart className='hover:fill-red-500'/>
+          {likes.length > 0 ? <span>{likes.length}</span> : null }
         </button>
         <div>
           <span className='text-xs text-gray-500'>{getMonth(createdAt)}{" "}{new Date(createdAt).getFullYear()}</span>
