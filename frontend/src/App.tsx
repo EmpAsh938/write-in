@@ -31,7 +31,7 @@ function App() {
     }, 2000);
 
     return () => clearTimeout(timer);
-  }, [dispatch, notificationAuth.type, notificationPost.type, notificationUpload.type])
+  }, [dispatch, notificationAuth.type, notificationPost.type, notificationUpload.type, notificationComment.type])
 
   useEffect(() => {
       dispatch(resetPages());     

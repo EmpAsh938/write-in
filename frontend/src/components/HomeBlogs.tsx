@@ -15,7 +15,7 @@ const HomeBlogs = ({_id, author, title, images, createdAt, likes}:PostsType) => 
   
   return (
     <div className='p-3 bg-white border border-green-200 border-solid rounded shadow-md'>
-    <div className='flex'>
+    <div className='flex justify-between'>
         <div>
               <div className='flex items-center gap-2'>
                 <UserImage profileImage={author.profileImage} fullname={author.fullname} width={45} height={45} />
