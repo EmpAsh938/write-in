@@ -8,22 +8,25 @@ import { notify, verifyUser } from './app/features/auth/authSlice';
 import { useAppDispatch, useAppSelector } from './hooks/useReactRedux';
 import { postNotification, resetPages } from './app/features/post/postSlice';
 import { resetNotification } from './app/features/upload/uploadSlice';
+import { commentNotification } from './app/features/comment/commentSlice';
 
 
 
 function App() {
   const { notifications: notificationAuth, token } = useAppSelector(state => state.auth);
   const { notifications: notificationPost } = useAppSelector(state => state.post);
-  const { notifications: notificationUpload } = useAppSelector(state => state.post);
+  const { notifications: notificationUpload } = useAppSelector(state => state.upload);
+  const { notifications: notificationComment } = useAppSelector(state => state.comment);
 
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     let timer = setTimeout(() => {
-      if(notificationAuth.type !=='idle' || notificationPost.type !== 'idle' || notificationUpload.type !== 'idle') {
+      if(notificationAuth.type !=='idle' || notificationPost.type !== 'idle' || notificationUpload.type !== 'idle' || notificationComment.type !== 'idle') {
         dispatch(notify({type:'idle',message:''}));
         dispatch(postNotification({type: 'idle', message:''}));
         dispatch(resetNotification({type: 'idle', message:''}));
+        dispatch(commentNotification());
       }
     }, 2000);
 
@@ -47,6 +50,7 @@ function App() {
       {notificationAuth.type !== 'idle' && <ErrorMessage {...notificationAuth} />}
       {notificationPost.type !== 'idle' && <ErrorMessage {...notificationPost} />}
       {notificationUpload.type !== 'idle' && <ErrorMessage {...notificationUpload} />}
+      {notificationComment.type !== 'idle' && <ErrorMessage {...notificationComment} />}
     </div>
       <Routes>
         <Route path="/">

@@ -16,27 +16,21 @@ const HomeBlogs = ({_id, author, title, images, createdAt, likes}:PostsType) => 
   return (
     <div className='p-3 bg-white border border-green-200 border-solid rounded shadow-md'>
     <div className='flex'>
-    <div>
-      <div className='flex items-center gap-2'>
-        <UserImage profileImage={author.profileImage} fullname={author.fullname} width={45} height={45} />
-        <h3 className='capitalize cursor-pointer'><Link to={`/user/${author._id}`}>{author.fullname}</Link></h3>
+        <div>
+              <div className='flex items-center gap-2'>
+                <UserImage profileImage={author.profileImage} fullname={author.fullname} width={45} height={45} />
+                <h3 className='capitalize cursor-pointer'><Link to={`/user/${author._id}`}>{author.fullname}</Link></h3>
+              </div>
+              <div onClick={handleClick}className='ml-[45px] flex flex-col gap-1 cursor-pointer'>
+                <h2 className='text-2xl font-bold'>{title}</h2>
+              </div>
       </div>
-      <div onClick={handleClick}className='ml-[45px] flex flex-col gap-1 cursor-pointer'>
-        <h2 className='text-2xl font-bold'>{title}</h2>
-{/*        <div className='flex flex-wrap text-sm text-gray-600 gap-2'>
-          <span className='px-2 py-1 border border-gray-300 border-solid rounded-sm'>#dev</span>
-          <span className='px-2 py-1 border border-gray-300 border-solid rounded-sm'>#javascript</span>
-          <span className='px-2 py-1 border border-gray-300 border-solid rounded-sm'>#tech</span>
-        </div>
-*/}
-      </div>
-  </div>
-    {images.length > 0 && (<img src={images[0]} alt=""/>)}
+    {images.length > 0 && (<img className='max-w-[200px] object-contain' src={images[0]} alt=""/>)}
     </div>
       <div onClick={handleClick} className='flex items-center justify-between cursor-pointer'>
-        <button className=''>
+        <button className='flex flex-row-reverse items-center gap-1'>
           <FaRegHeart className='hover:fill-red-500'/>
-          {likes.length > 0 ? <span>{likes.length}</span> : null }
+          {likes.length > 0 ? <span className='text-sm text-gray-800'>{likes.length}</span> : null }
         </button>
         <div>
           <span className='text-xs text-gray-500'>{getMonth(createdAt)}{" "}{new Date(createdAt).getFullYear()}</span>

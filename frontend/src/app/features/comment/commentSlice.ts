@@ -139,7 +139,11 @@ const commentSlice = createSlice({
 		resetPages: (state) => {
 			state.pages = 1;
 			state.rows = 5;
-		}
+		},
+        commentNotification: (state) => {
+            state.notifications.type = 'idle';
+            state.notifications.message = '';
+        }
 	},
 	extraReducers: (builder) => {
 		builder
@@ -291,6 +295,6 @@ const commentSlice = createSlice({
 	}
 })
 
-export const { resetPages } = commentSlice.actions;
+export const { resetPages, commentNotification } = commentSlice.actions;
 
 export default commentSlice.reducer
