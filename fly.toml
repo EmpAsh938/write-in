@@ -1,4 +1,4 @@
-# fly.toml file generated for writein on 2022-11-04T19:30:43+05:45
+# fly.toml file generated for writein on 2022-11-05T12:47:07+05:45
 
 app = "writein"
 kill_signal = "SIGINT"
