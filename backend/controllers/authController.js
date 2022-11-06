@@ -248,7 +248,7 @@ const emailChange = asyncHandler(async (req, res) => {
         throw new Error('some fields are empty');
     }
     const decoded = jwt.decode(req.headers.authorization.split('Bearer')[1].trim());
-    if(!validEmail(decoded.email)) {
+    if(!validEmail(email)) {
         res.status(400);
         throw new Error('email format not valid');
     }
@@ -285,13 +285,13 @@ const accountInfoChange = asyncHandler(async (req, res) => {
         throw new Error('some fields are empty');
     }
     const decoded = jwt.decode(req.headers.authorization.split("Bearer")[1].trim());
-    if(!validUsername(decoded.username)) {
-        res.status(400);
-        throw new Error('username format not valid');
-    }
     let insert_fullname = fullname || decoded.fullname;
     let insert_username = username || decoded.username;
     let insert_bio = bio || decoded.bio;
+    if(!validUsername(insert_username)) {
+        res.status(400);
+        throw new Error('username format not valid');
+    }
     try {
         let doc = await Auth.findOneAndUpdate({_id:decoded._id},{$set: {fullname:insert_fullname,username:insert_username,bio:insert_bio}});
         if(!doc) {
