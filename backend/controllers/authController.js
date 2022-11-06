@@ -8,6 +8,8 @@ const Reply = require('../models/replyModel');
 const Comment = require('../models/commentModel');
 const cloudinary = require('../config/cloudinary');
 const { validPassword } = require('../utils/validPassword');
+const { validEmail } = require('../utils/validEmail');
+const { validUsername } = require('../utils/validUsername');
 const { tokenGenerate } = require('../utils/tokenGenerate');
 
 const loginUser = asyncHandler(async (req, res) => {
@@ -246,6 +248,10 @@ const emailChange = asyncHandler(async (req, res) => {
         throw new Error('some fields are empty');
     }
     const decoded = jwt.decode(req.headers.authorization.split('Bearer')[1].trim());
+    if(!validEmail(decoded.email)) {
+        res.status(400);
+        throw new Error('email format not valid');
+    }
     try {
         let doc = await Auth.findOne({_id:decoded._id});
         
@@ -279,6 +285,10 @@ const accountInfoChange = asyncHandler(async (req, res) => {
         throw new Error('some fields are empty');
     }
     const decoded = jwt.decode(req.headers.authorization.split("Bearer")[1].trim());
+    if(!validUsername(decoded.username)) {
+        res.status(400);
+        throw new Error('username format not valid');
+    }
     let insert_fullname = fullname || decoded.fullname;
     let insert_username = username || decoded.username;
     let insert_bio = bio || decoded.bio;
