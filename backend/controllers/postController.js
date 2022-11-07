@@ -175,19 +175,9 @@ const listBlogsPrivate = asyncHandler(async (req, res) => {
     try {
         let docs;
         if(!type) {
-            docs = await Post.find({}).populate({
-                path: 'author',
-                match: {
-                    _id: { $eq: id }
-                }
-            }).sort({ createdAt: -1 }).skip(rows * (pages-1)).limit(rows).exec();
+            docs = await Post.find({author:id}).populate('author').sort({ createdAt: -1 }).skip(rows * (pages-1)).limit(rows).exec();
         } else {
-            docs = await Post.find({status:type}).populate({
-                path: 'author',
-                match: {
-                    _id: { $eq: id }
-                }
-            }).sort({ createdAt: -1 }).skip(rows * (pages-1)).limit(rows).exec();
+            docs = await Post.find({author:id,status:type}).populate('author').sort({ createdAt: -1 }).skip(rows * (pages-1)).limit(rows).exec();
         }
         if (docs.length === 0) {
             res.status(404);
