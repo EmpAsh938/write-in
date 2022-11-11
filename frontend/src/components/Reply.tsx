@@ -4,7 +4,7 @@ import {useAppSelector, useAppDispatch} from '../hooks/useReactRedux'
 import {ReplyType} from '../types/commentTypes'
 import UserImage from './UserImage'
 
-const Reply = ({ _id, author, body }:ReplyType) => {
+const Reply = ({ _id, author, body, likes }:ReplyType) => {
     const { token } = useAppSelector(state => state.auth);
     const { profileImage, fullname } = author;
     
@@ -52,7 +52,7 @@ const Reply = ({ _id, author, body }:ReplyType) => {
           <div>
             <p>{body}</p>
             <div className='flex items-center justify-between text-sm'>
-              <button onClick={handleLikeReply}>like</button>
+              <button onClick={handleLikeReply}>{likes.length} like</button>
               <button onClick={() => setIsEditing(true)}>edit</button>
               <button onClick={handleDelete}>delete</button>
             </div>

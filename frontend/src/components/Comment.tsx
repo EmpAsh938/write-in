@@ -7,7 +7,7 @@ import { CommentType }  from '../types/commentTypes';
 import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
 import { deleteComment, editComment, likeComment, listReply, newReply } from '../app/features/comment/commentSlice';
 
-const Comment = ({  _id, body, author, reply}: CommentType) => {
+const Comment = ({  _id, body, author, likes, reply}: CommentType) => {
     const { token } = useAppSelector(state => state.auth);
     const { singlePost } = useAppSelector(state => state.post);
     const [isReplyOpen, setIsReplyOpen] = useState<boolean>(false);
@@ -61,7 +61,7 @@ const Comment = ({  _id, body, author, reply}: CommentType) => {
         }
     }, [_id,pages,dispatch])
 	return (
-		<div className=''>
+		<div className='max-w-lg m-auto'>
 			{/* comments  */}
 			<div className='flex items-center justify-start text-sm gap-2'>
 				<UserImage profileImage={profileImage} fullname={fullname} height={40} width={40} />
@@ -80,7 +80,7 @@ const Comment = ({  _id, body, author, reply}: CommentType) => {
                     <div>
                         <p>{body}</p>
                         <div className='flex items-center justify-between text-sm'>
-                            <button onClick={handleLike}>like</button>
+                            <button onClick={handleLike}>{likes.length} like</button>
                             <button onClick={()=>setIsReplyOpen(!isReplyOpen)}>reply</button>
                             <button onClick={() => setIsEditing(true)}>edit</button>
                             <button onClick={handleDelete}>delete</button>
