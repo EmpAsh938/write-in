@@ -37,13 +37,13 @@
         @apply underline;
     }
     .markdown-css code {
-        @apply block p-2 bg-[rgba(0,0,0,.8)] text-white;
+        @apply block p-2 bg-[rgba(0,0,0,.8)] text-white w-full overflow-x-scroll;
     }
     .markdown-css img {
         @apply w-full object-contain;
     }
     .markdown-css a {
-        @apply underline;
+        @apply underline text-blue-900;
     }
     .markdown-css ul {
         @apply list-disc pl-6;

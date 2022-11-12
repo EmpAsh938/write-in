@@ -66,8 +66,6 @@ const createNewBlog = asyncHandler(async (req, res) => {
     }
     const decoded = jwt.decode(req.headers.authorization.split('Bearer')[1].trim());
 
-
-
     const newPost = new Post({
         title,
         markdown,
@@ -150,6 +148,7 @@ const deleteBlog = asyncHandler(async (req, res) => {
                 }
             }
         }
+        doc = Post.find({author:doc.author});
         res.json({
             message: "successfully deleted",
             result: doc

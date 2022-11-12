@@ -58,7 +58,7 @@ const editComment = asyncHandler(async (req, res) => {
             throw new Error('user not authorized');
         }
 	    result = await Comment.findOneAndUpdate({_id:id},{$set: {body}});
-	    result = await Comment.findOne({_id:id}).populate('author');
+	    result = await Comment.find({post:result.post.valueOf()}).populate('author');
         res.json({
             message: 'updated successfully',
             result
@@ -77,7 +77,6 @@ const deleteComment = asyncHandler(async (req,res) => {
 			res.status(401);
 			throw new Error('user not authorized');
         }
-        let post_id = doc.post.valueOf();
         // remove comment from post 
         await Post.findOneAndUpdate({_id:post_id}, {$pull: {comments: {$eq: id}}});
 		// delete subcomments signature from comments
@@ -88,6 +87,7 @@ const deleteComment = asyncHandler(async (req,res) => {
 		// doc = await Comment.findOneAndUpdate({_id: doc.root_id}, {$pull: {reply: id}});
 		// delete actual comment
 		doc = await Comment.findOneAndDelete({_id:id});
+        doc = await Comment.find({post:doc.post.valueOf()}).populate('author');
 		res.json({
 			message: 'comment deleted',
 			result: doc
@@ -103,6 +103,7 @@ const likeComment = asyncHandler(async (req, res) => {
 	const decoded = jwt.decode(req.headers.authorization.split('Bearer')[1].trim());
 	try {
 		let doc = await Comment.findOne({_id:id});
+        let post_id = doc.post.valueOf();
 		if(!doc) {
 			res.status(404);
 			throw new Error('comment not found');
@@ -111,7 +112,7 @@ const likeComment = asyncHandler(async (req, res) => {
 		doc = await Comment.findOne({_id:id, likes: {$eq: decoded._id}});
 		if(doc) {
             doc = await Comment.findOneAndUpdate({_id:id}, {$pull: {likes: {$eq: decoded._id}}});
-            doc = await Comment.findOne({_id:id});
+            doc = await Comment.find({post:post_id}).populate('author');
 			return res.json({
                 message: 'like removed',
 				result: doc
@@ -119,7 +120,7 @@ const likeComment = asyncHandler(async (req, res) => {
 		} 
 		// first time liking
 		doc = await Comment.findOneAndUpdate({_id:id}, {$push: {'likes': decoded._id}});
-        doc = await Comment.findOne({_id:id});
+        doc = await Comment.find({post:post_id}).populate('author');
 		res.json({
 			message: 'like added',
 			result: doc

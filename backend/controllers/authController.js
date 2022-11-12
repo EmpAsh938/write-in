@@ -7,6 +7,7 @@ const Post = require('../models/postModel');
 const Reply = require('../models/replyModel');
 const Comment = require('../models/commentModel');
 const cloudinary = require('../config/cloudinary');
+
 const { validPassword } = require('../utils/validPassword');
 const { validEmail } = require('../utils/validEmail');
 const { validUsername } = require('../utils/validUsername');
@@ -63,8 +64,6 @@ const registerUser = asyncHandler(async (req, res) => {
         res.status(400);
         throw new Error('User already Exists');
     }
-
-   
 
     const user = new Auth({
         email,
