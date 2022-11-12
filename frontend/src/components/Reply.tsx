@@ -5,7 +5,7 @@ import {ReplyType} from '../types/commentTypes'
 import UserImage from './UserImage'
 
 const Reply = ({ _id, author, body, likes }:ReplyType) => {
-    const { token } = useAppSelector(state => state.auth);
+    const { token, user } = useAppSelector(state => state.auth);
     const { profileImage, fullname } = author;
     
     const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -43,8 +43,8 @@ const Reply = ({ _id, author, body, likes }:ReplyType) => {
           <div>
             <input type="text" value={editInput} onChange={e=>setEditInput(e.target.value)}/>
             <div>
-              <button onClick={()=>setIsEditing(false)}>cancel</button>
-              <button onClick={handleEdit}>submit</button>
+              <button onClick={()=>setIsEditing(false)} className='focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900'>cancel</button>
+              <button onClick={handleEdit} className='focus:outline-none text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-900'>submit</button>
             </div>
           </div>
         ) : 
@@ -53,8 +53,10 @@ const Reply = ({ _id, author, body, likes }:ReplyType) => {
             <p>{body}</p>
             <div className='flex items-center justify-between text-sm'>
               <button onClick={handleLikeReply}>{likes.length} like</button>
-              <button onClick={() => setIsEditing(true)}>edit</button>
+              {user._id === author._id ? (
+              <><button onClick={() => setIsEditing(true)}>edit</button>
               <button onClick={handleDelete}>delete</button>
+              </>) : null }
             </div>
           </div>
         )

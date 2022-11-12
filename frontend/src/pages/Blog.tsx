@@ -44,9 +44,9 @@ const Blog = () => {
     const handleCancelPost = () => {
         if(markdown || title || images.length > 0) {
             if(id) {
-                dispatch(updateBlog({id,token,title:title || 'untitled',images,status:singlePost.status,markdown}));
+                dispatch(updateBlog({id,token,title:title ? title : 'untitled',images,status:singlePost.status,markdown}));
             } else {
-                dispatch(saveBlog({title:title || 'untitled',markdown,images,status:'draft',token}));
+                dispatch(saveBlog({title:title ? title : 'untitled',markdown,images,status:'draft',token}));
             }
         }
         dispatch(resetSinglePost());
@@ -62,6 +62,7 @@ const Blog = () => {
         } else {
             dispatch(saveBlog({title,markdown,images,status:type,token}));
         }
+        dispatch(resetSinglePost());
         navigate('/dashboard');
     }
 

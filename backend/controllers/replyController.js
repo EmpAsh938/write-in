@@ -84,7 +84,7 @@ const editReply = asyncHandler(async (req, res) => {
             throw new Error('user not authorized');
         }
 	    result = await Reply.findOneAndUpdate({_id:id},{$set: {body}});
-	    result = await Reply.findOne({_id:id}).populate('author');
+	    result = await Reply.find({comment:result.comment.valueOf()}).populate('author');
         res.json({
             message: 'updated successfully',
             result
@@ -108,6 +108,7 @@ const deleteReply = asyncHandler(async (req, res) => {
 
 		// delete actual comment
 		doc = await Reply.findOneAndDelete({_id:id}).exec();
+        doc = await Reply.find({comment:doc.comment.valueOf()}).populate('author');
 		res.json({
 			message: 'comment deleted',
 			result: doc
@@ -130,7 +131,7 @@ const likeReply = asyncHandler(async (req, res) => {
 		doc = await Reply.findOne({_id:id, likes: {$eq: decoded._id}});
 		if(doc) {
 			doc = await Reply.findOneAndUpdate({_id:id}, {$pull: {likes: {$eq: decoded._id}}});
-            doc = await Reply.findOne({_id:id});
+            doc = await Reply.find({comment:doc.comment.valueOf()}).populate('author');
 			return res.json({
                 message: 'like removed',
 				result: doc
@@ -138,7 +139,7 @@ const likeReply = asyncHandler(async (req, res) => {
 		}
 		// first time liking
 		doc = await Reply.findOneAndUpdate({_id:id}, {$push: {likes: decoded._id}});
-        doc = await Reply.findOne({_id:id});
+        doc = await Reply.find({comment:doc.comment.valueOf()}).populate('author');
 		res.json({
 			message: 'like added',
 			result: doc

@@ -2,7 +2,7 @@ import { marked } from 'marked';
 import { useEffect, useState } from 'react';
 import * as DOMPurify from 'dompurify';
 import { useNavigate, useParams } from 'react-router-dom';
-import { FaRegHeart, FaRegBookmark } from 'react-icons/fa';
+import { GoHeart, GoBookmark } from 'react-icons/go';
 
 import Loader from '../components/Loader';
 import Navbar from '../components/Navbar';
@@ -94,13 +94,13 @@ const SingleBlog = () => {
                             <span className='text-sm text-slate-500'>{`Created at ${getMonth(createdAt)} ${new Date(createdAt).getDate()} ${new Date(createdAt).getFullYear()}`}</span>
                         </div>
                     </div>
-                    <div className='flex items-center gap-2'>
+                    <div className='flex items-center gap-2 text-lg'>
                         <button className='relative' onClick={handleLike}>
-                            <FaRegHeart className={`${(token && likes.includes(user._id)) ? 'text-red-500' : ''}`} />
+                            <GoHeart className={`${(token && likes.includes(user._id)) ? 'text-red-500' : 'text-red-300'}`} />
                             {likes.length > 0 && <span className='absolute w-[25px] h-[25px] text-xs font-semibold text-center top-[-50%] left-[-130%] border border-solid border-gray-800 p-1 bg-white rounded-full'>{numberCount(likes.length)}</span>}
                         </button>
-                        <button onClick={handleBookmark} className={`${(token && user.bookmarks.includes(id||'')) ? 'text-green-500': ''}`}>
-                            <FaRegBookmark />
+                        <button onClick={handleBookmark} className={`${(token && user.bookmarks.includes(id||'')) ? 'text-green-500': 'text-green-300'}`}>
+                            <GoBookmark />
                         </button>
                     </div>
                 </div>
@@ -115,7 +115,7 @@ const SingleBlog = () => {
                     <div>
                         <h2 className='text-lg'>Comments</h2>
                     </div>
-                    <div className='flex items-center justify-start gap-2'>
+                    <div className='flex items-center justify-start gap-2 flex-wrap'>
                         <UserImage profileImage={author.profileImage} fullname={author.fullname} width={40} height={40} />
                         <input value={commentText} onChange={e=>setCommentText(e.target.value)} className='p-2 text-sm border border-gray-300 border-solid outline-none' type='text' placeholder='type here' />
                         <button onClick={handleSaveComment} className='px-2 py-1 text-white bg-green-500 rounded'>Comment</button>

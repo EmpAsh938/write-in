@@ -31,19 +31,20 @@ const Navbar = () => {
   }
   return (
     <header className='bg-white border border-green-200 border-solid'>
-      <nav className='flex items-center justify-between p-2 mx-auto max-w-7xl'>
-        <div>
+      <nav className='flex items-center gap-10 p-2 mx-auto max-w-7xl'>
+        <div className='hidden sm:block'>
           <Link to='/' className=''>
             <h2 className='w-fit py-3 px-2 rounded text-center bg-slate-900 text-white font-bold uppercase text-[.9rem]'>Write In</h2>
           </Link>
         </div>
-        <form onSubmit={handleSearch} className='flex flex-1 max-w-sm p-1 border border-green-200 border-solid rounded-sm'>
-          <input value={searchquery} onChange={e=>setSearchQuery(e.target.value)} type='text' placeholder='Search blogs here(>2 letters)' className='flex-1 outline-none'/>
+        <div className='flex-1 flex items-center gap-20'>
+        <form onSubmit={handleSearch} className='flex-1 flex p-1 pr-2 border border-green-200 border-solid rounded-sm'>
+          <input value={searchquery} onChange={e=>setSearchQuery(e.target.value)} type='text' placeholder="Search blogs here(>2 letters)" className='flex-1 outline-none pl-4'/>
           <button className='text-green-700 opacity-50' onClick={handleSearch}>
             <FaSearch />
           </button>
         </form>
-        <div>
+        <div className=''>
           <div className='items-center hidden md:flex gap-2'>
           {token ? (
             <>
@@ -79,7 +80,7 @@ const Navbar = () => {
           </div>
         </div>
         
- 
+</div> 
 </nav>
 
     </header>

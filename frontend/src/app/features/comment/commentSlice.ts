@@ -205,13 +205,8 @@ const commentSlice = createSlice({
 			state.notifications.type = 'success';
 			state.notifications.message = 'comment edited';
 			if(typeof action.payload.result === 'object') {
-				state.comments = state.comments.map(item => {
-					if(item._id === action.payload.result._id) {
-						return action.payload.result;
-					}
-					return item;
-				})
-			}
+				state.comments = action.payload.result;
+            }
 		})
 		.addCase(editComment.rejected, (state) => {
 			state.notifications.type = 'error';
@@ -222,15 +217,10 @@ const commentSlice = createSlice({
 			state.notifications.message = 'Reply edited';
             if(typeof action.payload.result === 'object') {
                 state.comments.forEach(item => {
-                    if(item._id === action.payload.result.comment) {
-                        item.reply = item.reply.map(newitem => {
-                            if(typeof newitem === 'object' && newitem._id === action.payload.result._id) {
-                                return action.payload.result;
-                            }
-                            return newitem;
+                    if(item._id === action.payload.result[0].comment) {
+                        item.reply = action.payload.result;
+                    }
                 })
-            }
-            })
             }
 		})
 		.addCase(editReply.rejected, (state) => {
@@ -239,11 +229,10 @@ const commentSlice = createSlice({
 		})
 		.addCase(likeReply.fulfilled, (state, action) => {
 			if(typeof action.payload.result === 'object') {
-				state.comments = state.comments.map(item => {
-					if(item._id === action.payload.result.comment) {
-						item.likes = action.payload.result.likes;
-					}
-					return item;
+				state.comments.forEach(item => {
+                    if(item._id === action.payload.result[0].comment) {
+                        item.reply = action.payload.result;
+                    }
 				})
 			}
 		})
@@ -255,13 +244,8 @@ const commentSlice = createSlice({
 			state.notifications.type = 'success';
 			state.notifications.message = action.payload.result.message;
 			if(typeof action.payload.result === 'object') {
-				state.comments = state.comments.map(item => {
-					if(item._id === action.payload.result._id) {
-						return action.payload.result;
-					}
-					return item;
-				})
-			}
+				state.comments = action.payload.result; 
+            }
 		})
 		.addCase(likeComment.rejected, (state) => {
 			state.notifications.type = 'error';
@@ -271,7 +255,7 @@ const commentSlice = createSlice({
 			state.notifications.type = 'success';
 			state.notifications.message = 'comment deleted';
 			if(typeof action.payload.result === 'object') {
-				state.comments = state.comments.filter(item => item._id !== action.payload.result._id);
+				state.comments = action.payload.result;
 			}
 		})
 		.addCase(deleteComment.rejected, (state) => {
@@ -282,9 +266,13 @@ const commentSlice = createSlice({
 			state.notifications.type = 'success';
 			state.notifications.message = 'Reply deleted';
 			if(typeof action.payload.result === 'object') {
-				state.comments = state.comments.map(item => {
-					item.reply = item.reply.filter(newitem => (typeof newitem === 'object' && newitem._id !== action.payload.result._id));
-					return item;
+				state.comments.forEach(item => {
+                    if(action.payload.result.length === 0) {
+                        item.reply = [];
+                    }
+                    else if(item._id === action.payload.result[0].comment) {
+                        item.reply = action.payload.result;
+                    }
 				})
 			}
 		})

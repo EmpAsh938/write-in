@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
 import { deleteComment, editComment, likeComment, listReply, newReply } from '../app/features/comment/commentSlice';
 
 const Comment = ({  _id, body, author, likes, reply}: CommentType) => {
-    const { token } = useAppSelector(state => state.auth);
+    const { token, user } = useAppSelector(state => state.auth);
     const { singlePost } = useAppSelector(state => state.post);
     const [isReplyOpen, setIsReplyOpen] = useState<boolean>(false);
     const [replyText, setReplyText] = useState<string>('');
@@ -61,7 +61,7 @@ const Comment = ({  _id, body, author, likes, reply}: CommentType) => {
         }
     }, [_id,pages,dispatch])
 	return (
-		<div className='max-w-lg m-auto'>
+		<div className='max-w-lg'>
 			{/* comments  */}
 			<div className='flex items-center justify-start text-sm gap-2'>
 				<UserImage profileImage={profileImage} fullname={fullname} height={40} width={40} />
@@ -71,9 +71,9 @@ const Comment = ({  _id, body, author, likes, reply}: CommentType) => {
                 isEditing ? (
                     <div>
                         <input type="text" value={editText} onChange={e=>setEditText(e.target.value)} />
-                        <div>
-                            <button onClick={() => setIsEditing(false)}>cancel</button>
-                            <button onClick={handleEdit}>submit</button>
+                        <div className='flex items-center gap-2'>
+                            <button onClick={() => setIsEditing(false)} className='focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900'>cancel</button>
+                            <button onClick={handleEdit} className='focus:outline-none text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'>submit</button>
                         </div>
                     </div>
                 ) : (
@@ -82,8 +82,11 @@ const Comment = ({  _id, body, author, likes, reply}: CommentType) => {
                         <div className='flex items-center justify-between text-sm'>
                             <button onClick={handleLike}>{likes.length} like</button>
                             <button onClick={()=>setIsReplyOpen(!isReplyOpen)}>reply</button>
+                            {user._id === author._id ? (
+                            <>
                             <button onClick={() => setIsEditing(true)}>edit</button>
                             <button onClick={handleDelete}>delete</button>
+                            </>) : null }
                         </div>
                     </div>
                 )
