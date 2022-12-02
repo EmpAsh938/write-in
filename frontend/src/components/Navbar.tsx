@@ -37,7 +37,7 @@ const Navbar = () => {
             <h2 className='w-fit py-3 px-2 rounded text-center bg-slate-900 text-white font-bold uppercase text-[.9rem]'>Write In</h2>
           </Link>
         </div>
-        <div className='flex-1 flex items-center gap-20'>
+        <div className='flex-1 flex items-center gap-2 sm:gap-20'>
         <form onSubmit={handleSearch} className='flex-1 flex p-1 pr-2 border border-green-200 border-solid rounded-sm'>
           <input value={searchquery} onChange={e=>setSearchQuery(e.target.value)} type='text' placeholder="Search blogs here(>2 letters)" className='flex-1 outline-none pl-4'/>
           <button className='text-green-700 opacity-50' onClick={handleSearch}>

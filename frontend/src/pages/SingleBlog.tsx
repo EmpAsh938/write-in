@@ -13,7 +13,7 @@ import { getMonth } from '../utils/getMonth';
 import { numberCount } from '../utils/numberCount'
 import { bookmarkPost } from '../app/features/auth/authSlice';
 import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
-import { likeBlog, listSingleBlogs } from '../app/features/post/postSlice';
+import { likeBlog, listSingleBlogs, resetSinglePost } from '../app/features/post/postSlice';
 import { listComment, newComment } from '../app/features/comment/commentSlice';
 
 
@@ -57,6 +57,7 @@ const SingleBlog = () => {
   }
 
     useEffect(() => {
+        dispatch(resetSinglePost());
         if(id){
             dispatch(listSingleBlogs({id,token:token||''}));
             dispatch(listComment({
