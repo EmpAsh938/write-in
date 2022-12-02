@@ -170,7 +170,7 @@ const Blog = () => {
      </div>
      {/* <div className='min-h-screen'> */}
      {/* </div> */}
-         <textarea onChange={e=>setMarkdown(e.target.value)} onSelect={handleSelection} value={markdown} className='w-full min-h-[200px]  overflow-y-visible resize-none' placeholder='Write your post here...'>
+         <textarea onChange={e=>setMarkdown(e.target.value)} onSelect={handleSelection} value={markdown} className='w-full min-h-[400px]  overflow-y-visible resize-none' placeholder='Write your post here...'>
 
          </textarea>
 
