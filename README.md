@@ -1,6 +1,6 @@
 ## write in
 
-It is a fullstack blogging app created by Ashok Thapa as side project. It has all sorts of features that a full fledged application most have.
+It is a fullstack blogging app created by Ashok Thapa as side project. It has all sorts of features that a full fledged application must have.
 
 ## Preview
 
