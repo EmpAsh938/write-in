@@ -66,6 +66,10 @@ const SingleBlog = () => {
                 post_id: id,
             }));
         }
+
+        return () => {
+            dispatch(resetSinglePost());
+        }
     }, [id,dispatch,token,navigate])
     if(Object.keys(singlePost).length === 0) {
         return (<Loader />) 
