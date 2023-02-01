@@ -41,8 +41,8 @@ const SingleBlog = () => {
     }
   }
 
-  const handleLinkNavigate = () => {
-        navigate(`/user/${user._id}`);
+  const handleLinkNavigate = (author_id:string) => {
+        navigate(`/user/${author_id}`);
 }
 
   const handleSaveComment = () => {
@@ -90,7 +90,7 @@ const SingleBlog = () => {
         <main className='p-10'>
             <section className='flex flex-col max-w-5xl min-h-screen p-4 mx-auto border border-green-300 border-solid rounded gap-3'>
                 <div className='flex items-center justify-between'>
-                    <div onClick={handleLinkNavigate} className='flex items-center gap-2 cursor-pointer'>
+                    <div onClick={() => handleLinkNavigate(author._id)} className='flex items-center gap-2 cursor-pointer'>
                         <div>
                             <UserImage profileImage={author.profileImage} fullname={author.fullname} width={45} height={45} />
                         </div>
@@ -120,11 +120,13 @@ const SingleBlog = () => {
                     <div>
                         <h2 className='text-lg'>Comments</h2>
                     </div>
-                    <div className='flex items-center justify-start gap-2 flex-wrap'>
+                    {token ? (<div className='flex items-center justify-start gap-2 flex-wrap'>
                         <UserImage profileImage={author.profileImage} fullname={author.fullname} width={40} height={40} />
                         <input value={commentText} onChange={e=>setCommentText(e.target.value)} className='p-2 text-sm border border-gray-300 border-solid outline-none' type='text' placeholder='type here' />
                         <button onClick={handleSaveComment} className='px-2 py-1 text-white bg-green-500 rounded'>Comment</button>
-                    </div>
+                    </div>): (
+                        <div>Please <a href='/login' className='font-bold text-green-700 underline'>Login</a> to comment, reply and like</div>
+                    )}
                     <div className=''>
                        {comments.length === 0 ? (<p>no comments to display</p>) : (
                         comments.map(item => {

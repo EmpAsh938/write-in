@@ -40,7 +40,7 @@
         @apply block p-2 bg-[rgba(0,0,0,.8)] text-white w-full overflow-x-scroll;
     }
     .markdown-css img {
-        @apply w-full object-contain;
+        @apply max-w-[400px] m-auto object-contain;
     }
     .markdown-css a {
         @apply underline text-blue-900;

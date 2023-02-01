@@ -31,7 +31,7 @@ const Register = () => {
   const handleSubmit = (event:MouseEvent | FormEvent) => {
     event.preventDefault();
     dispatch(registerUser(userDetails));
-    setUserDetails({username:'',email:'',fullname:'',password:''})
+    setUserDetails({...userDetails,password:''})
   }
 
   useEffect(() => {

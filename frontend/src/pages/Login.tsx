@@ -15,7 +15,6 @@ const Login = () => {
   const handleSignIn = (event:FormEvent) => {
     event.preventDefault();
     dispatch(loginUser({email, password}));
-    setEmail('');
     setPassword('');
   }
 
