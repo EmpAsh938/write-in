@@ -51,11 +51,11 @@ const Reply = ({ _id, author, body, likes }:ReplyType) => {
         (
           <div>
             <p>{body}</p>
-            <div className='flex items-center justify-between text-sm'>
-              <button onClick={handleLikeReply}>{likes.length} like</button>
+            <div className='flex justify-start gap-4 text-sm'>
+              <button onClick={handleLikeReply} className='capitalize'>{likes.length} like</button>
               {user._id === author._id ? (
-              <><button onClick={() => setIsEditing(true)}>edit</button>
-              <button onClick={handleDelete}>delete</button>
+              <><button onClick={() => setIsEditing(true)} className='capitalize'>edit</button>
+              <button onClick={handleDelete} className='capitalize'>delete</button>
               </>) : null }
             </div>
           </div>

@@ -15,7 +15,7 @@ const HomeBlogs = ({_id, author, title, images, createdAt, likes}:PostsType) => 
   
   return (
     <div className='p-3 bg-white border border-green-200 border-solid rounded shadow-md'>
-    <div className='flex justify-between'>
+    <div className='flex flex-col md:flex-row items-start'>
         <div>
               <div className='flex items-center gap-2'>
                 <UserImage profileImage={author.profileImage} fullname={author.fullname} width={45} height={45} />
@@ -25,7 +25,7 @@ const HomeBlogs = ({_id, author, title, images, createdAt, likes}:PostsType) => 
                 <h2 className='text-2xl font-bold'>{title}</h2>
               </div>
       </div>
-    {images.length > 0 && (<img className='max-w-[200px] object-contain' src={images[0]} alt=""/>)}
+    {images.length > 0 && (<img className='m-auto max-w-[200px] object-contain' src={images[0]} alt=""/>)}
     </div>
       <div onClick={handleClick} className='flex items-center justify-between cursor-pointer'>
         <button className='flex flex-row-reverse items-center gap-1'>

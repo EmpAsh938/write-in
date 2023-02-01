@@ -79,13 +79,13 @@ const Comment = ({  _id, body, author, likes, reply}: CommentType) => {
                 ) : (
                     <div>
                         <p>{body}</p>
-                        <div className='flex items-center justify-between text-sm'>
-                            <button onClick={handleLike}>{likes.length} like</button>
-                            <button onClick={()=>setIsReplyOpen(!isReplyOpen)}>reply</button>
+                        <div className='flex justify-start text-sm gap-4'>
+                            <button onClick={handleLike} className='capitalize'>{likes.length} like</button>
+                            <button onClick={()=>setIsReplyOpen(!isReplyOpen)} className='capitalize'>reply</button>
                             {user._id === author._id ? (
                             <>
-                            <button onClick={() => setIsEditing(true)}>edit</button>
-                            <button onClick={handleDelete}>delete</button>
+                            <button onClick={() => setIsEditing(true)} className='capitalize'>edit</button>
+                            <button onClick={handleDelete} className='capitalize'>delete</button>
                             </>) : null }
                         </div>
                     </div>
