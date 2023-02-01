@@ -41,8 +41,8 @@ const SingleBlog = () => {
     }
   }
 
-  const handleLinkNavigate = () => {
-        navigate(`/user/${user._id}`);
+  const handleLinkNavigate = (author_id:string) => {
+        navigate(`/user/${author_id}`);
 }
 
   const handleSaveComment = () => {
@@ -90,7 +90,7 @@ const SingleBlog = () => {
         <main className='p-10'>
             <section className='flex flex-col max-w-5xl min-h-screen p-4 mx-auto border border-green-300 border-solid rounded gap-3'>
                 <div className='flex items-center justify-between'>
-                    <div onClick={handleLinkNavigate} className='flex items-center gap-2 cursor-pointer'>
+                    <div onClick={() => handleLinkNavigate(author._id)} className='flex items-center gap-2 cursor-pointer'>
                         <div>
                             <UserImage profileImage={author.profileImage} fullname={author.fullname} width={45} height={45} />
                         </div>
