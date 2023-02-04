@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { HomeBlogs, Pagination, Navbar } from '../components';
+import { HomeBlogs, Pagination, Navbar, Footer } from '../components';
 
 import { useAppDispatch, useAppSelector } from '../hooks/useReactRedux';
 import { listPublicBlogs, loadMore, resetPages } from '../app/features/post/postSlice';
@@ -32,6 +32,7 @@ const Home = () => {
        )}
        <Pagination handleClick={handleLoadPages} />
       </main>
+      <Footer />
     </div>
   )
 }
