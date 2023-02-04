@@ -1,9 +1,8 @@
 ## write in
-
 It is a fullstack blogging web application. It has all sorts of features that a full fledged application must have.
 
 ## Preview
-
+![Homepage](https://user-images.githubusercontent.com/38640912/216762607-0abf7964-5c3e-4c1b-8deb-f262658db0d9.png)
 Go visit: https://writein.fly.dev
 
 ## Installation
