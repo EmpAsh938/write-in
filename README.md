@@ -17,6 +17,8 @@ cd write-in/backend
 npm i
 npm run dev
 ```
+> Note: Do not forget to setup necessary mongodb and cloudinary credentials. For more info contact me: ashokthapa938@gmail.com 
+
 
 ## Technologies Used
 
