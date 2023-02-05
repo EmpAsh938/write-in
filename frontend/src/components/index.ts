@@ -12,3 +12,4 @@ export { default as HomeBlogs} from './HomeBlogs';
 export { default as UserImage} from './UserImage';
 export { default as Pagination} from './Pagination';
 export { default as ErrorMessage} from './ErrorMessage';
+export { default as Footer } from './Footer';
