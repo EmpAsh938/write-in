@@ -11,22 +11,22 @@ const Footer = () => {
            </p>
           <ul className="flex items-center space-x-6">
             <li>
-              <a href="https://www.facebook.com" target="_blank">
+              <a href="https://www.facebook.com" target="_blank" rel="noreferrer>
                 <GrFacebook className="text-3xl" />
               </a>
             </li>
             <li>
-              <a href="https://www.twitter.com" target="_blank">
+              <a href="https://www.twitter.com" target="_blank" rel="noreferrer>
                 <GrTwitter className="text-3xl" />
               </a>
             </li>
             <li>
-              <a href="https://www.linkedin.com" target="_blank">
+              <a href="https://www.linkedin.com" target="_blank" rel="noreferrer>
                 <GrLinkedin className="text-3xl" />
               </a>
             </li>
             <li>
-              <a href="https://www.youtube.com" target="_blank">
+              <a href="https://www.youtube.com" target="_blank" rel="noreferrer>
                 <GrYoutube className="text-3xl" />
               </a>
             </li>
