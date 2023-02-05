@@ -14,4 +14,5 @@ jobs:
       steps:
         - uses: actions/checkout@v3
         - uses: superfly/flyctl-actions/setup-flyctl@master
+        - run: cd frontend && rm -rf build && npm i && npm run build
         - run: flyctl deploy
