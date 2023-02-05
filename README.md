@@ -1,4 +1,29 @@
-# Write In 
+<div align="center">
+<img src="https://user-images.githubusercontent.com/38640912/216804046-305a222c-1bfd-4b74-bce1-834edc415bc6.png" width=20% height=20% alt="logo.png">
+<h2><em>Connecting your thoughts to the world through blogs</em></h2>
+
+<!-- Issues -->
+<a href="https://github.com/EmpAsh938/write-in/issues">
+  <img src="https://img.shields.io/github/issues/EmpAsh938/write-in?style=flat-square" alt="Issues">
+</a>
+
+<!-- Pull Requests -->
+<a href="https://github.com/EmpAsh938/write-in/pulls">
+  <img src="https://img.shields.io/github/issues-pr/EmpAsh938/write-in?style=flat-square" alt="Pull Requests">
+</a>
+
+<!-- Activity -->
+<a href="https://github.com/EmpAsh938/write-in/pulse">
+  <img src="https://img.shields.io/github/commit-activity/m/EmpAsh938/write-in.svg?style=flat-square" alt="Activity">
+</a>
+
+<!-- License -->
+<a href="https://github.com/EmpAsh938/write-in/blob/master/LICENSE">
+  <img src="https://img.shields.io/github/license/EmpAsh938/write-in?style=flat-square" alt="License">
+</a>
+
+
+</div><br>
 
 ## About
 It is a fullstack blogging web application. It has all sorts of features that a full fledged application must have.
