@@ -7,8 +7,8 @@ const Footer = () => {
         <div className="flex items-center flex-col space-y-6 sm:space-y-8 px-8 sm:py-0">
           <h6 className="font-semibold text-4xl sm:text-5xl">WriteIn</h6>
           <p className="text-center sm:leading-8 sm:text-lg tracking-wide">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis illum non maiores mollitia nam nulla cum officiis tempore harum amet eligendi, at, eius voluptatem unde ipsum quibusdam, sapiente rem dolore?
-          </p>
+            A modern blogging application platform where you can write and share in public. 
+           </p>
           <ul className="flex items-center space-x-6">
             <li>
               <a href="#" target="_blank">
@@ -36,7 +36,7 @@ const Footer = () => {
       <div className="bg-black py-4">
         <div>
           <p className="text-center">
-            &copy; 2021 WriteIn. All rights reserved.
+            &copy; <span>{new Date().getFullYear()}</span> WriteIn. All rights reserved.
           </p>
         </div>
       </div>
