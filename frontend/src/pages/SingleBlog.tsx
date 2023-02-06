@@ -95,7 +95,7 @@ const SingleBlog = () => {
                             <UserImage profileImage={author.profileImage} fullname={author.fullname} width={45} height={45} />
                         </div>
                         <div className='flex flex-col'>
-                            <h3 className='font-medium capitalize leading-3'>{author.fullname}</h3>
+                            <h3 className='font-medium capitalize leading-3 m-0'>{author.fullname}</h3>
                             <span className='text-sm text-slate-500'>{`Created at ${getMonth(createdAt)} ${new Date(createdAt).getDate()} ${new Date(createdAt).getFullYear()}`}</span>
                         </div>
                     </div>
@@ -110,7 +110,7 @@ const SingleBlog = () => {
                     </div>
                 </div>
                 <div>
-                    <h1 className='text-4xl font-bold text-left text-black leading-9 mx-[3%] mb-2'>
+                    <h1 className='text-4xl font-bold text-left text-black leading-9 mx-[3%] '>
                     {title}
                     </h1>
                 </div>
