@@ -13,7 +13,7 @@ const UserImage = ({ profileImage, fullname }:Props) => {
         <img src={profileImage} alt={fullname || 'user photo'} className={`rounded-full object-cover w-[50px] h-[50px]`} referrerPolicy='no-referrer' />
       ) : (
         <div className={`w-[40px] h-[40px] bg-green-400 rounded-full grid place-items-center`}>
-            <h2 className='uppercase'>{fullname?.charAt(0) || 'U'}</h2>
+            <span className='uppercase'>{fullname?.charAt(0) || 'U'}</span>
         </div>
       )
     }
