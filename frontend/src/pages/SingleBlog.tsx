@@ -87,15 +87,15 @@ const SingleBlog = () => {
     return (
         <>
         <Navbar />
-        <main className='p-10'>
-            <section className='flex flex-col max-w-5xl min-h-screen p-4 mx-auto border border-green-300 border-solid rounded gap-3'>
-                <div className='flex items-center justify-between'>
+        <main className='p-[5%] bg-slate-100'>
+            <section className='flex flex-col max-w-5xl min-h-screen p-5 mx-auto border border-green-300 border-solid rounded gap-3 shadow-xl bg-white hover:shadow-2xl  '>
+                <div className='flex items-center justify-between mx-[2%] my-[3%]'>
                     <div onClick={() => handleLinkNavigate(author._id)} className='flex items-center gap-2 cursor-pointer'>
                         <div>
                             <UserImage profileImage={author.profileImage} fullname={author.fullname} width={45} height={45} />
                         </div>
-                        <div className='flex flex-col gap-1'>
-                            <h3 className='font-medium capitalize'>{author.fullname}</h3>
+                        <div className='flex flex-col'>
+                            <h3 className='font-medium capitalize leading-3'>{author.fullname}</h3>
                             <span className='text-sm text-slate-500'>{`Created at ${getMonth(createdAt)} ${new Date(createdAt).getDate()} ${new Date(createdAt).getFullYear()}`}</span>
                         </div>
                     </div>
@@ -110,25 +110,25 @@ const SingleBlog = () => {
                     </div>
                 </div>
                 <div>
-                    <h1 className='text-4xl font-bold text-left'>
+                    <h1 className='text-4xl font-bold text-left text-black leading-9 mx-[3%] mb-2'>
                     {title}
                     </h1>
                 </div>
-                <article className='text-lg font-light text-slate-700 markdown-css' dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(marked.parse(markdown))}}>
+                <article className='text-lg font-normal markdown-css mx-[5%] leading-9' dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(marked.parse(markdown))}}>
                 </article>
-                <article className='flex flex-col gap-4'>
-                    <div>
-                        <h2 className='text-lg'>Comments</h2>
+                <article className='flex flex-col my-3'>
+                    <div className='my-0'>
+                        <h2 className='text-lg font-bold'>Comments</h2>
                     </div>
-                    {token ? (<div className='flex items-center justify-start gap-2 flex-wrap'>
+                    {token ? (<div className='flex items-center justify-start gap-2 flex-wrap mb-3'>
                         <UserImage profileImage={author.profileImage} fullname={author.fullname} width={40} height={40} />
                         <input value={commentText} onChange={e=>setCommentText(e.target.value)} className='p-2 text-sm border border-gray-300 border-solid outline-none' type='text' placeholder='type here' />
                         <button onClick={handleSaveComment} className='px-2 py-1 text-white bg-green-500 rounded'>Comment</button>
                     </div>): (
-                        <div>Please <a href='/login' className='font-bold text-green-700 underline'>Login</a> to comment, reply and like</div>
+                        <div className='mb-2'>Please <a href='/login' className='font-bold text-green-700 underline'>Login</a> to comment, reply and like</div>
                     )}
-                    <div className=''>
-                       {comments.length === 0 ? (<p>no comments to display</p>) : (
+                    <div className="m-5">
+                       {comments.length === 0 ? (<p className="text-slate-500">no comments to display</p>) : (
                         comments.map(item => {
                             return (<Comment key={item._id} {...item} />)})
                        )}
