@@ -3,60 +3,66 @@
 @tailwind utilities;
 
 @layer components {
-    .markdown-css * {
-        @apply text-base text-gray-900;
-    }
-    .markdown-css h1,h2,h3,h4,h5,h6 {
-        @apply font-semibold my-1;
-    }
-    .markdown-css h1 {
-        @apply text-3xl;
-    }
-    .markdown-css h2 {
-        @apply text-xl;
-    }
-    .markdown-css h3 {
-        @apply text-lg;
-    }
-    .markdown-css h4 {
-        @apply text-base;
-    }
-    .markdown-css h5 {
-        @apply text-sm;
-    }
-    .markdown-css h6 {
-        @apply text-xs;
-    }
-    .markdown-css strong {
-        @apply font-bold;
-    }
-    .mardown-css em {
-        @apply italic;
-    }
-    .markdown-css u {
-        @apply underline;
-    }
-    .markdown-css code {
-        @apply block p-2 bg-[rgba(0,0,0,.8)] text-white w-full overflow-x-scroll;
-    }
-    .markdown-css img {
-        @apply max-w-[400px] m-auto object-contain;
-    }
-    .markdown-css a {
-        @apply underline text-blue-900;
-    }
-    .markdown-css ul {
-        @apply list-disc pl-6;
-    }
-    .markdown-css ol {
-        @apply list-decimal pl-6;
-    }
-    
-    .markdown-css p {
-        @apply text-base;
-    }
-
-    .active {
-        @apply font-semibold border-b-2 border-solid border-current;
-    }
+  .markdown-css * {
+    @apply text-base text-slate-900;
+  }
+  .markdown-css h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-semibold mt-5 mb-2;
+  }
+  .markdown-css h1 {
+    @apply text-3xl;
+  }
+  .markdown-css h2 {
+    @apply text-xl;
+  }
+  .markdown-css h3 {
+    @apply text-lg;
+  }
+  .markdown-css h4 {
+    @apply text-base;
+  }
+  .markdown-css h5 {
+    @apply text-sm;
+  }
+  .markdown-css h6 {
+    @apply text-xs;
+  }
+  .markdown-css strong {
+    @apply font-bold;
+  }
+  .mardown-css em {
+    @apply italic ;
+  }
+  .markdown-css u {
+    @apply underline ;
+  }
+  .markdown-css code {
+    @apply block p-2 bg-gray-800  text-gray-200 w-full overflow-x-scroll pl-4 my-4 rounded-md hover:shadow-lg transition-all;
+  }
+  .markdown-css img {
+    @apply max-w-[100%] md:max-w-[400px] m-auto object-contain;
+  }
+  .markdown-css a {
+    @apply underline text-blue-900;
+  }
+  .markdown-css ul {
+    @apply list-disc px-6 ;
+  }
+  .markdown-css ol {
+    @apply list-decimal pl-6;
+  }
+  .markdown-css p {
+    @apply text-justify text-slate-800 ml-1 mb-2;
+  }
+  .markdown-css p span {
+    @apply px-1 pb-1 rounded-sm shadow-inner shadow-slate-200;
+  }
+  .active {
+    @apply font-semibold border-b-2 border-solid border-current;
+  }
 }
