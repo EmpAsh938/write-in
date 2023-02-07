@@ -74,7 +74,7 @@ const emailChange = async (email:string,token:string) => {
 	return response.data;
 }
 
-const accountDetailsChange = async (fullname:string,username:string,bio:string,token:string) =>  {
+const accountDetailsChange = async (bio:string,fullname:string,username:string,token:string) =>  {
 	const response = await axios.put('/auth/change/account', {fullname,username,bio}, {
 		headers: {
 			Authorization: `Bearer ${token}`
