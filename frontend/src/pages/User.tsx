@@ -34,7 +34,7 @@ const User = () => {
     const handleFollow = () => {
         if(token) 
         {
-            dispatch(followUser({token,follow_id:user._id}));
+            dispatch(followUser({token,follow_id:id}));
         }
 
     }
