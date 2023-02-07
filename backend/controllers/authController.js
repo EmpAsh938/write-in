@@ -258,6 +258,11 @@ const emailChange = asyncHandler(async (req, res) => {
             res.status(400);
             throw new Error('same email as old one');
         }
+        doc = await Auth.findOne({email:decoded.email});
+        if(doc) {
+            res.status(400);
+            throw new Error('email already exists');
+        }
         doc = await Auth.findOneAndUpdate({_id:decoded._id},{$set: {email}});
         if(!doc) {
             throw new Error('email change failed');
