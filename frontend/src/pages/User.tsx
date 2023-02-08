@@ -32,7 +32,7 @@ const User = () => {
     }
 
     const handleFollow = () => {
-        if(token) 
+        if(token && id) 
         {
             dispatch(followUser({token,follow_id:id}));
         }
