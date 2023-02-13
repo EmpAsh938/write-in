@@ -12,12 +12,11 @@ const Home = () => {
   const dispatch = useAppDispatch();
 
     const handleLoadPages = () => {
-    console.log('working');
         dispatch(loadMore());
     }
   useEffect(() => {
-    dispatch(resetPages());
     dispatch(listPublicBlogs({pages,rows}));
+    return () => dispatch(resetPages());
   }, [dispatch,pages,rows])  
   return (
     <div className='bg-slate-100'>
