@@ -15,7 +15,9 @@ const Home = () => {
         dispatch(loadMore());
     }
   useEffect(() => {
-    dispatch(listPublicBlogs({pages,rows}));
+    if(pages && rows) {
+      dispatch(listPublicBlogs({pages,rows}));
+    }
     return () => dispatch(resetPages());
   }, [dispatch,pages,rows])  
   return (
