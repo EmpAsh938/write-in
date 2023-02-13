@@ -212,13 +212,13 @@ const postSlice = createSlice({
             if(typeof action.payload === 'object') {
                 if(Array.isArray(action.payload.result)) {
                     if(action.payload.result.length > 0) {
-                        if(initialState.pages !== state.pages) {
+                        if(state.pages !== 1) {
                             state.posts = [...state.posts, ...action.payload.result]
                         } else {
                             state.posts = [...action.payload.result];
                         }
                     } else {
-                        state.pages = state.pages === 1 ? 1 : state.pages- 1;
+                        state.pages = state.pages === 1 ? 1 : state.pages - 1;
                     }
                 }
             }
