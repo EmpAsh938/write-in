@@ -18,7 +18,9 @@ const Home = () => {
     if(pages && rows) {
       dispatch(listPublicBlogs({pages,rows}));
     }
-    return () => dispatch(resetPages());
+    return () => {
+      dispatch(resetPages());
+    }
   }, [dispatch,pages,rows])  
   return (
     <div className='bg-slate-100'>
