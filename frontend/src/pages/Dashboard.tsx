@@ -29,6 +29,10 @@ const Dashboard = () => {
   }
   
   useEffect(() => {
+      dispatch(resetPages());
+  }, [dispatch])
+  
+  useEffect(() => {
     if(token) {
       dispatch(listPrivate({type:blogType,pages,rows,token}));
     }
