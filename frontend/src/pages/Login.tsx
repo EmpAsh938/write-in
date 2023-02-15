@@ -17,7 +17,7 @@ const Login = () => {
     dispatch(loginUser({email, password}));
     setPassword('');
   }
-
+ // commenting inorder to make previous deployment successful
 
   useEffect(() => {
     if(token) navigate('/');
