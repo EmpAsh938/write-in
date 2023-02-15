@@ -14,14 +14,17 @@ const Home = () => {
     const handleLoadPages = () => {
         dispatch(loadMore());
     }
+    
+  useEffect(() => {
+    dispatch(resetPages());
+  },[dispatch])
+  
   useEffect(() => {
     if(pages && rows) {
       dispatch(listPublicBlogs({pages,rows}));
     }
-    return () => {
-      dispatch(resetPages());
-    }
   }, [dispatch,pages,rows])  
+  
   return (
     <div className='bg-slate-100'>
       <Navbar />
