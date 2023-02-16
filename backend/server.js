@@ -35,6 +35,7 @@ app.use('/post', postRouter);
 app.use('/upload', uploadRouter);
 app.use('/comment', commentRouter);
 app.use('/reply', replyRouter);
+app.use('*', notFound);
 
 // serve frontend
 if(process.env.NODE_ENV === 'production') {
@@ -47,7 +48,6 @@ if(process.env.NODE_ENV === 'production') {
 }
 
 app.use(errorHandler);
-app.use(notFound);
 
 // listener
 app.listen(port, () => {
